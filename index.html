@@ -1,0 +1,4195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PROYECTO SENTINEL · Plataforma de Concienciación y Respuesta a Amenazas</title>
+  <meta name="description" content="Presentación interactiva arcade de Proyecto Sentinel: transformando empleados en el firewall humano de las pymes.">
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><polygon points='16,2 30,7 30,18 16,30 2,18 2,7' fill='%2300f0ff' stroke='%23ff2a85' stroke-width='2'/><circle cx='16' cy='15' r='4' fill='%2300ff66'/></svg>">
+
+  <!-- Tipografías Retro & Cyber de Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,600;0,700;1,400&family=Press+Start+2P&family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       VARIABLES Y DESIGN SYSTEM RETRO-CYBER ARCADE
+       ========================================================================== */
+    :root {
+      --bg-dark: #07080f;
+      --bg-surface: #0e111f;
+      --bg-card: rgba(18, 23, 41, 0.82);
+      --bg-card-hover: rgba(26, 33, 58, 0.95);
+      
+      --neon-cyan: #00f0ff;
+      --cyan-glow: rgba(0, 240, 255, 0.45);
+      --neon-magenta: #ff2a85;
+      --magenta-glow: rgba(255, 42, 133, 0.45);
+      --phosphor-green: #00ff66;
+      --green-glow: rgba(0, 255, 102, 0.45);
+      --arcade-gold: #ffbe0b;
+      --gold-glow: rgba(255, 190, 11, 0.45);
+      --retro-white: #e6f1ff;
+      --retro-dim: #7f8fa4;
+      --border-color: #1e2846;
+
+      --font-arcade: 'Press Start 2P', monospace, cursive;
+      --font-mono: 'Share Tech Mono', monospace;
+      --font-crt: 'VT323', monospace;
+      --font-body: 'Chakra Petch', sans-serif;
+
+      --hud-height: 56px;
+      --transition-speed: 0.35s;
+    }
+
+    /* Reset & Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: var(--bg-dark);
+      color: var(--retro-white);
+      font-family: var(--font-body);
+      line-height: 1.5;
+      user-select: none;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Fondo con cuadrícula de perspectiva Cyber-Grid */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(0, 240, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.04) 1px, transparent 1px);
+      background-size: 38px 38px;
+      background-position: center center;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Glow ambiental radial */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.03) 0%, rgba(7, 8, 15, 0.85) 85%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ==========================================================================
+       OVERLAY CRT SCANLINES & VIGNETTE
+       ========================================================================== */
+    .crt-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.18) 0px,
+        rgba(0, 0, 0, 0.18) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.85);
+      transition: opacity 0.3s ease;
+    }
+
+    .crt-overlay.disabled {
+      opacity: 0;
+    }
+
+    /* Sutil destello o parpadeo CRT */
+    @keyframes crt-flicker {
+      0% { opacity: 0.98; }
+      50% { opacity: 1; }
+      100% { opacity: 0.98; }
+    }
+    .crt-overlay::after {
+      content: " ";
+      display: block;
+      position: absolute;
+      inset: 0;
+      background: rgba(18, 16, 16, 0.03);
+      opacity: 0;
+      animation: crt-flicker 0.15s infinite;
+      pointer-events: none;
+    }
+
+    /* ==========================================================================
+       VIEW TRANSITIONS API (Modern Web Guidance)
+       ========================================================================== */
+    /* Transiciones estándar limpias y fluidas (sin distorsiones raras) */
+    @keyframes slide-clean-out-left {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(-35px); opacity: 0; }
+    }
+    @keyframes slide-clean-in-right {
+      from { transform: translateX(35px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slide-clean-out-right {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(35px); opacity: 0; }
+    }
+    @keyframes slide-clean-in-left {
+      from { transform: translateX(-35px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    /* Selectores direccionales nativos limpios */
+    html:active-view-transition-type(forward)::view-transition-old(root) {
+      animation: 0.28s cubic-bezier(0.2, 0.9, 0.3, 1) both slide-clean-out-left;
+    }
+    html:active-view-transition-type(forward)::view-transition-new(root) {
+      animation: 0.28s cubic-bezier(0.2, 0.9, 0.3, 1) both slide-clean-in-right;
+    }
+    html:active-view-transition-type(backward)::view-transition-old(root) {
+      animation: 0.28s cubic-bezier(0.2, 0.9, 0.3, 1) both slide-clean-out-right;
+    }
+    html:active-view-transition-type(backward)::view-transition-new(root) {
+      animation: 0.28s cubic-bezier(0.2, 0.9, 0.3, 1) both slide-clean-in-left;
+    }
+
+    /* Transición especial GLITCH / HACK al pulsar INSERT COIN (Slide 1 -> Slide 2) */
+    @keyframes glitch-transition-out {
+      0% { transform: translate(0); filter: none; opacity: 1; }
+      20% { transform: translate(-8px, 4px) skewX(-4deg); filter: drop-shadow(-8px 0 #ff2a85) drop-shadow(8px 0 #00f0ff); opacity: 0.9; }
+      40% { transform: translate(6px, -3px) skewX(4deg); filter: drop-shadow(8px 0 #a855f7); opacity: 0.8; }
+      60% { transform: translate(-4px, 2px); clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%, 0 70%, 100% 70%, 100% 90%, 0 90%); opacity: 0.5; }
+      80% { transform: translate(4px, -1px); opacity: 0.2; }
+      100% { transform: translate(0); opacity: 0; }
+    }
+    @keyframes glitch-transition-in {
+      0% { transform: scale(1.04); opacity: 0; filter: drop-shadow(0 0 30px #c084fc); }
+      30% { transform: translate(-4px, 2px); opacity: 0.8; filter: drop-shadow(-6px 0 #a855f7) drop-shadow(6px 0 #9333ea); }
+      70% { transform: translate(2px, -1px); opacity: 0.95; }
+      100% { transform: translate(0) scale(1); opacity: 1; filter: none; }
+    }
+
+    html:active-view-transition-type(glitch-hack)::view-transition-old(root) {
+      animation: 0.45s steps(2, jump-none) both glitch-transition-out;
+    }
+    html:active-view-transition-type(glitch-hack)::view-transition-new(root) {
+      animation: 0.45s ease-out both glitch-transition-in;
+    }
+
+    /* Respetar preferencias de reducción de movimiento */
+    @media (prefers-reduced-motion: reduce) {
+      ::view-transition-group(root) {
+        animation: none !important;
+      }
+      *, *::before, *::after {
+        animation-duration: 0.001s !important;
+        transition-duration: 0.001s !important;
+      }
+    }
+
+    /* ==========================================================================
+       ESTRUCTURA PRINCIPAL Y CONTENEDOR DE SLIDES
+       ========================================================================== */
+    #app-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      z-index: 10;
+    }
+
+    /* HUD Superior */
+    .hud-top {
+      height: var(--hud-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.75rem;
+      background: linear-gradient(180deg, rgba(14, 17, 31, 0.95) 0%, rgba(14, 17, 31, 0.6) 100%);
+      border-bottom: 2px solid var(--border-color);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      font-family: var(--font-arcade);
+      font-size: 0.7rem;
+      letter-spacing: 1px;
+      z-index: 100;
+    }
+
+    .hud-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--neon-cyan);
+    }
+    .hud-badge-live {
+      display: inline-block;
+      width: 9px;
+      height: 9px;
+      background: var(--phosphor-green);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--phosphor-green);
+      animation: pulse-dot 1.4s infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.8); }
+    }
+
+    .hud-center {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      color: var(--arcade-gold);
+      text-shadow: 0 0 8px var(--gold-glow);
+    }
+
+    .hud-stage-counter {
+      padding: 4px 10px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--arcade-gold);
+      border-radius: 3px;
+    }
+
+    .hud-right {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--retro-white);
+    }
+    .hud-score {
+      color: var(--neon-magenta);
+      text-shadow: 0 0 8px var(--magenta-glow);
+      font-family: var(--font-arcade);
+      font-size: 0.65rem;
+    }
+
+    /* Área de Diapositiva */
+    main.viewport {
+      flex: 1;
+      position: relative;
+      width: 100%;
+      height: calc(100vh - var(--hud-height) * 2);
+      overflow-y: auto;
+      overflow-x: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem 2rem;
+    }
+
+    /* Scrollbar personalizada Cyber */
+    main.viewport::-webkit-scrollbar {
+      width: 6px;
+    }
+    main.viewport::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.3);
+    }
+    main.viewport::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 3px;
+    }
+    main.viewport::-webkit-scrollbar-thumb:hover {
+      background: var(--neon-cyan);
+    }
+
+    .slide-wrapper {
+      width: 100%;
+      max-width: 1280px;
+      margin: auto;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      opacity: 1;
+      animation: slide-in 0.35s ease-out;
+    }
+
+    @keyframes slide-in {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* HUD Inferior */
+    .hud-bottom {
+      height: var(--hud-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.75rem;
+      background: linear-gradient(0deg, rgba(14, 17, 31, 0.95) 0%, rgba(14, 17, 31, 0.6) 100%);
+      border-top: 2px solid var(--border-color);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      z-index: 100;
+    }
+
+    /* Barra de Progreso / HP Bar Arcade */
+    .hp-container {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      width: 280px;
+    }
+    .hp-label {
+      font-family: var(--font-arcade);
+      font-size: 0.6rem;
+      color: var(--neon-cyan);
+    }
+    .hp-meter {
+      flex: 1;
+      height: 12px;
+      background: #000;
+      border: 1.5px solid var(--neon-cyan);
+      box-shadow: 0 0 8px rgba(0, 240, 255, 0.25);
+      border-radius: 2px;
+      display: flex;
+      padding: 1px;
+      gap: 2px;
+    }
+    .hp-cell {
+      flex: 1;
+      height: 100%;
+      background: #142030;
+      transition: background-color 0.25s, box-shadow 0.25s;
+    }
+    .hp-cell.filled {
+      background: var(--phosphor-green);
+      box-shadow: 0 0 6px var(--phosphor-green);
+    }
+    .hp-cell.filled:nth-child(n+9) {
+      background: var(--arcade-gold);
+      box-shadow: 0 0 6px var(--arcade-gold);
+    }
+    .hp-cell.filled:nth-child(n+12) {
+      background: var(--neon-magenta);
+      box-shadow: 0 0 6px var(--neon-magenta);
+    }
+
+    /* Controles Centrales */
+    .hud-nav-buttons {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .btn-arcade-nav {
+      background: #12182b;
+      border: 2px solid var(--neon-cyan);
+      color: var(--neon-cyan);
+      font-family: var(--font-arcade);
+      font-size: 0.65rem;
+      padding: 8px 14px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 3px 0 #005f66;
+    }
+    .btn-arcade-nav:hover:not(:disabled) {
+      background: var(--neon-cyan);
+      color: #000;
+      box-shadow: 0 0 14px var(--cyan-glow), 0 3px 0 #008899;
+      transform: translateY(-1px);
+    }
+    .btn-arcade-nav:active:not(:disabled) {
+      transform: translateY(2px);
+      box-shadow: none;
+    }
+    .btn-arcade-nav:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      border-color: #334;
+      color: #667;
+      box-shadow: none;
+    }
+
+    /* Utilidades HUD Derecha */
+    .hud-controls-right {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .btn-hud-icon {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--retro-dim);
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .btn-hud-icon:hover {
+      border-color: var(--neon-cyan);
+      color: var(--neon-cyan);
+      background: rgba(0, 240, 255, 0.08);
+    }
+    .btn-hud-icon.active {
+      border-color: var(--phosphor-green);
+      color: var(--phosphor-green);
+      background: rgba(0, 255, 102, 0.08);
+      box-shadow: 0 0 8px rgba(0, 255, 102, 0.25);
+    }
+
+    /* ==========================================================================
+       TIPOGRAFÍAS Y ELEMENTOS COMUNES DE SLIDES
+       ========================================================================== */
+    .slide-header {
+      margin-bottom: 2rem;
+      text-align: left;
+    }
+    .slide-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-arcade);
+      font-size: 0.65rem;
+      color: var(--neon-cyan);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+      padding: 4px 10px;
+      background: rgba(0, 240, 255, 0.08);
+      border-left: 3px solid var(--neon-cyan);
+    }
+    .slide-title {
+      font-family: var(--font-arcade);
+      font-size: clamp(1.2rem, 2.5vw, 2.1rem);
+      line-height: 1.35;
+      color: #ffffff;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.35);
+      margin-bottom: 0.35rem;
+    }
+    .slide-subtitle {
+      font-family: var(--font-mono);
+      font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+      color: var(--retro-dim);
+    }
+
+    /* Micro-animaciones escalonadas */
+    .stagger {
+      animation: stagger-in 0.45s ease-out both;
+    }
+    .stagger-1 { animation-delay: 0.05s; }
+    .stagger-2 { animation-delay: 0.12s; }
+    .stagger-3 { animation-delay: 0.19s; }
+    .stagger-4 { animation-delay: 0.26s; }
+    .stagger-5 { animation-delay: 0.33s; }
+    .stagger-6 { animation-delay: 0.40s; }
+
+    @keyframes stagger-in {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Tarjetas y Contenedores Cyber */
+    .cyber-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 1.5rem;
+      position: relative;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(8px);
+    }
+    .cyber-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 6px;
+      border-top: 2px solid var(--neon-cyan);
+      border-left: 2px solid var(--neon-cyan);
+    }
+    .cyber-card::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 6px;
+      height: 6px;
+      border-bottom: 2px solid var(--neon-cyan);
+      border-right: 2px solid var(--neon-cyan);
+    }
+    .cyber-card:hover {
+      border-color: var(--neon-cyan);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0, 240, 255, 0.12);
+    }
+
+    /* ==========================================================================
+       SLIDE 1: PANTALLA DE INICIO (ARCADE TITLE SCREEN) & EFECTOS GLITCH/HACKED
+       ========================================================================== */
+    #slide-1 {
+      text-align: center;
+      align-items: center;
+      padding: 2rem 1rem;
+      position: relative;
+    }
+
+    /* Sweep de interferencia de escaneo al hackear */
+    .hacked-scanline {
+      position: absolute;
+      top: 0;
+      left: 10%;
+      right: 10%;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--neon-magenta), var(--neon-cyan), transparent);
+      box-shadow: 0 0 12px var(--magenta-glow), 0 0 20px var(--cyan-glow);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .slide.is-glitching .hacked-scanline {
+      animation: scanline-sweep 0.5s ease-out;
+    }
+    @keyframes scanline-sweep {
+      0% { top: 5%; opacity: 1; height: 4px; }
+      40% { opacity: 0.9; height: 16px; }
+      100% { top: 95%; opacity: 0; height: 2px; }
+    }
+
+    /* Escudo con efecto de alteración cibernética */
+    .title-shield-logo {
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 1.25rem auto;
+      filter: drop-shadow(0 0 18px var(--cyan-glow));
+      animation: float-logo 3.5s ease-in-out infinite alternate;
+      cursor: pointer;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+    .title-shield-logo:hover {
+      transform: scale(1.08);
+      filter: drop-shadow(-3px 0 12px var(--neon-magenta)) drop-shadow(3px 0 12px var(--neon-cyan));
+    }
+    .slide.is-glitching .title-shield-logo {
+      animation: shield-glitch-shake 0.4s ease-out;
+    }
+    @keyframes shield-glitch-shake {
+      0% { transform: translate(0, 0) scale(1); filter: drop-shadow(0 0 18px var(--cyan-glow)); }
+      20% { transform: translate(-5px, 2px) scale(1.04); filter: drop-shadow(-6px 0 0 var(--neon-magenta)); }
+      40% { transform: translate(4px, -3px) scale(0.97); filter: drop-shadow(6px 0 0 var(--neon-cyan)); }
+      60% { transform: translate(-3px, 1px) scale(1.02); filter: drop-shadow(0 0 25px var(--neon-magenta)); }
+      80% { transform: translate(2px, -1px) scale(1); filter: drop-shadow(0 0 18px var(--neon-cyan)); }
+      100% { transform: translate(0, 0) scale(1); }
+    }
+
+    @keyframes float-logo {
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(-8px) scale(1.03); }
+    }
+
+    /* ==========================================================================
+       SLIDE 2: FULL-SCREEN TAKEOVER HACKED (MORADO NEÓN EXAGERADO)
+       ========================================================================== */
+    #slide-2.active {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 5000;
+      background: radial-gradient(circle at 50% 50%, #29004d 0%, #0c001c 60%, #030008 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+      box-shadow: inset 0 0 170px rgba(168, 85, 247, 0.7);
+      animation: hacked-screen-quake 0.75s ease-out;
+    }
+    #slide-2.active::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at center, transparent 35%, rgba(147, 51, 234, 0.28) 75%, rgba(255, 42, 133, 0.45) 100%);
+      animation: emergency-strobe 1.3s infinite alternate ease-in-out;
+      z-index: 2;
+    }
+    @keyframes emergency-strobe {
+      0% { opacity: 0.35; }
+      100% { opacity: 0.95; }
+    }
+
+    @keyframes hacked-screen-quake {
+      0% { transform: scale(1.08); filter: drop-shadow(0 0 60px #c084fc); }
+      12% { transform: scale(0.96) translate(-16px, 10px); filter: drop-shadow(-22px 0 0 #ff2a85); }
+      25% { transform: scale(1.04) translate(16px, -10px); filter: drop-shadow(22px 0 0 #00f0ff); }
+      40% { transform: scale(0.98) translate(-8px, 6px); }
+      55% { transform: scale(1.02) translate(6px, -4px); }
+      75% { transform: translate(-3px, 2px); }
+      100% { transform: scale(1) translate(0); filter: none; }
+    }
+
+    /* Fondo de cuadrícula y lluvia de bits purpúreos */
+    .hacked-matrix-bg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: 
+        radial-gradient(rgba(192, 132, 252, 0.15) 1.5px, transparent 1.5px),
+        linear-gradient(rgba(147, 51, 234, 0.12) 1px, transparent 1px);
+      background-size: 24px 24px, 100% 4px;
+      z-index: 1;
+      opacity: 0.9;
+    }
+
+    /* Cintas de peligro superior e inferior de pantalla completa */
+    .hacked-hazard-tape {
+      width: 100%;
+      background: #140029;
+      border-top: 2px solid #c084fc;
+      border-bottom: 2px solid #c084fc;
+      padding: 11px 0;
+      font-family: var(--font-arcade);
+      font-size: clamp(0.7rem, 1.2vw, 0.92rem);
+      color: #f3e8ff;
+      letter-spacing: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      z-index: 10;
+      text-shadow: 0 0 12px rgba(192, 132, 252, 0.95);
+      box-shadow: 0 0 30px rgba(147, 51, 234, 0.6);
+    }
+    .hacked-hazard-tape.top {
+      border-top: none;
+    }
+    .hacked-hazard-tape.bottom {
+      border-bottom: none;
+    }
+    .hacked-hazard-tape.top span {
+      display: inline-block;
+      animation: marquee-tape-left 22s linear infinite;
+    }
+    .hacked-hazard-tape.bottom span {
+      display: inline-block;
+      animation: marquee-tape-right 22s linear infinite;
+    }
+    @keyframes marquee-tape-left {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    @keyframes marquee-tape-right {
+      0% { transform: translateX(-50%); }
+      100% { transform: translateX(0); }
+    }
+
+    /* Contenedor central a pantalla completa */
+    .hacked-center-content {
+      position: relative;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 1rem 1.5rem;
+      max-width: 1100px;
+      width: 100%;
+      flex: 1;
+    }
+
+    .hacked-skull-giant {
+      width: clamp(75px, 11vw, 120px);
+      height: clamp(75px, 11vw, 120px);
+      margin-bottom: 0.75rem;
+      filter: drop-shadow(0 0 25px rgba(192, 132, 252, 0.95));
+      animation: skull-menace 1.5s infinite alternate ease-in-out;
+    }
+    @keyframes skull-menace {
+      0% { transform: scale(1) translateY(0); filter: drop-shadow(0 0 20px #9333ea); }
+      100% { transform: scale(1.1) translateY(-6px); filter: drop-shadow(0 0 45px #c084fc) drop-shadow(0 0 70px #a855f7); }
+    }
+
+    /* TÍTULO COLOSAL HACKED A PANTALLA COMPLETA */
+    .hacked-title-wrapper {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+    .hacked-colossal-title {
+      font-family: var(--font-arcade);
+      font-size: clamp(4rem, 15vw, 10.5rem);
+      line-height: 0.95;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: clamp(6px, 2vw, 18px);
+      position: relative;
+      text-shadow: 
+        0 0 20px #c084fc,
+        0 0 50px #a855f7,
+        0 0 95px rgba(168, 85, 247, 0.95),
+        0 0 150px rgba(147, 51, 234, 0.85),
+        6px 6px 0 #2e0854;
+      animation: purple-colossal-pulse 1.6s infinite alternate;
+    }
+    @keyframes purple-colossal-pulse {
+      0% {
+        text-shadow: 
+          0 0 20px #c084fc,
+          0 0 50px #9333ea,
+          0 0 80px rgba(147, 51, 234, 0.8),
+          6px 6px 0 #2e0854;
+      }
+      100% {
+        text-shadow: 
+          0 0 35px #ffffff,
+          0 0 70px #c084fc,
+          0 0 110px #a855f7,
+          0 0 170px rgba(168, 85, 247, 0.95),
+          6px 6px 0 #2e0854;
+      }
+    }
+
+    .hacked-colossal-title::before,
+    .hacked-colossal-title::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .hacked-colossal-title::before {
+      color: #ff2a85;
+      text-shadow: -5px 0 #ff2a85;
+      z-index: -1;
+      animation: glitch-slice-magenta 2.2s infinite steps(1);
+    }
+    .hacked-colossal-title::after {
+      color: #00f0ff;
+      text-shadow: 5px 0 #00f0ff;
+      z-index: -2;
+      animation: glitch-slice-cyan 1.9s infinite steps(1);
+    }
+
+    /* Terminal de alerta de intrusión */
+    .hacked-terminal-alert {
+      background: rgba(14, 0, 28, 0.86);
+      border: 2px solid #a855f7;
+      border-radius: 6px;
+      padding: 1.25rem 2rem;
+      max-width: 840px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 0 40px rgba(168, 85, 247, 0.4), inset 0 0 30px rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(10px);
+    }
+    .hacked-alert-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-family: var(--font-arcade);
+      font-size: clamp(0.6rem, 1vw, 0.72rem);
+      color: var(--neon-magenta);
+      margin-bottom: 0.6rem;
+      letter-spacing: 1.5px;
+    }
+    .hacked-main-quote {
+      font-family: var(--font-arcade);
+      font-size: clamp(0.85rem, 1.4vw, 1.3rem);
+      color: #ffffff;
+      line-height: 1.4;
+      margin-bottom: 0.6rem;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+    }
+    .hacked-subquote {
+      font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+      color: #e9d5ff;
+      line-height: 1.5;
+    }
+
+    /* Botón de acción destacado a pantalla completa */
+    .btn-hacked-action {
+      background: #9333ea;
+      color: #ffffff;
+      border: 3px solid #ffffff;
+      font-family: var(--font-arcade);
+      font-size: clamp(0.8rem, 1.3vw, 1.1rem);
+      padding: 1.1rem 2.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      box-shadow: 0 6px 0 #581c87, 0 12px 30px rgba(168, 85, 247, 0.6);
+      transition: all 0.12s ease;
+      animation: arcade-blink 1.4s infinite;
+    }
+    .btn-hacked-action:hover {
+      background: #c084fc;
+      color: #000;
+      box-shadow: 0 6px 0 #7e22ce, 0 16px 45px rgba(192, 132, 252, 0.9);
+      transform: translateY(-2px);
+    }
+    .btn-hacked-action:active {
+      transform: translateY(4px);
+      box-shadow: none;
+    }
+    .hacked-keys-hint {
+      margin-top: 0.75rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: #d8b4fe;
+      letter-spacing: 1px;
+    }
+
+    .title-badge {
+      display: inline-block;
+      font-family: var(--font-arcade);
+      font-size: 0.75rem;
+      color: var(--arcade-gold);
+      background: rgba(255, 190, 11, 0.1);
+      border: 1px dashed var(--arcade-gold);
+      padding: 6px 14px;
+      margin-bottom: 1rem;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px var(--gold-glow);
+    }
+
+    /* TÍTULO PRINCIPAL CON EFECTO CYBER GLITCH & RGB SPLIT */
+    .main-game-title {
+      font-family: var(--font-arcade);
+      font-size: clamp(1.8rem, 4.5vw, 3.8rem);
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      line-height: 1.2;
+      margin-bottom: 0.8rem;
+      text-shadow: 
+        0 0 10px var(--neon-cyan),
+        0 0 30px var(--cyan-glow),
+        3px 3px 0 #003644;
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    /* Capas RGB Split duplicadas mediante ::before y ::after */
+    .main-game-title::before,
+    .main-game-title::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    /* Capa Magenta Glitch */
+    .main-game-title::before {
+      color: var(--neon-magenta);
+      z-index: -1;
+      text-shadow: -2px 0 var(--neon-magenta);
+      animation: glitch-slice-magenta 3.2s infinite steps(1);
+    }
+
+    /* Capa Cian Glitch */
+    .main-game-title::after {
+      color: var(--neon-cyan);
+      z-index: -2;
+      text-shadow: 2px 0 var(--neon-cyan);
+      animation: glitch-slice-cyan 2.7s infinite steps(1);
+    }
+
+    /* Animación de corte horizontal aleatorio */
+    @keyframes glitch-slice-magenta {
+      0%, 82%, 100% {
+        clip-path: polygon(0 0, 0 0, 0 0, 0 0);
+        transform: translate(0, 0);
+        opacity: 0;
+      }
+      83% {
+        clip-path: polygon(0 15%, 100% 15%, 100% 32%, 0 32%);
+        transform: translate(-4px, -1px);
+        opacity: 0.9;
+      }
+      84% {
+        clip-path: polygon(0 60%, 100% 60%, 100% 75%, 0 75%);
+        transform: translate(3px, 1px);
+        opacity: 0.9;
+      }
+      85% {
+        clip-path: polygon(0 0, 0 0, 0 0, 0 0);
+        transform: translate(0, 0);
+        opacity: 0;
+      }
+      93% {
+        clip-path: polygon(0 40%, 100% 40%, 100% 52%, 0 52%);
+        transform: translate(-3px, 2px);
+        opacity: 0.9;
+      }
+      95% {
+        clip-path: polygon(0 0, 0 0, 0 0, 0 0);
+        transform: translate(0, 0);
+        opacity: 0;
+      }
+    }
+
+    @keyframes glitch-slice-cyan {
+      0%, 75%, 100% {
+        clip-path: polygon(0 0, 0 0, 0 0, 0 0);
+        transform: translate(0, 0);
+        opacity: 0;
+      }
+      76% {
+        clip-path: polygon(0 25%, 100% 25%, 100% 42%, 0 42%);
+        transform: translate(4px, 1px);
+        opacity: 0.9;
+      }
+      77% {
+        clip-path: polygon(0 70%, 100% 70%, 100% 88%, 0 88%);
+        transform: translate(-4px, -2px);
+        opacity: 0.9;
+      }
+      78% {
+        clip-path: polygon(0 0, 0 0, 0 0, 0 0);
+        transform: translate(0, 0);
+        opacity: 0;
+      }
+      89% {
+        clip-path: polygon(0 10%, 100% 10%, 100% 25%, 0 25%);
+        transform: translate(3px, -1px);
+        opacity: 0.9;
+      }
+      91% {
+        clip-path: polygon(0 0, 0 0, 0 0, 0 0);
+        transform: translate(0, 0);
+        opacity: 0;
+      }
+    }
+
+    /* Espasmo violento cuando se activa el trigger de hack */
+    .slide.is-glitching .main-game-title {
+      animation: glitch-spasm 0.45s ease-out;
+    }
+    @keyframes glitch-spasm {
+      0% { transform: translate(0); }
+      15% { transform: translate(-6px, 3px) skewX(-4deg); text-shadow: -4px 0 var(--neon-magenta), 4px 0 var(--neon-cyan); }
+      30% { transform: translate(5px, -3px) skewX(3deg); text-shadow: 4px 0 var(--neon-magenta), -4px 0 var(--neon-cyan); }
+      45% { transform: translate(-3px, -2px) skewX(-2deg); }
+      60% { transform: translate(4px, 2px); }
+      75% { transform: translate(-2px, 1px); }
+      100% { transform: translate(0); }
+    }
+
+    .main-game-sub {
+      font-family: var(--font-arcade);
+      font-size: clamp(0.7rem, 1.3vw, 1.1rem);
+      color: var(--neon-magenta);
+      margin-bottom: 1.5rem;
+      letter-spacing: 1.5px;
+      text-shadow: 0 0 10px var(--magenta-glow);
+    }
+    .main-game-motto {
+      font-family: var(--font-crt);
+      font-size: clamp(1.3rem, 2vw, 1.8rem);
+      color: var(--phosphor-green);
+      letter-spacing: 1px;
+      margin-bottom: 3rem;
+      text-shadow: 0 0 8px var(--green-glow);
+    }
+    
+    /* El Gran Botón "PRESS START / INSERT COIN" */
+    .start-btn-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+    .btn-press-start {
+      font-family: var(--font-arcade);
+      font-size: clamp(0.9rem, 1.6vw, 1.35rem);
+      padding: 1.2rem 2.8rem;
+      color: #07080f;
+      background: var(--arcade-gold);
+      border: 4px solid #fff;
+      cursor: pointer;
+      position: relative;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      box-shadow: 
+        0 6px 0 #996e00,
+        0 12px 25px rgba(255, 190, 11, 0.45);
+      transition: all 0.1s ease;
+      animation: arcade-blink 1.2s infinite;
+    }
+    @keyframes arcade-blink {
+      0%, 49% { opacity: 1; }
+      50%, 75% { opacity: 0.85; }
+      100% { opacity: 1; }
+    }
+    .btn-press-start:hover {
+      background: #fff;
+      color: #000;
+      border-color: var(--neon-cyan);
+      box-shadow: 
+        0 6px 0 #008899,
+        0 14px 30px var(--cyan-glow);
+      transform: translateY(-2px);
+    }
+    .btn-press-start:active {
+      transform: translateY(6px);
+      box-shadow: none;
+    }
+    .keyboard-hint {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--retro-dim);
+      letter-spacing: 1px;
+    }
+    .arcade-credits {
+      margin-top: 1.5rem;
+      font-family: var(--font-arcade);
+      font-size: 0.65rem;
+      color: var(--retro-dim);
+    }
+
+    /* ==========================================================================
+       SLIDE 2: EQUIPO Y ORGANIZACIÓN
+       ========================================================================== */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 1rem;
+    }
+    .team-member-card {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 1rem;
+      transition: all 0.2s ease;
+    }
+    .team-member-card:hover {
+      border-color: var(--neon-cyan);
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 240, 255, 0.1);
+    }
+    .member-avatar {
+      width: 58px;
+      height: 58px;
+      border-radius: 4px;
+      background: #17213c;
+      border: 2px solid var(--neon-cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-arcade);
+      font-size: 1.1rem;
+      color: var(--neon-cyan);
+      flex-shrink: 0;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+    }
+    /* Ponentes desbloqueados (Mario e Iván con foto de su sprite pixel-art) */
+    .member-avatar.unlocked {
+      padding: 0;
+      overflow: hidden;
+      position: relative;
+    }
+    .member-avatar.unlocked.mario-avatar {
+      background: radial-gradient(circle, rgba(0, 240, 255, 0.25) 0%, #091224 82%);
+      border: 2px solid var(--neon-cyan);
+      box-shadow: 0 0 14px rgba(0, 240, 255, 0.45), inset 0 0 8px rgba(0, 240, 255, 0.2);
+    }
+    .member-avatar.unlocked.ivan-avatar {
+      background: radial-gradient(circle, rgba(255, 190, 11, 0.25) 0%, #171306 82%);
+      border: 2px solid var(--arcade-gold);
+      box-shadow: 0 0 14px rgba(255, 190, 11, 0.45), inset 0 0 8px rgba(255, 190, 11, 0.2);
+    }
+    .member-avatar-sprite {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center bottom;
+      image-rendering: pixelated;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: crisp-edges;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
+      transition: transform 0.25s ease, filter 0.25s ease;
+      display: block;
+    }
+    .member-avatar.unlocked:hover .member-avatar-sprite {
+      transform: scale(1.14);
+      filter: drop-shadow(0 2px 8px rgba(0, 240, 255, 0.75));
+    }
+    /* Personajes aún no desbloqueados (Avatar negro con interrogación arcade) */
+    .member-avatar.locked {
+      background: #000000;
+      border: 2px dashed var(--arcade-gold);
+      color: #ffffff;
+      font-family: var(--font-arcade);
+      font-size: 1.75rem;
+      text-shadow: 0 0 12px #ffbe0b, 0 0 24px rgba(255, 190, 11, 0.7);
+      box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.95), 0 0 16px rgba(255, 190, 11, 0.35);
+      animation: locked-avatar-pulse 2.2s infinite ease-in-out;
+      cursor: help;
+      transition: all 0.2s ease;
+    }
+    .member-avatar.locked:hover {
+      border-color: var(--neon-magenta);
+      color: var(--neon-magenta);
+      text-shadow: 0 0 15px #ff2a85, 0 0 30px rgba(255, 42, 133, 0.9);
+      box-shadow: inset 0 0 22px rgba(0, 0, 0, 0.95), 0 0 25px rgba(255, 42, 133, 0.7);
+      transform: scale(1.1);
+    }
+    @keyframes locked-avatar-pulse {
+      0%, 100% {
+        border-color: var(--arcade-gold);
+        color: #ffffff;
+        box-shadow: inset 0 0 18px #000, 0 0 12px rgba(255, 190, 11, 0.4);
+      }
+      50% {
+        border-color: var(--neon-magenta);
+        color: var(--arcade-gold);
+        box-shadow: inset 0 0 18px #000, 0 0 22px rgba(255, 42, 133, 0.6);
+      }
+    }
+    .member-details {
+      flex: 1;
+      min-width: 0;
+    }
+    .member-name-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 0.2rem;
+    }
+    .member-name {
+      font-family: var(--font-arcade);
+      font-size: 0.88rem;
+      color: #fff;
+    }
+    .member-role-badge {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 2px 7px;
+      border-radius: 2px;
+      background: rgba(0, 240, 255, 0.12);
+      color: var(--neon-cyan);
+      border: 1px solid var(--neon-cyan);
+    }
+    .member-agile {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--arcade-gold);
+      margin-bottom: 0.25rem;
+    }
+    .member-profile {
+      font-family: var(--font-mono);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ff3388;
+      background: rgba(255, 42, 133, 0.14);
+      border: 1px solid rgba(255, 42, 133, 0.35);
+      border-radius: 4px;
+      padding: 3px 9px;
+      display: inline-block;
+      margin-top: 0.2rem;
+      margin-bottom: 0.35rem;
+      letter-spacing: 0.5px;
+      text-shadow: 0 0 8px rgba(255, 42, 133, 0.4);
+    }
+    .member-specialty {
+      font-size: 0.85rem;
+      color: var(--retro-white);
+      line-height: 1.3;
+    }
+
+    /* ==========================================================================
+       SLIDE 3: VULNERABILIDAD CRÍTICA
+       ========================================================================== */
+    .vuln-layout {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    @media (max-width: 900px) {
+      .vuln-layout { grid-template-columns: 1fr; }
+    }
+    .stat-hero-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-hero-card.danger {
+      border-color: var(--neon-magenta);
+      box-shadow: 0 0 20px rgba(255, 42, 133, 0.15);
+    }
+    .stat-hero-card.warning {
+      border-color: var(--arcade-gold);
+      box-shadow: 0 0 20px rgba(255, 190, 11, 0.15);
+    }
+    .stat-hero-card.info {
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+    }
+    .stat-big-number {
+      font-family: var(--font-arcade);
+      font-size: clamp(2.5rem, 4vw, 3.8rem);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+    .stat-hero-card.danger .stat-big-number {
+      color: var(--neon-magenta);
+      text-shadow: 0 0 20px var(--magenta-glow);
+    }
+    .stat-hero-card.warning .stat-big-number {
+      color: var(--arcade-gold);
+      text-shadow: 0 0 20px var(--gold-glow);
+    }
+    .stat-hero-card.info .stat-big-number {
+      color: var(--neon-cyan);
+      text-shadow: 0 0 20px var(--cyan-glow);
+    }
+    .stat-card-title {
+      font-family: var(--font-arcade);
+      font-size: 0.8rem;
+      margin-bottom: 0.75rem;
+      color: #fff;
+    }
+    .stat-card-desc {
+      font-size: 0.95rem;
+      color: var(--retro-white);
+      line-height: 1.45;
+    }
+
+    /* ==========================================================================
+       SLIDE 4: DIAGNÓSTICO DE RIESGO (PYMES)
+       ========================================================================== */
+    .risk-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 1.5rem;
+      align-items: stretch;
+    }
+    @media (max-width: 900px) {
+      .risk-grid { grid-template-columns: 1fr; }
+    }
+    .cost-highlight-box {
+      background: linear-gradient(135deg, rgba(255, 42, 133, 0.12) 0%, rgba(14, 17, 31, 0.9) 100%);
+      border: 2px solid var(--neon-magenta);
+      border-radius: 6px;
+      padding: 2.2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      box-shadow: 0 0 25px rgba(255, 42, 133, 0.2);
+    }
+    .cost-badge {
+      font-family: var(--font-arcade);
+      font-size: 0.65rem;
+      color: var(--neon-magenta);
+      margin-bottom: 0.75rem;
+      letter-spacing: 2px;
+    }
+    .cost-amount {
+      font-family: var(--font-arcade);
+      font-size: clamp(2rem, 3.2vw, 3.2rem);
+      color: #fff;
+      text-shadow: 0 0 15px var(--magenta-glow);
+      margin-bottom: 1rem;
+    }
+    .cost-impact {
+      font-size: 1.05rem;
+      color: var(--retro-white);
+      line-height: 1.5;
+    }
+    .risk-factors-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+    .risk-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+    .risk-item:hover {
+      border-color: var(--neon-cyan);
+      transform: translateX(4px);
+    }
+    .risk-icon-box {
+      width: 38px;
+      height: 38px;
+      border-radius: 4px;
+      background: rgba(0, 240, 255, 0.1);
+      border: 1px solid var(--neon-cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--neon-cyan);
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .risk-item-title {
+      font-family: var(--font-arcade);
+      font-size: 0.7rem;
+      color: var(--neon-cyan);
+      margin-bottom: 0.25rem;
+    }
+    .risk-item-desc {
+      font-size: 0.9rem;
+      color: var(--retro-white);
+    }
+
+    /* ==========================================================================
+       SLIDE 5: ANÁLISIS DAFO (SWOT CYBER MATRIX)
+       ========================================================================== */
+    .swot-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+    @media (max-width: 800px) {
+      .swot-grid { grid-template-columns: 1fr; }
+    }
+    .swot-card {
+      background: var(--bg-card);
+      border-radius: 6px;
+      padding: 1.4rem;
+      position: relative;
+    }
+    .swot-card.fortalezas {
+      border: 1px solid var(--phosphor-green);
+      box-shadow: 0 0 15px rgba(0, 255, 102, 0.1);
+    }
+    .swot-card.oportunidades {
+      border: 1px solid var(--neon-cyan);
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.1);
+    }
+    .swot-card.debilidades {
+      border: 1px solid var(--arcade-gold);
+      box-shadow: 0 0 15px rgba(255, 190, 11, 0.1);
+    }
+    .swot-card.amenazas {
+      border: 1px solid var(--neon-magenta);
+      box-shadow: 0 0 15px rgba(255, 42, 133, 0.1);
+    }
+    .swot-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-arcade);
+      font-size: 0.85rem;
+      margin-bottom: 0.9rem;
+    }
+    .swot-card.fortalezas .swot-title { color: var(--phosphor-green); }
+    .swot-card.oportunidades .swot-title { color: var(--neon-cyan); }
+    .swot-card.debilidades .swot-title { color: var(--arcade-gold); }
+    .swot-card.amenazas .swot-title { color: var(--neon-magenta); }
+    .swot-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .swot-list li {
+      font-size: 0.95rem;
+      color: var(--retro-white);
+      position: relative;
+      padding-left: 1.4rem;
+      line-height: 1.4;
+    }
+    .swot-list li::before {
+      content: "▶";
+      position: absolute;
+      left: 0;
+      font-size: 0.65rem;
+      top: 0.25rem;
+      color: inherit;
+      opacity: 0.8;
+    }
+
+    /* ==========================================================================
+       SLIDE 6: POSICIONAMIENTO Y COMPETENCIA
+       ========================================================================== */
+    .comp-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      align-items: stretch;
+    }
+    @media (max-width: 900px) {
+      .comp-grid { grid-template-columns: 1fr; }
+    }
+    .comp-col {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.25s ease;
+    }
+    .comp-col.highlight {
+      border: 2px solid var(--neon-cyan);
+      background: linear-gradient(180deg, rgba(0, 240, 255, 0.12) 0%, rgba(14, 17, 31, 0.95) 100%);
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.25);
+      transform: scale(1.02);
+    }
+    .comp-header {
+      font-family: var(--font-arcade);
+      font-size: 0.85rem;
+      color: #fff;
+      margin-bottom: 0.6rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .comp-col.highlight .comp-header {
+      color: var(--neon-cyan);
+      border-color: var(--neon-cyan);
+      text-shadow: 0 0 10px var(--cyan-glow);
+    }
+    .comp-badge-winner {
+      font-family: var(--font-arcade);
+      font-size: 0.55rem;
+      background: var(--neon-cyan);
+      color: #000;
+      padding: 3px 6px;
+      border-radius: 2px;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+    .comp-field {
+      margin-bottom: 0.75rem;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+    .comp-field-label {
+      font-family: var(--font-arcade);
+      font-size: 0.6rem;
+      color: var(--arcade-gold);
+      display: block;
+      margin-bottom: 0.15rem;
+    }
+
+    /* ==========================================================================
+       SLIDE 7: PROYECCIÓN SECTORIAL Y TAMAÑO DE MERCADO
+       ========================================================================== */
+    .market-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
+    .market-bars-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 1.8rem;
+    }
+    .market-stat-row {
+      margin-bottom: 1.4rem;
+    }
+    .market-stat-row:last-child {
+      margin-bottom: 0;
+    }
+    .market-row-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.5rem;
+    }
+    .market-row-label {
+      font-family: var(--font-arcade);
+      font-size: 0.75rem;
+      color: var(--retro-white);
+    }
+    .market-row-value {
+      font-family: var(--font-arcade);
+      font-size: 1.15rem;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 10px var(--cyan-glow);
+    }
+    .market-row-value.future {
+      color: var(--phosphor-green);
+      text-shadow: 0 0 10px var(--green-glow);
+    }
+    .market-progress-bar {
+      height: 20px;
+      background: #000;
+      border: 1px solid var(--border-color);
+      border-radius: 3px;
+      overflow: hidden;
+      padding: 2px;
+    }
+    .market-progress-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 1s ease-out;
+    }
+    .market-progress-fill.current {
+      width: 46%;
+      background: linear-gradient(90deg, #008899, var(--neon-cyan));
+      box-shadow: 0 0 12px var(--cyan-glow);
+    }
+    .market-progress-fill.target {
+      width: 100%;
+      background: linear-gradient(90deg, #00a844, var(--phosphor-green));
+      box-shadow: 0 0 12px var(--green-glow);
+    }
+
+    .market-drivers-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+    @media (max-width: 800px) {
+      .market-drivers-grid { grid-template-columns: 1fr; }
+    }
+    .driver-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 1.2rem;
+    }
+    .driver-title {
+      font-family: var(--font-arcade);
+      font-size: 0.7rem;
+      color: var(--arcade-gold);
+      margin-bottom: 0.4rem;
+    }
+    .driver-desc {
+      font-size: 0.95rem;
+      color: var(--retro-white);
+      line-height: 1.4;
+    }
+
+    /* ==========================================================================
+       SLIDE 8: FUNCIONAMIENTO (ENTRENAMIENTO POR IMPACTO)
+       ========================================================================== */
+    .steps-pipeline {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      position: relative;
+    }
+    @media (max-width: 900px) {
+      .steps-pipeline { grid-template-columns: 1fr; }
+    }
+    .step-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 1.8rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .step-card:hover {
+      border-color: var(--neon-cyan);
+      transform: translateY(-4px);
+    }
+    .step-number-badge {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #141c33;
+      border: 2px solid var(--neon-cyan);
+      color: var(--neon-cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-arcade);
+      font-size: 1.1rem;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.25);
+    }
+    .step-title {
+      font-family: var(--font-arcade);
+      font-size: 0.8rem;
+      color: #fff;
+      margin-bottom: 0.8rem;
+    }
+    .step-desc {
+      font-size: 0.95rem;
+      color: var(--retro-white);
+      line-height: 1.45;
+    }
+
+    /* ==========================================================================
+       SLIDE 9: PROPUESTA DE VALOR
+       ========================================================================== */
+    .value-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+    }
+    @media (max-width: 800px) {
+      .value-grid { grid-template-columns: 1fr; }
+    }
+    .value-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 1.5rem;
+      display: flex;
+      gap: 1.2rem;
+      align-items: flex-start;
+      transition: all 0.2s ease;
+    }
+    .value-card:hover {
+      border-color: var(--neon-magenta);
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+    }
+    .value-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 4px;
+      background: rgba(255, 42, 133, 0.12);
+      border: 1px solid var(--neon-magenta);
+      color: var(--neon-magenta);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .value-title {
+      font-family: var(--font-arcade);
+      font-size: 0.75rem;
+      color: var(--neon-magenta);
+      margin-bottom: 0.4rem;
+      line-height: 1.3;
+    }
+    .value-text {
+      font-size: 0.95rem;
+      color: var(--retro-white);
+      line-height: 1.4;
+    }
+
+    /* ==========================================================================
+       SLIDE 10: MÉTRICAS DE VALIDACIÓN (KPIS)
+       ========================================================================== */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    @media (max-width: 900px) {
+      .kpi-grid { grid-template-columns: 1fr; }
+    }
+    .kpi-card {
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      border-radius: 6px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    .kpi-card:nth-child(1) {
+      border-color: var(--phosphor-green);
+      box-shadow: 0 0 20px rgba(0, 255, 102, 0.15);
+    }
+    .kpi-card:nth-child(2) {
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+    }
+    .kpi-card:nth-child(3) {
+      border-color: var(--arcade-gold);
+      box-shadow: 0 0 20px rgba(255, 190, 11, 0.15);
+    }
+    .kpi-label {
+      font-family: var(--font-arcade);
+      font-size: 0.65rem;
+      color: var(--retro-dim);
+      margin-bottom: 0.8rem;
+      letter-spacing: 1px;
+    }
+    .kpi-number {
+      font-family: var(--font-arcade);
+      font-size: clamp(2.4rem, 4vw, 3.5rem);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+    .kpi-card:nth-child(1) .kpi-number { color: var(--phosphor-green); text-shadow: 0 0 15px var(--green-glow); }
+    .kpi-card:nth-child(2) .kpi-number { color: var(--neon-cyan); text-shadow: 0 0 15px var(--cyan-glow); }
+    .kpi-card:nth-child(3) .kpi-number { color: var(--arcade-gold); text-shadow: 0 0 15px var(--gold-glow); }
+    .kpi-desc {
+      font-size: 0.95rem;
+      color: var(--retro-white);
+      line-height: 1.45;
+    }
+
+    /* ==========================================================================
+       SLIDE 12: PLANIFICACIÓN Y CRONOGRAMA (ROADMAP DE HITOS)
+       ========================================================================== */
+    .roadmap-section {
+      margin-bottom: 0;
+      width: 100%;
+    }
+    .roadmap-timeline {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      align-items: stretch;
+    }
+    @media (max-width: 850px) {
+      .roadmap-timeline { grid-template-columns: 1fr; }
+    }
+    .milestone-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.8rem 1.4rem;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .milestone-card:hover {
+      transform: translateY(-4px);
+    }
+    .milestone-card.milestone-p1 {
+      border-top: 4px solid var(--neon-cyan);
+      box-shadow: 0 4px 20px rgba(0, 240, 255, 0.08);
+    }
+    .milestone-card.milestone-p2 {
+      border-top: 4px solid var(--arcade-gold);
+      box-shadow: 0 4px 20px rgba(255, 215, 0, 0.08);
+    }
+    .milestone-card.milestone-p3 {
+      border-top: 4px solid var(--phosphor-green);
+      box-shadow: 0 4px 20px rgba(0, 255, 102, 0.08);
+    }
+    .milestone-badge-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.8rem;
+      flex-wrap: wrap;
+    }
+    .milestone-sprint-tag {
+      font-family: var(--font-arcade);
+      font-size: 0.65rem;
+      letter-spacing: 1px;
+    }
+    .milestone-deadline-tag {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+    .milestone-p1 .milestone-sprint-tag { color: var(--neon-cyan); }
+    .milestone-p1 .milestone-deadline-tag {
+      background: rgba(0, 240, 255, 0.12);
+      color: var(--neon-cyan);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+    }
+    .milestone-p2 .milestone-sprint-tag { color: var(--neon-magenta); }
+    .milestone-p2 .milestone-deadline-tag {
+      background: rgba(255, 0, 85, 0.12);
+      color: var(--neon-magenta);
+      border: 1px solid rgba(255, 0, 85, 0.3);
+    }
+    .milestone-p3 .milestone-sprint-tag { color: var(--arcade-gold); }
+    .milestone-p3 .milestone-deadline-tag {
+      background: rgba(255, 215, 0, 0.12);
+      color: var(--arcade-gold);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+    }
+
+    .milestone-card.milestone-locked {
+      background: rgba(13, 16, 27, 0.85);
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+    }
+    .milestone-card.milestone-locked.milestone-p2 {
+      border-top: 4px solid var(--neon-magenta);
+      box-shadow: 0 4px 20px rgba(255, 0, 85, 0.06);
+    }
+    .milestone-card.milestone-locked.milestone-p3 {
+      border-top: 4px solid var(--arcade-gold);
+      box-shadow: 0 4px 20px rgba(255, 215, 0, 0.06);
+    }
+
+    .milestone-locked-box {
+      margin: 1rem 0 1.3rem 0;
+      padding: 1.2rem 1rem;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+    .milestone-locked-box .lock-icon {
+      font-size: 1.8rem;
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+      animation: pulseGlow 2.5s infinite ease-in-out;
+    }
+    .milestone-locked-box .lock-status-title {
+      font-family: var(--font-arcade);
+      font-size: 0.65rem;
+      color: var(--neon-magenta);
+      letter-spacing: 1px;
+    }
+    .milestone-p3 .milestone-locked-box .lock-status-title {
+      color: var(--arcade-gold);
+    }
+    .milestone-locked-box .lock-status-sub {
+      font-size: 0.85rem;
+      color: var(--retro-dim);
+    }
+
+    .milestone-badge {
+      font-family: var(--font-arcade);
+      font-size: 0.65rem;
+      margin-bottom: 0.6rem;
+      letter-spacing: 1px;
+    }
+    .milestone-p1 .milestone-badge { color: var(--neon-cyan); }
+    .milestone-p2 .milestone-badge { color: var(--arcade-gold); }
+    .milestone-p3 .milestone-badge { color: var(--phosphor-green); }
+
+    .milestone-title {
+      font-family: var(--font-arcade);
+      font-size: 0.95rem;
+      color: #fff;
+      margin-bottom: 0.75rem;
+      line-height: 1.3;
+    }
+    .milestone-desc {
+      font-size: 0.95rem;
+      color: var(--retro-white);
+      line-height: 1.45;
+      margin-bottom: 1.2rem;
+    }
+    .milestone-deliverables {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 1.2rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      border-top: 1px dashed rgba(255, 255, 255, 0.12);
+      padding-top: 0.9rem;
+    }
+    .milestone-deliverables li {
+      font-size: 0.85rem;
+      color: var(--retro-dim);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+    .milestone-deliverables .bullet {
+      font-family: var(--font-arcade);
+      font-size: 0.65rem;
+      color: var(--neon-cyan);
+      margin-top: 2px;
+    }
+    .milestone-p2 .milestone-deliverables .bullet { color: var(--arcade-gold); }
+    .milestone-p3 .milestone-deliverables .bullet { color: var(--phosphor-green); }
+
+    .milestone-status {
+      margin-top: auto;
+      font-family: var(--font-arcade);
+      font-size: 0.65rem;
+      padding: 0.45rem 0.75rem;
+      border-radius: 4px;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+    .status-done {
+      background: rgba(0, 240, 255, 0.12);
+      color: var(--neon-cyan);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+    }
+    .status-active {
+      background: rgba(255, 215, 0, 0.12);
+      color: var(--arcade-gold);
+      border: 1px solid rgba(255, 215, 0, 0.35);
+    }
+    .status-pending {
+      background: rgba(0, 255, 102, 0.12);
+      color: var(--phosphor-green);
+      border: 1px solid rgba(0, 255, 102, 0.35);
+    }
+    .status-locked {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--retro-dim);
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+    }
+
+    /* ==========================================================================
+       SLIDE 12: ACUERDOS Y DINÁMICAS DETALLADAS DEL EQUIPO
+       ========================================================================== */
+    .dynamics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    @media (max-width: 900px) {
+      .dynamics-grid { grid-template-columns: 1fr; }
+    }
+    .dynamic-card {
+      background: var(--bg-card);
+      border-radius: 6px;
+      padding: 1.8rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+    .dynamic-card:hover {
+      transform: translateY(-4px);
+    }
+    .dynamic-card.start {
+      border: 2px solid var(--phosphor-green);
+      box-shadow: 0 0 20px rgba(0, 255, 102, 0.15);
+    }
+    .dynamic-card.stop {
+      border: 2px solid var(--neon-magenta);
+      box-shadow: 0 0 20px rgba(255, 42, 133, 0.15);
+    }
+    .dynamic-card.continue {
+      border: 2px solid var(--arcade-gold);
+      box-shadow: 0 0 20px rgba(255, 190, 11, 0.15);
+    }
+    .dynamic-icon-badge {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-arcade);
+      font-size: 1.4rem;
+      margin-bottom: 1.2rem;
+    }
+    .dynamic-card.start .dynamic-icon-badge {
+      background: rgba(0, 255, 102, 0.12);
+      border: 2px solid var(--phosphor-green);
+      color: var(--phosphor-green);
+    }
+    .dynamic-card.stop .dynamic-icon-badge {
+      background: rgba(255, 42, 133, 0.12);
+      border: 2px solid var(--neon-magenta);
+      color: var(--neon-magenta);
+    }
+    .dynamic-card.continue .dynamic-icon-badge {
+      background: rgba(255, 190, 11, 0.12);
+      border: 2px solid var(--arcade-gold);
+      color: var(--arcade-gold);
+    }
+    .dynamic-title {
+      font-family: var(--font-arcade);
+      font-size: 0.85rem;
+      margin-bottom: 0.8rem;
+    }
+    .dynamic-card.start .dynamic-title { color: var(--phosphor-green); }
+    .dynamic-card.stop .dynamic-title { color: var(--neon-magenta); }
+    .dynamic-card.continue .dynamic-title { color: var(--arcade-gold); }
+    .dynamic-desc {
+      font-size: 1rem;
+      color: var(--retro-white);
+      line-height: 1.5;
+    }
+
+    /* ==========================================================================
+       SLIDE 14: CIERRE / MISSION ACCOMPLISHED (Q&A)
+       ========================================================================== */
+    #slide-14 {
+      text-align: center;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+    .clear-badge {
+      display: inline-block;
+      font-family: var(--font-arcade);
+      font-size: 0.8rem;
+      color: var(--phosphor-green);
+      background: rgba(0, 255, 102, 0.1);
+      border: 2px solid var(--phosphor-green);
+      padding: 8px 18px;
+      margin-bottom: 1.25rem;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px var(--green-glow);
+      animation: pulse-dot 1.5s infinite;
+    }
+    .clear-main-title {
+      font-family: var(--font-arcade);
+      font-size: clamp(1.4rem, 3.2vw, 2.6rem);
+      color: #fff;
+      line-height: 1.35;
+      margin-bottom: 1.2rem;
+      text-shadow: 0 0 20px var(--cyan-glow);
+    }
+    .clear-callout {
+      font-family: var(--font-crt);
+      font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+      color: var(--arcade-gold);
+      letter-spacing: 1px;
+      margin-bottom: 2.5rem;
+      text-shadow: 0 0 10px var(--gold-glow);
+    }
+    .clear-credits-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 1.2rem 2rem;
+      display: inline-block;
+      margin-bottom: 2rem;
+    }
+    .clear-credits-title {
+      font-family: var(--font-arcade);
+      font-size: 0.65rem;
+      color: var(--neon-cyan);
+      margin-bottom: 0.5rem;
+    }
+    .clear-credits-list {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--retro-white);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.2rem;
+    }
+    .btn-replay {
+      font-family: var(--font-arcade);
+      font-size: 0.85rem;
+      padding: 1rem 2.2rem;
+      background: var(--neon-cyan);
+      color: #000;
+      border: 3px solid #fff;
+      cursor: pointer;
+      box-shadow: 0 5px 0 #008899, 0 10px 20px var(--cyan-glow);
+      transition: all 0.15s ease;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .btn-replay:hover {
+      background: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 7px 0 #008899, 0 12px 25px var(--cyan-glow);
+    }
+    .btn-replay:active {
+      transform: translateY(4px);
+      box-shadow: none;
+    }
+
+    /* ==========================================================================
+       MODAL DE SELECCIÓN DE STAGE (NIVEL)
+       ========================================================================== */
+    .stage-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 10000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .stage-modal-backdrop.open {
+      display: flex;
+      animation: modal-fade 0.2s ease-out;
+    }
+    @keyframes modal-fade {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .stage-modal {
+      width: 100%;
+      max-width: 820px;
+      background: #0f1324;
+      border: 2px solid var(--neon-cyan);
+      border-radius: 8px;
+      padding: 1.8rem;
+      box-shadow: 0 0 30px var(--cyan-glow);
+    }
+    .stage-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.8rem;
+    }
+    .stage-modal-title {
+      font-family: var(--font-arcade);
+      font-size: 0.95rem;
+      color: var(--neon-cyan);
+    }
+    .stage-modal-close {
+      background: transparent;
+      border: 1px solid var(--neon-magenta);
+      color: var(--neon-magenta);
+      font-family: var(--font-arcade);
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .stage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 0.85rem;
+      max-height: 60vh;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+    .stage-btn-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 0.85rem;
+      border-radius: 4px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .stage-btn-item:hover {
+      border-color: var(--arcade-gold);
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+    }
+    .stage-btn-item.current {
+      border-color: var(--phosphor-green);
+      background: rgba(0, 255, 102, 0.08);
+    }
+    .stage-btn-num {
+      font-family: var(--font-arcade);
+      font-size: 0.65rem;
+      color: var(--arcade-gold);
+    }
+    .stage-btn-name {
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      color: #fff;
+      line-height: 1.25;
+    }
+
+    /* ==========================================================================
+       PONENTES ARCADE VIRTUALES (CANVAS CHROMA-KEY & SPRITE ANIMATION)
+       ========================================================================== */
+    #speakers-arcade-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 150;
+    }
+
+    .sprite-speaker-container {
+      position: fixed;
+      bottom: 44px; /* Justo sobre el HUD inferior de 42px */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      pointer-events: auto;
+      cursor: pointer;
+      user-select: none;
+      transition: 
+        opacity 0.35s ease,
+        transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+        filter 0.28s ease;
+    }
+
+    .sprite-speaker-container.left {
+      left: 20px;
+    }
+
+    .sprite-speaker-container.right {
+      right: 20px;
+    }
+    /* El ponente situado a la derecha mira hacia el centro de la pantalla (izquierda) */
+    .sprite-speaker-container.right .sprite-speaker-canvas {
+      transform: scaleX(-1);
+    }
+
+    /* Ocultos en portada, intro y equipo (Slides 1, 2, 3) */
+    .sprite-speaker-container.hidden {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transform: translateY(28px) scale(0.8) !important;
+    }
+
+    .sprite-speaker-canvas {
+      width: auto;
+      height: clamp(120px, 16vh, 165px);
+      image-rendering: pixelated;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: crisp-edges;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.75));
+      transition: filter 0.25s ease;
+    }
+
+    /* Badge / Etiqueta de ponente activo */
+    .sprite-speaker-badge {
+      font-family: var(--font-arcade);
+      font-size: 0.58rem;
+      letter-spacing: 1.5px;
+      padding: 3px 8px;
+      border-radius: 3px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.85);
+      transition: all 0.25s ease;
+      display: none;
+    }
+
+    /* ESTADO ACTIVO (El compañero que está hablando) */
+    .sprite-speaker-container.active {
+      opacity: 1;
+      transform: scale(1.1);
+      filter: grayscale(0%) brightness(100%);
+      z-index: 160;
+    }
+    .sprite-speaker-container.left.active .sprite-speaker-canvas {
+      filter: drop-shadow(0 0 14px var(--neon-cyan)) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.85));
+    }
+    .sprite-speaker-container.right.active .sprite-speaker-canvas {
+      filter: drop-shadow(0 0 14px var(--arcade-gold)) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.85));
+    }
+
+    /* La etiqueta '1P/2P SPEAKING' se oculta durante la exposición para mantener la vista limpia */
+    .sprite-speaker-container.active .sprite-speaker-badge {
+      display: none;
+    }
+
+    @keyframes speaker-badge-blink {
+      0% { opacity: 0.85; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1.06); filter: brightness(1.25); }
+    }
+
+    /* ESTADO INACTIVO (Compañero callado congelado en blanco y negro esperando su turno) */
+    .sprite-speaker-container.inactive {
+      opacity: 0.82;
+      transform: scale(0.9);
+      filter: grayscale(100%) brightness(45%) contrast(1.1);
+      z-index: 150;
+    }
+    .sprite-speaker-container.inactive .sprite-speaker-badge {
+      display: none;
+    }
+    .sprite-speaker-container.inactive:hover {
+      opacity: 0.95;
+      filter: grayscale(50%) brightness(75%) contrast(1.05);
+      transform: scale(0.95);
+    }
+
+    /* ESTADO REACCIÓN / FINAL (Ambos a color celebrando con animación de salto) */
+    .sprite-speaker-container.reacting {
+      opacity: 1;
+      filter: grayscale(0%) brightness(105%);
+      z-index: 170;
+      animation: speaker-victory-jump 0.5s ease infinite alternate;
+    }
+    .sprite-speaker-container.left.reacting .sprite-speaker-canvas {
+      filter: drop-shadow(0 0 16px var(--neon-cyan)) drop-shadow(0 0 25px rgba(0, 240, 255, 0.4));
+    }
+    .sprite-speaker-container.right.reacting .sprite-speaker-canvas {
+      filter: drop-shadow(0 0 16px var(--arcade-gold)) drop-shadow(0 0 25px rgba(255, 190, 11, 0.4));
+    }
+    .sprite-speaker-container.reacting .sprite-speaker-badge {
+      display: inline-block;
+      background: rgba(0, 255, 102, 0.25);
+      color: var(--phosphor-green);
+      border: 1px solid var(--phosphor-green);
+      box-shadow: 0 0 14px var(--green-glow);
+      animation: speaker-badge-blink 0.45s infinite alternate;
+    }
+
+    @keyframes speaker-victory-jump {
+      0% { transform: translateY(0) scale(1.1); }
+      100% { transform: translateY(-16px) scale(1.16); }
+    }
+
+    @media (max-width: 900px) {
+      .sprite-speaker-canvas {
+        height: clamp(85px, 12vh, 110px);
+      }
+      .sprite-speaker-container.left { left: 10px; }
+      .sprite-speaker-container.right { right: 10px; }
+      .sprite-speaker-badge { font-size: 0.5rem; padding: 2px 5px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Overlay de Efecto CRT (Scanlines y Vignette) -->
+  <div id="crt-overlay" class="crt-overlay" aria-hidden="true"></div>
+
+  <!-- Contenedor Maestro -->
+  <div id="app-container">
+    
+    <!-- ======================================================================
+         HUD SUPERIOR (ARCADE DASHBOARD)
+         ====================================================================== -->
+    <header class="hud-top">
+      <div class="hud-left">
+        <span class="hud-badge-live"></span>
+        <span>SENTINEL-OS // Q1·SPRINT 1</span>
+      </div>
+      
+      <div class="hud-center">
+        <div class="hud-stage-counter" id="hud-stage-display">STAGE 01 / 14</div>
+      </div>
+
+      <div class="hud-right">
+        <span class="hud-score" id="hud-score-display">SCORE: 01000</span>
+        <span id="hud-timer">00:00</span>
+      </div>
+    </header>
+
+    <!-- ======================================================================
+         VIEWPORT DE DIAPOSITIVAS (CONTENIDO EXTRAÍDO DEL PDF)
+         ====================================================================== -->
+    <main class="viewport">
+      <div class="slide-wrapper">
+
+        <!-- ------------------------------------------------------------------
+             SLIDE 1: PANTALLA INICIAL (START SCREEN)
+             ------------------------------------------------------------------ -->
+        <section class="slide active" id="slide-1" data-stage="1" data-title="Pantalla de Inicio">
+          <svg id="title-shield-logo" class="title-shield-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 90,20 90,55 50,95 10,55 10,20" stroke="#00f0ff" stroke-width="4" fill="rgba(0, 240, 255, 0.12)" />
+            <polygon points="50,18 78,30 78,52 50,80 22,52 22,30" stroke="#ff2a85" stroke-width="2.5" fill="rgba(255, 42, 133, 0.08)" />
+            <circle cx="50" cy="46" r="10" fill="#00ff66" />
+            <path d="M44 46 L48 50 L56 42" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+
+          <div class="title-badge stagger stagger-1">PROYECTO Q1 · SPRINT 1</div>
+          <h1 id="main-game-title" class="main-game-title stagger stagger-2" data-text="PROYECTO SENTINEL">PROYECTO SENTINEL</h1>
+          <h2 class="main-game-sub stagger stagger-3">Plataforma de Concienciación y Respuesta a Amenazas (PCRA)</h2>
+          <p class="main-game-motto stagger stagger-4">«No formamos empleados; entrenamos instintos.»</p>
+
+          <div class="start-btn-container stagger stagger-5">
+            <button id="btn-start" class="btn-press-start">
+              ▶ INSERT COIN TO PLAY ◀
+            </button>
+            <div class="keyboard-hint">PULSA ESPACIO O ENTER PARA EMPEZAR</div>
+            <div class="arcade-credits">CREDIT 01 · INSERT COIN · FREE PLAY</div>
+          </div>
+        </section>
+
+        <!-- ------------------------------------------------------------------
+             SLIDE 2: PANTALLA HACKED (FULLSCREEN TAKEOVER EXTREMO)
+             ------------------------------------------------------------------ -->
+        <section class="slide" id="slide-2" data-stage="2" data-title="HACKED">
+          <!-- Cinta de peligro superior continua -->
+          <div class="hacked-hazard-tape top">
+            <span>⚠️ CRITICAL ALERT: SYSTEM COMPROMISED // INTRUSION DETECTED // UNAUTHORIZED OVERRIDE // 95% HUMAN FACTOR EXPLOIT // FIREWALL BREACHED // ACCESS GRANTED // ⚠️ CRITICAL ALERT: SYSTEM COMPROMISED // INTRUSION DETECTED // UNAUTHORIZED OVERRIDE // 95% HUMAN FACTOR EXPLOIT // FIREWALL BREACHED // ACCESS GRANTED // </span>
+          </div>
+
+          <!-- Fondo de lluvia matricial y cuadrícula cyber púrpura -->
+          <div class="hacked-matrix-bg"></div>
+
+          <!-- Contenido central colosal -->
+          <div class="hacked-center-content">
+            <svg class="hacked-skull-giant" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M25,45 C25,24 35,12 50,12 C65,12 75,24 75,45 C75,56 70,62 65,68 L65,80 L35,80 L35,68 C30,62 25,56 25,45 Z" stroke="#c084fc" stroke-width="3.5" fill="rgba(147, 51, 234, 0.35)" />
+              <circle cx="39" cy="45" r="7" fill="#c084fc" />
+              <circle cx="61" cy="45" r="7" fill="#c084fc" />
+              <polygon points="50,56 46,65 54,65" fill="#c084fc" />
+              <line x1="42" y1="72" x2="42" y2="80" stroke="#c084fc" stroke-width="3" />
+              <line x1="50" y1="72" x2="50" y2="80" stroke="#c084fc" stroke-width="3" />
+              <line x1="58" y1="72" x2="58" y2="80" stroke="#c084fc" stroke-width="3" />
+            </svg>
+
+            <div class="hacked-title-wrapper">
+              <h2 class="hacked-colossal-title" data-text="HACKED">HACKED</h2>
+            </div>
+
+            <div class="hacked-terminal-alert">
+              <div class="hacked-alert-title-row">
+                <span class="hud-badge-live" style="background:#ff2a85; box-shadow:0 0 12px #ff2a85;"></span>
+                <span>CRITICAL SECURITY EXPLOIT // SECTOR PYMES // PERÍMETRO VULNERADO</span>
+              </div>
+              <div class="hacked-main-quote">
+                «EL 95% DE LOS CIBERATAQUES EXITOSOS TIENEN COMO ORIGEN EL FACTOR HUMANO»
+              </div>
+              <div class="hacked-subquote">
+                Un único empleado engañado por una simulación de phishing puede comprometer toda la red corporativa en segundos.
+              </div>
+            </div>
+
+            <button id="btn-hacked-proceed" class="btn-hacked-action">
+              DESPLEGAR EQUIPO DEFENSIVO ▶
+            </button>
+            <div class="hacked-keys-hint">PULSA ESPACIO, ENTER O CLIC PARA CONTINUAR</div>
+          </div>
+
+          <!-- Cinta de peligro inferior continua -->
+          <div class="hacked-hazard-tape bottom">
+            <span>⚠️ PROTOCOLO DE CONTENCIÓN EN CURSO // ENTRENAR AL FACTOR HUMANO // RESPUESTA INMEDIATA // ACTIVAR PROTOCOLO SENTINEL // ⚠️ PROTOCOLO DE CONTENCIÓN EN CURSO // ENTRENAR AL FACTOR HUMANO // RESPUESTA INMEDIATA // ACTIVAR PROTOCOLO SENTINEL // </span>
+          </div>
+        </section>
+
+        <!-- ------------------------------------------------------------------
+             SLIDE 3: ORGANIZACIÓN (MIEMBROS, ROLES Y HABILIDADES)
+             ------------------------------------------------------------------ -->
+        <section class="slide" id="slide-3" data-stage="3" data-title="Organización y Equipo">
+          <div class="slide-header">
+            <div class="slide-tag">ORGANIZACIÓN // ARCHIVO DE AGENTES</div>
+            <h2 class="slide-title">Miembros, Roles y Habilidades</h2>
+            <p class="slide-subtitle">Distribución táctica, metodologías ágiles y perfiles de personalidad</p>
+          </div>
+
+          <div class="team-grid">
+            <!-- Iván Navarrete -->
+            <div class="team-member-card stagger stagger-1">
+              <div class="member-avatar unlocked mario-avatar" title="Iván Navarrete · Ponente Desbloqueado">
+                <img src="assets/avatars/avatar_mario.png" alt="Iván Navarrete" class="member-avatar-sprite" />
+              </div>
+              <div class="member-details">
+                <div class="member-name-row">
+                  <span class="member-name">Iván</span>
+                  <span class="member-role-badge">Frontend</span>
+                </div>
+                <div class="member-agile">Product Owner</div>
+                <div class="member-profile">DISC: I · ENFP-T</div>
+                <div class="member-specialty">Oratoria y coordinación grupal</div>
+              </div>
+            </div>
+
+            <!-- Nicolás -->
+            <div class="team-member-card stagger stagger-2">
+              <div class="member-avatar locked" title="Personaje aún no desbloqueado">?</div>
+              <div class="member-details">
+                <div class="member-name-row">
+                  <span class="member-name">Nicolás</span>
+                  <span class="member-role-badge">Ciberseguridad</span>
+                </div>
+                <div class="member-agile">Scrum Master</div>
+                <div class="member-profile">DISC: S · ISFJ-T</div>
+                <div class="member-specialty">Seguridad y documentación</div>
+              </div>
+            </div>
+
+            <!-- Nacho -->
+            <div class="team-member-card stagger stagger-3">
+              <div class="member-avatar locked" title="Personaje aún no desbloqueado">?</div>
+              <div class="member-details">
+                <div class="member-name-row">
+                  <span class="member-name">Nacho</span>
+                  <span class="member-role-badge">Frontend</span>
+                </div>
+                <div class="member-agile">Desarrollador</div>
+                <div class="member-profile">DISC: S · ESTP-T</div>
+                <div class="member-specialty">Programación y tecnologías web</div>
+              </div>
+            </div>
+
+            <!-- Mario Seoane -->
+            <div class="team-member-card stagger stagger-4">
+              <div class="member-avatar unlocked ivan-avatar" title="Mario Seoane · Ponente Desbloqueado">
+                <img src="assets/avatars/avatar_ivan.png" alt="Mario Seoane" class="member-avatar-sprite" />
+              </div>
+              <div class="member-details">
+                <div class="member-name-row">
+                  <span class="member-name">Mario</span>
+                  <span class="member-role-badge">UX y Testing</span>
+                </div>
+                <div class="member-agile">Diseñador QA</div>
+                <div class="member-profile">DISC: S · ISFJ-T</div>
+                <div class="member-specialty">Experiencia de usuario y pruebas</div>
+              </div>
+            </div>
+
+            <!-- Miguel -->
+            <div class="team-member-card stagger stagger-5">
+              <div class="member-avatar locked" title="Personaje aún no desbloqueado">?</div>
+              <div class="member-details">
+                <div class="member-name-row">
+                  <span class="member-name">Miguel</span>
+                  <span class="member-role-badge">Backend</span>
+                </div>
+                <div class="member-agile">Desarrollador</div>
+                <div class="member-profile">DISC: S · ENTP-A</div>
+                <div class="member-specialty">Arquitectura de servidor</div>
+              </div>
+            </div>
+
+            <!-- Alberto -->
+            <div class="team-member-card stagger stagger-6">
+              <div class="member-avatar locked" title="Personaje aún no desbloqueado">?</div>
+              <div class="member-details">
+                <div class="member-name-row">
+                  <span class="member-name">Alberto</span>
+                  <span class="member-role-badge">Backend</span>
+                </div>
+                <div class="member-agile">Desarrollador</div>
+                <div class="member-profile">DISC: C · Técnico</div>
+                <div class="member-specialty">Lógica de datos y sistemas</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ------------------------------------------------------------------
+             SLIDE 4: VULNERABILIDAD CRÍTICA
+             ------------------------------------------------------------------ -->
+        <section class="slide" id="slide-4" data-stage="4" data-title="Vulnerabilidad Crítica">
+          <div class="slide-header">
+            <div class="slide-tag">VULNERABILIDAD CRÍTICA // AMENAZA NIVEL 5</div>
+            <h2 class="slide-title">El Factor Humano en Ciberseguridad</h2>
+            <p class="slide-subtitle">La brecha de seguridad más explotada y desatendida del ecosistema digital</p>
+          </div>
+
+          <div class="vuln-layout">
+            <div class="stat-hero-card danger stagger stagger-1">
+              <div class="stat-big-number">95%</div>
+              <div class="stat-card-title">INCIDENTES POR ERROR HUMANO</div>
+              <p class="stat-card-desc">Causados directamente por fallos de personas en la organización, según el World Economic Forum (WEF).</p>
+            </div>
+
+            <div class="stat-hero-card warning stagger stagger-2">
+              <div class="stat-big-number">+435%</div>
+              <div class="stat-card-title">EXPLOSIÓN DE ATAQUES</div>
+              <p class="stat-card-desc">Incremento reciente y acelerado en incidentes dirigidos de malware y campañas de ransomware.</p>
+            </div>
+
+            <div class="stat-hero-card info stagger stagger-3">
+              <div class="stat-big-number">0%</div>
+              <div class="stat-card-title">FORMACIÓN PASIVA OBSOLETA</div>
+              <p class="stat-card-desc">Vídeos teóricos eternos y aburridos que los empleados olvidan por completo al día siguiente de verlos.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ------------------------------------------------------------------
+             SLIDE 5: DIAGNÓSTICO DE RIESGO (PYMES)
+             ------------------------------------------------------------------ -->
+        <section class="slide" id="slide-5" data-stage="5" data-title="Diagnóstico de Riesgo">
+          <div class="slide-header">
+            <div class="slide-tag">DIAGNÓSTICO DE RIESGO // SECTOR PYMES</div>
+            <h2 class="slide-title">Cliente Objetivo e Impacto en Pymes</h2>
+            <p class="slide-subtitle">Consecuencias catastróficas y vectores de presión psicológica</p>
+          </div>
+
+          <div class="risk-grid">
+            <div class="cost-highlight-box stagger stagger-1">
+              <div class="cost-badge">COSTE ECONÓMICO POR INCIDENTE</div>
+              <div class="cost-amount">35k€ – 80k€</div>
+              <p class="cost-impact">Paralización operativa del negocio, secuestro o pérdida de datos confidenciales sensibles y grave daño reputacional irreversible.</p>
+            </div>
+
+            <div class="risk-factors-list">
+              <div class="risk-item stagger stagger-2">
+                <div class="risk-icon-box">🛡️</div>
+                <div>
+                  <div class="risk-item-title">Cliente Objetivo</div>
+                  <div class="risk-item-desc">Pymes que carecen de departamento propio o personal técnico especializado en seguridad.</div>
+                </div>
+              </div>
+
+              <div class="risk-item stagger stagger-3">
+                <div class="risk-icon-box">🎯</div>
+                <div>
+                  <div class="risk-item-title">Usuarios Finales</div>
+                  <div class="risk-item-desc">Empleados altamente expuestos a campañas de ingeniería social hiperpersonalizadas.</div>
+                </div>
+              </div>
+
+              <div class="risk-item stagger stagger-4">
+                <div class="risk-icon-box">⚡</div>
+                <div>
+                  <div class="risk-item-title">Fatiga Digital</div>
+                  <div class="risk-item-desc">Altísimo volumen diario de correos, multitarea y estrés laboral constante que nublan el juicio crítico.</div>
+                </div>
+              </div>
+
+              <div class="risk-item stagger stagger-5">
+                <div class="risk-icon-box">🤖</div>
+                <div>
+                  <div class="risk-item-title">Urgencia por IA</div>
+                  <div class="risk-item-desc">Ataques hiperrealistas generados por Inteligencia Artificial capaces de comprometer redes corporativas enteras en minutos.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ------------------------------------------------------------------
+             SLIDE 6: ANÁLISIS DAFO
+             ------------------------------------------------------------------ -->
+        <section class="slide" id="slide-6" data-stage="6" data-title="Análisis DAFO">
+          <div class="slide-header">
+            <div class="slide-tag">ESTRATEGIA // MATRIZ TÁCTICA</div>
+            <h2 class="slide-title">Análisis DAFO del Proyecto</h2>
+            <p class="slide-subtitle">Evaluación estratégica interna y factores competitivos del entorno</p>
+          </div>
+
+          <div class="swot-grid">
+            <div class="swot-card fortalezas stagger stagger-1">
+              <div class="swot-title"><span>[+]</span> FORTALEZAS</div>
+              <ul class="swot-list">
+                <li>Experiencia programando.</li>
+                <li>Personal cualificado.</li>
+                <li>Adaptado a pymes sin técnicos.</li>
+              </ul>
+            </div>
+
+            <div class="swot-card oportunidades stagger stagger-2">
+              <div class="swot-title"><span>[*]</span> OPORTUNIDADES</div>
+              <ul class="swot-list">
+                <li>Sector en constante crecimiento por la IA.</li>
+                <li>El factor humano es el punto más débil.</li>
+                <li>Obligación legal y de seguros.</li>
+              </ul>
+            </div>
+
+            <div class="swot-card debilidades stagger stagger-3">
+              <div class="swot-title"><span>[-]</span> DEBILIDADES</div>
+              <ul class="swot-list">
+                <li>Poco personal.</li>
+                <li>Catálogo inicial reducido.</li>
+                <li>Falta de reconocimiento en el mercado.</li>
+              </ul>
+            </div>
+
+            <div class="swot-card amenazas stagger stagger-4">
+              <div class="swot-title"><span>[!]</span> AMENAZAS</div>
+              <ul class="swot-list">
+                <li>Sector con bastante competencia.</li>
+                <li>Desconocimiento en las pymes.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- ------------------------------------------------------------------
+             SLIDE 7: POSICIONAMIENTO Y COMPETIDORES
+             ------------------------------------------------------------------ -->
+        <section class="slide" id="slide-7" data-stage="7" data-title="Análisis Competitivo">
+          <div class="slide-header">
+            <div class="slide-tag">POSICIONAMIENTO // MAPA DEL MERCADO</div>
+            <h2 class="slide-title">Análisis de Competidores</h2>
+            <p class="slide-subtitle">Diferenciación estratégica frente a corporaciones y plataformas complejas</p>
+          </div>
+
+          <div class="comp-grid">
+            <!-- Gigantes Globales -->
+            <div class="comp-col stagger stagger-1">
+              <div class="comp-header">Gigantes Globales</div>
+              <div class="comp-field">
+                <span class="comp-field-label">ACTORES</span>
+                KnowBe4, Proofpoint.
+              </div>
+              <div class="comp-field">
+                <span class="comp-field-label">ENFOQUE</span>
+                Grandes corporaciones multinacionales y banca.
+              </div>
+              <div class="comp-field">
+                <span class="comp-field-label">BARRERA</span>
+                Configuración técnica extremadamente compleja.
+              </div>
+              <div class="comp-field">
+                <span class="comp-field-label">COSTE</span>
+                Licencias con precios prohibitivos para pymes.
+              </div>
+            </div>
+
+            <!-- Especialistas Europeos -->
+            <div class="comp-col stagger stagger-2">
+              <div class="comp-header">Especialistas Europeos</div>
+              <div class="comp-field">
+                <span class="comp-field-label">ACTORES</span>
+                SoSafe, Hoxhunt.
+              </div>
+              <div class="comp-field">
+                <span class="comp-field-label">ENFOQUE</span>
+                Medianas y grandes empresas.
+              </div>
+              <div class="comp-field">
+                <span class="comp-field-label">VENTAJA</span>
+                Cumplimiento estricto del marco RGPD.
+              </div>
+              <div class="comp-field">
+                <span class="comp-field-label">BARRERA</span>
+                Tarifas elevadas y fricción de entrada.
+              </div>
+            </div>
+
+            <!-- Proyecto Sentinel -->
+            <div class="comp-col highlight stagger stagger-3">
+              <div class="comp-badge-winner">NUESTRA SOLUCIÓN</div>
+              <div class="comp-header">Proyecto Sentinel</div>
+              <div class="comp-field">
+                <span class="comp-field-label">ENFOQUE</span>
+                Exclusivo y optimizado para pymes españolas.
+              </div>
+              <div class="comp-field">
+                <span class="comp-field-label">OPERATIVA</span>
+                Despliegue inmediato sin requerir técnicos.
+              </div>
+              <div class="comp-field">
+                <span class="comp-field-label">CONTENIDO</span>
+                Simulaciones realistas de fraudes y timos locales.
+              </div>
+              <div class="comp-field">
+                <span class="comp-field-label">MODELO</span>
+                Tarifas accesibles, transparentes y escalables.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ------------------------------------------------------------------
+             SLIDE 8: PROYECCIÓN SECTORIAL
+             ------------------------------------------------------------------ -->
+        <section class="slide" id="slide-8" data-stage="8" data-title="Proyección Sectorial">
+          <div class="slide-header">
+            <div class="slide-tag">PROYECCIÓN SECTORIAL // VOLUMEN DE MERCADO</div>
+            <h2 class="slide-title">Tamaño de Mercado Estimado</h2>
+            <p class="slide-subtitle">Oportunidad expansiva en Security Awareness Training (SAT)</p>
+          </div>
+
+          <div class="market-container">
+            <div class="market-bars-card stagger stagger-1">
+              <div class="market-stat-row">
+                <div class="market-row-info">
+                  <span class="market-row-label">VALORACIÓN ACTUAL (SECURITY AWARENESS TRAINING)</span>
+                  <span class="market-row-value">USD 6.74 Mil Millones</span>
+                </div>
+                <div class="market-progress-bar">
+                  <div class="market-progress-fill current"></div>
+                </div>
+              </div>
+
+              <div class="market-stat-row">
+                <div class="market-row-info">
+                  <span class="market-row-label">PROYECCIÓN DE CRECIMIENTO (MORDOR INTELLIGENCE)</span>
+                  <span class="market-row-value future">USD 14.66 Mil Millones</span>
+                </div>
+                <div class="market-progress-bar">
+                  <div class="market-progress-fill target"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="market-drivers-grid">
+              <div class="driver-box stagger stagger-2">
+                <div class="driver-title">⚖️ IMPULSO NORMATIVO</div>
+                <div class="driver-desc">Obligación legal y de pólizas de ciberseguro de registrar la evolución formativa y realizar auditorías anti-phishing periódicas auditables.</div>
+              </div>
+
+              <div class="driver-box stagger stagger-3">
+                <div class="driver-title">🧠 SOFISTICACIÓN IA</div>
+                <div class="driver-desc">Engaños persuasivos hiperdirigidos que superan fácilmente los filtros y barreras técnicas tradicionales de correo.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ------------------------------------------------------------------
+             SLIDE 9: FUNCIONAMIENTO (ENTRENAMIENTO POR IMPACTO)
+             ------------------------------------------------------------------ -->
+        <section class="slide" id="slide-9" data-stage="9" data-title="Funcionamiento">
+          <div class="slide-header">
+            <div class="slide-tag">FUNCIONAMIENTO // GAMEPLAY LOOP DEFENSIVO</div>
+            <h2 class="slide-title">Solución: Entrenamiento Basado en Impacto</h2>
+            <p class="slide-subtitle">De la teoría aburrida a la práctica psicológica inmediata en 3 fases</p>
+          </div>
+
+          <div class="steps-pipeline">
+            <div class="step-card stagger stagger-1">
+              <div class="step-number-badge">1</div>
+              <h3 class="step-title">Simulación Continua</h3>
+              <p class="step-desc">Ataques inofensivos controlados en el entorno laboral diario, simulando fraudes creíbles según el contexto del empleado.</p>
+            </div>
+
+            <div class="step-card stagger stagger-2">
+              <div class="step-number-badge">2</div>
+              <h3 class="step-title">Aprendizaje por Impacto</h3>
+              <p class="step-desc">Muestra al instante los datos comprometidos tras fallar, provocando una experiencia memorable e instructiva en caliente.</p>
+            </div>
+
+            <div class="step-card stagger stagger-3">
+              <div class="step-number-badge">3</div>
+              <h3 class="step-title">Refuerzo Positivo</h3>
+              <p class="step-desc">Recompensa con puntos en el ranking corporativo y reconocimiento a los empleados al reportar amenazas activamente.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ------------------------------------------------------------------
+             SLIDE 10: PROPUESTA DE VALOR
+             ------------------------------------------------------------------ -->
+        <section class="slide" id="slide-10" data-stage="10" data-title="Propuesta de Valor">
+          <div class="slide-header">
+            <div class="slide-tag">PROPUESTA DE VALOR // BENEFICIOS DIRECTOS</div>
+            <h2 class="slide-title">Beneficios para la Organización</h2>
+            <p class="slide-subtitle">Impacto medible en retención, cultura interna y cumplimiento normativo</p>
+          </div>
+
+          <div class="value-grid">
+            <div class="value-card stagger stagger-1">
+              <div class="value-icon">🧠</div>
+              <div>
+                <div class="value-title">Memoria Muscular Defensiva</div>
+                <div class="value-text">Retención muy superior al experimentar las consecuencias reales e inmediatas del fallo en primera persona.</div>
+              </div>
+            </div>
+
+            <div class="value-card stagger stagger-2">
+              <div class="value-icon">📊</div>
+              <div>
+                <div class="value-title">Visibilidad Directiva</div>
+                <div class="value-text">Panel de control integral con métricas en tiempo real de evolución semanal por departamento y empleado.</div>
+              </div>
+            </div>
+
+            <div class="value-card stagger stagger-3">
+              <div class="value-icon">🏆</div>
+              <div>
+                <div class="value-title">Cultura de Reconocimiento</div>
+                <div class="value-text">Incentivos corporativos y gamificación transparente orientados al buen desempeño defensivo en seguridad.</div>
+              </div>
+            </div>
+
+            <div class="value-card stagger stagger-4">
+              <div class="value-icon">📜</div>
+              <div>
+                <div class="value-title">Cumplimiento Legal</div>
+                <div class="value-text">Registro auditable automatizado para leyes exigentes de protección de datos (RGPD) y requisitos de aseguradoras.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ------------------------------------------------------------------
+             SLIDE 11: MÉTRICAS DE VALIDACIÓN (KPIS)
+             ------------------------------------------------------------------ -->
+        <section class="slide" id="slide-11" data-stage="11" data-title="Métricas de Validación">
+          <div class="slide-header">
+            <div class="slide-tag">MÉTRICAS DE VALIDACIÓN // TARGET CRITERIA</div>
+            <h2 class="slide-title">Criterios de Éxito (KPIs)</h2>
+            <p class="slide-subtitle">Objetivos cuantificables para certificar la efectividad de la plataforma</p>
+          </div>
+
+          <div class="kpi-grid">
+            <div class="kpi-card stagger stagger-1">
+              <div class="kpi-label">TASA DE CAÍDA (3 MESES)</div>
+              <div class="kpi-number">&lt; 10%</div>
+              <div class="kpi-desc">Reducción drástica desde el 30-40% inicial de clics maliciosos en pruebas iniciales de diagnóstico.</div>
+            </div>
+
+            <div class="kpi-card stagger stagger-2">
+              <div class="kpi-label">TASA DE REPORTE ACTIVO</div>
+              <div class="kpi-number">&gt; 80%</div>
+              <div class="kpi-desc">Empleados utilizando proactivamente el botón de alerta del sistema ante simulaciones y correos sospechosos.</div>
+            </div>
+
+            <div class="kpi-card stagger stagger-3">
+              <div class="kpi-label">RESOLUCIÓN FORMATIVA</div>
+              <div class="kpi-number">100%</div>
+              <div class="kpi-desc">Lectura completa de la pantalla pedagógica de impacto y superación satisfactoria del micro-test interactivo.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ------------------------------------------------------------------
+             SLIDE 12: PLANIFICACIÓN Y SPRINTS
+             ------------------------------------------------------------------ -->
+        <section class="slide" id="slide-12" data-stage="12" data-title="Planificación de Sprints">
+          <div class="slide-header">
+            <div class="slide-tag">ROADMAP // CALENDARIO DE SPRINTS</div>
+            <h2 class="slide-title">Planificación de Sprints</h2>
+            <p class="slide-subtitle">Cronograma de desarrollo, fechas límite y evolución del proyecto</p>
+          </div>
+
+          <div class="roadmap-section">
+            <div class="roadmap-timeline">
+              <!-- SPRINT 1 -->
+              <div class="milestone-card milestone-p1 stagger stagger-1">
+                <div class="milestone-badge-row">
+                  <span class="milestone-sprint-tag">SPRINT 1</span>
+                  <span class="milestone-deadline-tag">📅 LÍMITE: 20 OCTUBRE</span>
+                </div>
+                <div class="milestone-title">Especificación</div>
+                <div class="milestone-desc">Definición de alcance, objetivos estratégicos y análisis exhaustivo de mercado.</div>
+                <ul class="milestone-deliverables">
+                  <li><span class="bullet">▶</span> Alcance del producto y objetivos estratégicos</li>
+                  <li><span class="bullet">▶</span> Análisis exhaustivo de competidores y mercado</li>
+                  <li><span class="bullet">▶</span> Definición de perfiles de usuario y roles DISC</li>
+                </ul>
+                <div class="milestone-status status-done">✔ FASE COMPLETADA · 20 OCT</div>
+              </div>
+
+              <!-- SPRINT 2 -->
+              <div class="milestone-card milestone-p2 milestone-locked stagger stagger-2">
+                <div class="milestone-badge-row">
+                  <span class="milestone-sprint-tag">SPRINT 2</span>
+                  <span class="milestone-deadline-tag">📅 LÍMITE: 10 NOVIEMBRE</span>
+                </div>
+                <div class="milestone-title" style="color: var(--neon-magenta);">Sin Definir</div>
+                <div class="milestone-desc">Objetivos específicos, alcance y tareas del sprint aún sin definir.</div>
+                <div class="milestone-locked-box">
+                  <div class="lock-icon">🔒</div>
+                  <div class="lock-status-title">CONTENIDO BLOQUEADO</div>
+                  <div class="lock-status-sub">Próximamente en planificación</div>
+                </div>
+                <div class="milestone-status status-locked">🔒 BLOQUEADO · PRÓXIMAMENTE</div>
+              </div>
+
+              <!-- SPRINT 3 -->
+              <div class="milestone-card milestone-p3 milestone-locked stagger stagger-3">
+                <div class="milestone-badge-row">
+                  <span class="milestone-sprint-tag">SPRINT 3</span>
+                  <span class="milestone-deadline-tag">📅 LÍMITE: 1 DICIEMBRE</span>
+                </div>
+                <div class="milestone-title" style="color: var(--arcade-gold);">Sin Definir</div>
+                <div class="milestone-desc">Fase final, despliegue y validación con fecha límite del 1 de diciembre.</div>
+                <div class="milestone-locked-box">
+                  <div class="lock-icon">🔒</div>
+                  <div class="lock-status-title">CONTENIDO BLOQUEADO</div>
+                  <div class="lock-status-sub">Próximamente en planificación</div>
+                </div>
+                <div class="milestone-status status-locked">🔒 BLOQUEADO · PRÓXIMAMENTE</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ------------------------------------------------------------------
+             SLIDE 13: ACUERDOS Y DINÁMICAS DEL EQUIPO
+             ------------------------------------------------------------------ -->
+        <section class="slide" id="slide-13" data-stage="13" data-title="Dinámicas y Acuerdos">
+          <div class="slide-header">
+            <div class="slide-tag">DINÁMICAS // PROTOCOLO DE CONVIVENCIA</div>
+            <h2 class="slide-title">Acuerdos y Dinámicas del Equipo</h2>
+            <p class="slide-subtitle">Tabla de tareas y conductas clave acordadas por consenso grupal</p>
+          </div>
+
+          <div class="dynamics-grid">
+            <div class="dynamic-card start stagger stagger-1">
+              <div class="dynamic-icon-badge">+</div>
+              <h3 class="dynamic-title">Empezar a hacer</h3>
+              <p class="dynamic-desc">Aumentar la comunicación constante y organizar llamadas grupales para resolver bloqueos rápidamente.</p>
+            </div>
+
+            <div class="dynamic-card stop stagger stagger-2">
+              <div class="dynamic-icon-badge">−</div>
+              <h3 class="dynamic-title">Dejar de hacer</h3>
+              <p class="dynamic-desc">Menos uso de dispositivos electrónicos durante reuniones cara a cara para garantizar atención plena.</p>
+            </div>
+
+            <div class="dynamic-card continue stagger stagger-3">
+              <div class="dynamic-icon-badge">✓</div>
+              <h3 class="dynamic-title">Seguir haciendo</h3>
+              <p class="dynamic-desc">Seguir documentando todas las decisiones de grupo clave para poder consultarlas en cualquier momento futuro.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ------------------------------------------------------------------
+             SLIDE 14: CIERRE / TURNO DE DEBATE
+             ------------------------------------------------------------------ -->
+        <section class="slide" id="slide-14" data-stage="14" data-title="Misión Cumplida / Cierre">
+          <div class="clear-badge stagger stagger-1">★ ALL STAGES COMPLETED · MISSION SUCCESS ★</div>
+          
+          <h2 class="clear-main-title stagger stagger-2">
+            PROYECTO SENTINEL (PCRA)<br>
+            <span style="color: var(--neon-cyan); font-size: 0.8em;">Convertimos empleados en el firewall humano de las pymes</span>
+          </h2>
+
+          <div class="clear-callout stagger stagger-3">
+            ¿Preguntas o comentarios?
+          </div>
+
+          <div class="clear-credits-box stagger stagger-4">
+            <div class="clear-credits-title">EQUIPO SENTINEL</div>
+            <div class="clear-credits-list">
+              <span>Iván (PO)</span>
+              <span>•</span>
+              <span>Nicolás (SM)</span>
+              <span>•</span>
+              <span>Nacho (Dev)</span>
+              <span>•</span>
+              <span>Mario (QA)</span>
+              <span>•</span>
+              <span>Miguel (Dev)</span>
+              <span>•</span>
+              <span>Alberto (Dev)</span>
+            </div>
+          </div>
+
+          <div class="stagger stagger-5">
+            <button id="btn-replay" class="btn-replay">
+              ↺ REINICIAR MISIÓN (STAGE 01)
+            </button>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- ======================================================================
+         HUD INFERIOR (CONTROLES Y BARRA DE VIDA)
+         ====================================================================== -->
+    <footer class="hud-bottom">
+      <div class="hp-container">
+        <span class="hp-label">SHIELD</span>
+        <div class="hp-meter" id="hp-bar" title="Progreso de la presentación">
+          <!-- 13 celdas generadas dinámicamente -->
+        </div>
+      </div>
+
+      <nav class="hud-nav-buttons" aria-label="Controles de navegación">
+        <button id="btn-prev" class="btn-arcade-nav" title="Retroceder (Flecha Izq)">
+          ◀ PREV
+        </button>
+        <button id="btn-stage-select" class="btn-arcade-nav" title="Seleccionar Diapositiva (Tecla S)">
+          STAGE MAP
+        </button>
+        <button id="btn-next" class="btn-arcade-nav" title="Avanzar (Flecha Der / Espacio)">
+          NEXT ▶
+        </button>
+      </nav>
+
+      <div class="hud-controls-right">
+        <button id="btn-toggle-sound" class="btn-hud-icon active" title="Silenciar / Activar Audio (Tecla M)">
+          <span id="sound-icon">🔊</span> AUDIO: ON
+        </button>
+        <button id="btn-toggle-crt" class="btn-hud-icon active" title="Activar / Desactivar efecto CRT (Tecla T)">
+          📺 CRT: ON
+        </button>
+        <button id="btn-toggle-fullscreen" class="btn-hud-icon" title="Pantalla Completa (Tecla F o F11)">
+          ⛶ FULL
+        </button>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- ======================================================================
+       MODAL DE SELECCIÓN DE STAGE (STAGE SELECTOR)
+       ====================================================================== -->
+  <div id="stage-modal" class="stage-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="stage-modal">
+      <div class="stage-modal-header">
+        <div class="stage-modal-title" id="modal-title">SELECT MISSION STAGE</div>
+        <button id="stage-modal-close" class="stage-modal-close">ESC [X]</button>
+      </div>
+      <div class="stage-grid" id="stage-grid-container">
+        <!-- Generado dinámicamente -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       PONENTES ARCADE VIRTUALES (CANVAS CHROMA-KEY)
+       ====================================================================== -->
+  <aside id="speakers-arcade-layer" aria-label="Ponentes de la Presentación">
+    <!-- Player 1 (Esquina Inferior Izquierda - Mario Seoane, Traje Negro y Gafas) -->
+    <div id="speaker-p1" class="sprite-speaker-container left hidden" title="Player 1: Mario Seoane · Clic o Tecla C para alternar">
+      <div class="sprite-speaker-badge" id="badge-p1">1P SPEAKING</div>
+      <canvas id="canvas-p1" class="sprite-speaker-canvas"></canvas>
+    </div>
+
+    <!-- Player 2 (Esquina Inferior Derecha - Iván Navarrete, Abrigo Beige mirando al centro) -->
+    <div id="speaker-p2" class="sprite-speaker-container right hidden" title="Player 2: Iván Navarrete · Clic o Tecla C para alternar">
+      <div class="sprite-speaker-badge" id="badge-p2">2P SPEAKING</div>
+      <canvas id="canvas-p2" class="sprite-speaker-canvas"></canvas>
+    </div>
+  </aside>
+
+  <!-- ======================================================================
+       MOTOR DE AUDIO RETRO (Web Audio API) & CONTROLADOR PRINCIPAL
+       ====================================================================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      /* ----------------------------------------------------------------------
+         1. MOTOR DE AUDIO RETRO PROCEDURAL (Web Audio API)
+         ---------------------------------------------------------------------- */
+      class RetroAudioEngine {
+        constructor() {
+          this.ctx = null;
+          this.muted = false;
+          this.sirenNodes = null;
+          this.sirenGain = null;
+        }
+
+        init() {
+          if (!this.ctx) {
+            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+            if (AudioContextClass) {
+              this.ctx = new AudioContextClass();
+            }
+          }
+          if (this.ctx && this.ctx.state === 'suspended') {
+            this.ctx.resume();
+          }
+        }
+
+        toggleMute() {
+          this.muted = !this.muted;
+          if (this.sirenGain && this.ctx) {
+            const now = this.ctx.currentTime;
+            this.sirenGain.gain.cancelScheduledValues(now);
+            this.sirenGain.gain.setValueAtTime(this.muted ? 0 : 0.13, now);
+          }
+          if (!this.muted) {
+            this.playBlip(true);
+          }
+          return !this.muted;
+        }
+
+        /* Sonido de "Coin / Game Start" estilo Arcade */
+        playCoin() {
+          if (this.muted) return;
+          this.init();
+          if (!this.ctx) return;
+
+          const now = this.ctx.currentTime;
+          
+          // Nota 1: B5 (987.77 Hz)
+          const osc1 = this.ctx.createOscillator();
+          const gain1 = this.ctx.createGain();
+          osc1.type = 'square';
+          osc1.frequency.setValueAtTime(987.77, now);
+          gain1.gain.setValueAtTime(0.18, now);
+          gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+
+          osc1.connect(gain1);
+          gain1.connect(this.ctx.destination);
+          osc1.start(now);
+          osc1.stop(now + 0.08);
+
+          // Nota 2: E6 (1318.51 Hz) triunfal
+          const osc2 = this.ctx.createOscillator();
+          const gain2 = this.ctx.createGain();
+          osc2.type = 'square';
+          osc2.frequency.setValueAtTime(1318.51, now + 0.08);
+          gain2.gain.setValueAtTime(0.25, now + 0.08);
+          gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
+
+          osc2.connect(gain2);
+          gain2.connect(this.ctx.destination);
+          osc2.start(now + 0.08);
+          osc2.stop(now + 0.45);
+        }
+
+        /* Sonido sutil de navegación de diapositivas */
+        playBlip(forward = true) {
+          if (this.muted) return;
+          this.init();
+          if (!this.ctx) return;
+
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+
+          osc.type = 'triangle';
+          const startFreq = forward ? 520 : 680;
+          const endFreq = forward ? 840 : 420;
+
+          osc.frequency.setValueAtTime(startFreq, now);
+          osc.frequency.exponentialRampToValueAtTime(endFreq, now + 0.06);
+
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.06);
+        }
+
+        /* Sonido de tope / error */
+        playBump() {
+          if (this.muted) return;
+          this.init();
+          if (!this.ctx) return;
+
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(120, now);
+          osc.frequency.exponentialRampToValueAtTime(40, now + 0.12);
+
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.12);
+        }
+
+        /* Fanfarria de Victoria (Slide 13) */
+        playVictory() {
+          if (this.muted) return;
+          this.init();
+          if (!this.ctx) return;
+
+          const now = this.ctx.currentTime;
+          const notes = [
+            { f: 523.25, d: 0.1 },  // C5
+            { f: 659.25, d: 0.1 },  // E5
+            { f: 783.99, d: 0.1 },  // G5
+            { f: 1046.50, d: 0.35 } // C6
+          ];
+
+          let offset = 0;
+          notes.forEach((n) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(n.f, now + offset);
+            gain.gain.setValueAtTime(0.18, now + offset);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + offset + n.d);
+
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now + offset);
+            osc.stop(now + offset + n.d);
+            offset += n.d * 0.85;
+          });
+        }
+
+        /* Sonido de Glitch Cibernético de Alta Intensidad para la Transición a HACKED */
+        playGlitch() {
+          if (this.muted) return;
+          this.init();
+          if (!this.ctx) return;
+
+          const now = this.ctx.currentTime;
+          const duration = 0.52;
+
+          // 1. Ráfaga de ruido estático corrupto con gating de tartamudeo (data packet corruption)
+          const bufferSize = Math.floor(this.ctx.sampleRate * duration);
+          const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            const stutterStep = Math.floor(i / (this.ctx.sampleRate * 0.024));
+            const stutterGate = (stutterStep % 2 === 0) ? 1.0 : 0.28;
+            data[i] = (Math.random() * 2 - 1) * stutterGate * (1 - (i / bufferSize) * 0.65);
+          }
+          const noise = this.ctx.createBufferSource();
+          noise.buffer = buffer;
+
+          const noiseFilter = this.ctx.createBiquadFilter();
+          noiseFilter.type = 'bandpass';
+          noiseFilter.Q.setValueAtTime(6.0, now);
+          noiseFilter.frequency.setValueAtTime(3200, now);
+          noiseFilter.frequency.exponentialRampToValueAtTime(160, now + duration);
+
+          const noiseGain = this.ctx.createGain();
+          noiseGain.gain.setValueAtTime(0.26, now);
+          noiseGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+          noise.connect(noiseFilter);
+          noiseFilter.connect(noiseGain);
+          noiseGain.connect(this.ctx.destination);
+          noise.start(now);
+          noise.stop(now + duration);
+
+          // 2. Ondas de sierra en salto caótico de frecuencias (bit-crushed jitter)
+          const glitchOsc = this.ctx.createOscillator();
+          const glitchGain = this.ctx.createGain();
+          glitchOsc.type = 'sawtooth';
+
+          const freqs = [940, 210, 1820, 120, 1420, 80, 1680, 290, 95, 2200, 45];
+          const stepTime = duration / freqs.length;
+          freqs.forEach((f, idx) => {
+            glitchOsc.frequency.setValueAtTime(f, now + idx * stepTime);
+          });
+
+          glitchGain.gain.setValueAtTime(0.22, now);
+          for (let idx = 0; idx < freqs.length; idx++) {
+            const t = now + idx * stepTime;
+            glitchGain.gain.setValueAtTime((idx % 2 === 0) ? 0.22 : 0.05, t);
+          }
+          glitchGain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+          glitchOsc.connect(glitchGain);
+          glitchGain.connect(this.ctx.destination);
+          glitchOsc.start(now);
+          glitchOsc.stop(now + duration);
+
+          // 3. Sub-bass Drop / Impacto profundo de brecha de seguridad
+          const subOsc = this.ctx.createOscillator();
+          const subGain = this.ctx.createGain();
+          subOsc.type = 'sine';
+          subOsc.frequency.setValueAtTime(160, now);
+          subOsc.frequency.exponentialRampToValueAtTime(34, now + 0.42);
+
+          subGain.gain.setValueAtTime(0.36, now);
+          subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.42);
+
+          subOsc.connect(subGain);
+          subGain.connect(this.ctx.destination);
+          subOsc.start(now);
+          subOsc.stop(now + 0.42);
+        }
+
+        /* Sirena de Alarma Cibernética Continua para la Pantalla HACKED (Slide 2) */
+        startSiren() {
+          if (this.sirenNodes) return; // Ya está sonando
+          this.init();
+          if (!this.ctx) return;
+
+          const now = this.ctx.currentTime;
+          
+          // Ganancia maestra de la sirena con rampa suave de entrada (sin chasquidos)
+          const sirenMasterGain = this.ctx.createGain();
+          const targetVol = this.muted ? 0 : 0.13;
+          sirenMasterGain.gain.setValueAtTime(0, now);
+          sirenMasterGain.gain.linearRampToValueAtTime(targetVol, now + 0.16);
+          sirenMasterGain.connect(this.ctx.destination);
+          this.sirenGain = sirenMasterGain;
+
+          // Filtro analógico pasobajo para darle tono de alarma industrial sci-fi
+          const filter = this.ctx.createBiquadFilter();
+          filter.type = 'lowpass';
+          filter.frequency.setValueAtTime(1450, now);
+          filter.Q.setValueAtTime(2.8, now);
+          filter.connect(sirenMasterGain);
+
+          // LFO modulador de frecuencia (barrido continuo de tono a 1.85 Hz)
+          const lfo = this.ctx.createOscillator();
+          const lfoGain = this.ctx.createGain();
+          lfo.type = 'triangle'; // Oscilación simétrica suave de sirena
+          lfo.frequency.setValueAtTime(1.85, now);
+          lfoGain.gain.setValueAtTime(190, now); // Barrido de +/- 190 Hz
+          lfo.connect(lfoGain);
+
+          // Oscilador principal de la sirena (onda diente de sierra centrada en 730 Hz -> oscila de 540 a 920 Hz)
+          const osc1 = this.ctx.createOscillator();
+          osc1.type = 'sawtooth';
+          osc1.frequency.setValueAtTime(730, now);
+          lfoGain.connect(osc1.frequency);
+          osc1.connect(filter);
+
+          // Segundo oscilador armónico sub-octava (365 Hz) para dar profundidad y presencia
+          const osc2 = this.ctx.createOscillator();
+          osc2.type = 'triangle';
+          osc2.frequency.setValueAtTime(365, now);
+          const lfoGainSub = this.ctx.createGain();
+          lfoGainSub.gain.setValueAtTime(95, now);
+          lfo.connect(lfoGainSub);
+          lfoGainSub.connect(osc2.frequency);
+
+          const subGain = this.ctx.createGain();
+          subGain.gain.setValueAtTime(0.5, now);
+          osc2.connect(subGain);
+          subGain.connect(filter);
+
+          lfo.start(now);
+          osc1.start(now);
+          osc2.start(now);
+
+          this.sirenNodes = {
+            lfo,
+            lfoGain,
+            osc1,
+            osc2,
+            subGain,
+            filter,
+            masterGain: sirenMasterGain
+          };
+        }
+
+        /* Detención suave de la sirena al salir de la pantalla HACKED */
+        stopSiren() {
+          if (!this.sirenNodes) return;
+          if (!this.ctx) return;
+
+          const now = this.ctx.currentTime;
+          const nodes = this.sirenNodes;
+          this.sirenNodes = null;
+
+          try {
+            nodes.masterGain.gain.cancelScheduledValues(now);
+            nodes.masterGain.gain.setValueAtTime(nodes.masterGain.gain.value, now);
+            nodes.masterGain.gain.linearRampToValueAtTime(0.0001, now + 0.12);
+
+            setTimeout(() => {
+              try {
+                nodes.osc1.stop();
+                nodes.osc2.stop();
+                nodes.lfo.stop();
+                nodes.masterGain.disconnect();
+              } catch (e) {}
+            }, 150);
+          } catch (e) {}
+        }
+      }
+
+      const audio = new RetroAudioEngine();
+
+      /* ----------------------------------------------------------------------
+         2. ESTADO Y CONTROLADOR DE PRESENTACIÓN
+         ---------------------------------------------------------------------- */
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const totalSlides = slides.length;
+      let currentIndex = 0;
+      let score = 1000;
+      let timerSeconds = 0;
+      let timerInterval = null;
+
+      // Elementos de la interfaz
+      const hpBar = document.getElementById('hp-bar');
+      const stageDisplay = document.getElementById('hud-stage-display');
+      const scoreDisplay = document.getElementById('hud-score-display');
+      const timerDisplay = document.getElementById('hud-timer');
+      const btnPrev = document.getElementById('btn-prev');
+      const btnNext = document.getElementById('btn-next');
+      const btnStart = document.getElementById('btn-start');
+      const btnReplay = document.getElementById('btn-replay');
+      const btnToggleSound = document.getElementById('btn-toggle-sound');
+      const btnToggleCrt = document.getElementById('btn-toggle-crt');
+      const btnToggleFullscreen = document.getElementById('btn-toggle-fullscreen');
+      const crtOverlay = document.getElementById('crt-overlay');
+      const btnStageSelect = document.getElementById('btn-stage-select');
+      const stageModal = document.getElementById('stage-modal');
+      const stageModalClose = document.getElementById('stage-modal-close');
+      const stageGridContainer = document.getElementById('stage-grid-container');
+
+      /* Construir celdas de la barra de vida */
+      function buildHpBar() {
+        hpBar.innerHTML = '';
+        for (let i = 0; i < totalSlides; i++) {
+          const cell = document.createElement('div');
+          cell.className = 'hp-cell' + (i <= currentIndex ? ' filled' : '');
+          cell.title = `Stage ${i + 1}: ${slides[i].dataset.title}`;
+          cell.addEventListener('click', () => goToSlide(i));
+          hpBar.appendChild(cell);
+        }
+      }
+
+      /* Construir items del modal de selección de etapa */
+      function buildStageModal() {
+        stageGridContainer.innerHTML = '';
+        slides.forEach((slide, idx) => {
+          const btn = document.createElement('div');
+          btn.className = 'stage-btn-item' + (idx === currentIndex ? ' current' : '');
+          btn.innerHTML = `
+            <span class="stage-btn-num">STAGE ${String(idx + 1).padStart(2, '0')}</span>
+            <span class="stage-btn-name">${slide.dataset.title}</span>
+          `;
+          btn.addEventListener('click', () => {
+            goToSlide(idx);
+            closeStageModal();
+          });
+          stageGridContainer.appendChild(btn);
+        });
+      }
+
+      /* Actualizar visuales de HUD */
+      function updateHUD() {
+        // Contador de Stage
+        stageDisplay.textContent = `STAGE ${String(currentIndex + 1).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
+        
+        // Puntuación
+        scoreDisplay.textContent = `SCORE: ${String(score).padStart(6, '0')}`;
+
+        // Barra de Vida
+        const cells = hpBar.querySelectorAll('.hp-cell');
+        cells.forEach((cell, idx) => {
+          if (idx <= currentIndex) {
+            cell.classList.add('filled');
+          } else {
+            cell.classList.remove('filled');
+          }
+        });
+
+        // Botones de navegación
+        btnPrev.disabled = (currentIndex === 0);
+        btnNext.disabled = (currentIndex === totalSlides - 1);
+      }
+
+      /* Navegación mediante View Transitions API con fallback (Modern Web Guidance) */
+      function updateDOM(newIndex) {
+        slides.forEach((s, idx) => {
+          if (idx === newIndex) {
+            s.classList.add('active');
+            // Forzar reinicio de micro-animaciones
+            const staggers = s.querySelectorAll('.stagger');
+            staggers.forEach(el => {
+              el.style.animation = 'none';
+              void el.offsetWidth; // Trigger reflow
+              el.style.animation = '';
+            });
+          } else {
+            s.classList.remove('active');
+          }
+        });
+
+        currentIndex = newIndex;
+        updateHUD();
+
+        // Control de sirena de emergencia: suena mientras esté en la diapositiva HACKED (Slide 2, index 1)
+        if (newIndex === 1) {
+          audio.startSiren();
+        } else {
+          audio.stopSiren();
+        }
+
+        if (typeof SpeakerEngine !== 'undefined') {
+          SpeakerEngine.update(newIndex, true);
+        }
+      }
+
+      function goToSlide(newIndex, direction = null) {
+        if (newIndex < 0 || newIndex >= totalSlides) {
+          audio.playBump();
+          return;
+        }
+
+        if (newIndex === currentIndex) return;
+
+        // Determinar dirección o tipo para la transición visual
+        let navDirection = direction;
+        if (!navDirection) {
+          if (currentIndex === 0 && newIndex === 1) {
+            navDirection = 'glitch-hack';
+          } else {
+            navDirection = newIndex > currentIndex ? 'forward' : 'backward';
+          }
+        }
+
+        // Reproducir sonido adecuado
+        if (newIndex === totalSlides - 1) {
+          audio.playVictory();
+        } else if (newIndex === 1) {
+          // Al entrar a la diapositiva de hackeado suena el efecto de glitch
+          audio.playGlitch();
+        } else {
+          audio.playBlip(newIndex > currentIndex);
+        }
+
+        // Incrementar puntuación estilo Arcade
+        if (newIndex > currentIndex) {
+          score += 150 * (newIndex - currentIndex);
+        }
+
+        // View Transitions API con detección de características
+        if (document.startViewTransition) {
+          document.startViewTransition({
+            update: () => updateDOM(newIndex),
+            types: [navDirection]
+          });
+        } else {
+          updateDOM(newIndex);
+        }
+      }
+
+      function nextSlide() {
+        if (currentIndex < totalSlides - 1) {
+          goToSlide(currentIndex + 1);
+        } else {
+          audio.playBump();
+        }
+      }
+
+      function prevSlide() {
+        if (currentIndex > 0) {
+          goToSlide(currentIndex - 1, 'backward');
+        } else {
+          audio.playBump();
+        }
+      }
+
+      /* ----------------------------------------------------------------------
+         3. GESTIÓN DE EVENTOS Y CONTROLES DE TECLADO
+         ---------------------------------------------------------------------- */
+      // Transición Glitch hacia la pantalla HACKED al iniciar
+      function startMissionWithGlitch() {
+        audio.init();
+        audio.playGlitch();
+        goToSlide(1, 'glitch-hack');
+      }
+
+      // Botón "INSERT COIN TO PLAY" de la Slide 1
+      btnStart.addEventListener('click', startMissionWithGlitch);
+
+      // Botón "DESPLEGAR EQUIPO DEFENSIVO" de la pantalla HACKED
+      const btnHackedProceed = document.getElementById('btn-hacked-proceed');
+      if (btnHackedProceed) {
+        btnHackedProceed.addEventListener('click', (e) => {
+          e.stopPropagation();
+          audio.init();
+          nextSlide();
+        });
+      }
+
+      // Clic directo en cualquier parte de la pantalla HACKED para avanzar
+      const slideHacked = document.getElementById('slide-2');
+      if (slideHacked) {
+        slideHacked.addEventListener('click', () => {
+          if (currentIndex === 1) {
+            audio.init();
+            nextSlide();
+          }
+        });
+      }
+
+      // Botón "REINICIAR MISIÓN" de la Slide 14
+      btnReplay.addEventListener('click', () => {
+        goToSlide(0, 'backward');
+      });
+
+      // Navegación HUD
+      btnNext.addEventListener('click', () => {
+        audio.init();
+        if (currentIndex === 0) {
+          startMissionWithGlitch();
+        } else {
+          nextSlide();
+        }
+      });
+      btnPrev.addEventListener('click', () => {
+        audio.init();
+        prevSlide();
+      });
+
+      // Mute Toggle
+      btnToggleSound.addEventListener('click', () => {
+        const isSoundOn = audio.toggleMute();
+        btnToggleSound.classList.toggle('active', isSoundOn);
+        btnToggleSound.innerHTML = isSoundOn 
+          ? '<span id="sound-icon">🔊</span> AUDIO: ON'
+          : '<span id="sound-icon">🔇</span> AUDIO: OFF';
+      });
+
+      // CRT FX Toggle
+      btnToggleCrt.addEventListener('click', () => {
+        crtOverlay.classList.toggle('disabled');
+        const isActive = !crtOverlay.classList.contains('disabled');
+        btnToggleCrt.classList.toggle('active', isActive);
+        btnToggleCrt.textContent = isActive ? '📺 CRT: ON' : '📺 CRT: OFF';
+        audio.playBlip(true);
+      });
+
+      // Fullscreen Toggle
+      function toggleFullScreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+          btnToggleFullscreen.textContent = '⛶ EXIT';
+          btnToggleFullscreen.classList.add('active');
+        } else {
+          if (document.exitFullscreen) {
+            document.exitFullscreen().catch(() => {});
+            btnToggleFullscreen.textContent = '⛶ FULL';
+            btnToggleFullscreen.classList.remove('active');
+          }
+        }
+      }
+      btnToggleFullscreen.addEventListener('click', toggleFullScreen);
+
+      // Modal Stage Selector
+      function openStageModal() {
+        buildStageModal();
+        stageModal.classList.add('open');
+        audio.playBlip(true);
+      }
+      function closeStageModal() {
+        stageModal.classList.remove('open');
+        audio.playBlip(false);
+      }
+      btnStageSelect.addEventListener('click', openStageModal);
+      stageModalClose.addEventListener('click', closeStageModal);
+      stageModal.addEventListener('click', (e) => {
+        if (e.target === stageModal) closeStageModal();
+      });
+
+      // Atajos de Teclado
+      window.addEventListener('keydown', (e) => {
+        // Desactivar si el modal está abierto y pulsa ESC
+        if (stageModal.classList.contains('open')) {
+          if (e.key === 'Escape') closeStageModal();
+          return;
+        }
+
+        switch (e.key) {
+          case 'ArrowRight':
+          case 'Enter':
+          case ' ':
+          case 'PageDown':
+            e.preventDefault();
+            audio.init();
+            if (currentIndex === 0) {
+              startMissionWithGlitch();
+            } else {
+              nextSlide();
+            }
+            break;
+          case 'ArrowLeft':
+          case 'Backspace':
+          case 'PageUp':
+            e.preventDefault();
+            audio.init();
+            prevSlide();
+            break;
+          case 'm':
+          case 'M':
+            btnToggleSound.click();
+            break;
+          case 't':
+          case 'T':
+            btnToggleCrt.click();
+            break;
+          case 'c':
+          case 'C':
+            e.preventDefault();
+            if (typeof SpeakerEngine !== 'undefined') {
+              SpeakerEngine.toggle();
+            }
+            break;
+          case 'r':
+          case 'R':
+            e.preventDefault();
+            if (typeof SpeakerEngine !== 'undefined') {
+              SpeakerEngine.celebrate(2000);
+            }
+            break;
+          case 'f':
+          case 'F':
+            toggleFullScreen();
+            break;
+          case 's':
+          case 'S':
+            openStageModal();
+            break;
+          case 'Home':
+            goToSlide(0, 'backward');
+            break;
+          case 'End':
+            goToSlide(totalSlides - 1, 'forward');
+            break;
+        }
+      });
+
+      /* ----------------------------------------------------------------------
+         4. DECODIFICADOR TEXTUAL SUBLIMINAL (SLIDE 1)
+         ---------------------------------------------------------------------- */
+      const mainGameTitle = document.getElementById('main-game-title');
+
+      function scrambleText(element, finalText, duration = 800) {
+        if (!element) return;
+        const chars = '01#@$%&*<>~/[]{}PX_!?-+';
+        const startTime = Date.now();
+
+        function step() {
+          const elapsed = Date.now() - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const revealedLen = Math.floor(progress * finalText.length);
+
+          let output = '';
+          for (let i = 0; i < finalText.length; i++) {
+            if (finalText[i] === ' ') {
+              output += ' ';
+            } else if (i < revealedLen) {
+              output += finalText[i];
+            } else {
+              output += chars[Math.floor(Math.random() * chars.length)];
+            }
+          }
+
+          element.textContent = output;
+          element.setAttribute('data-text', output);
+
+          if (progress < 1) {
+            requestAnimationFrame(step);
+          } else {
+            element.textContent = finalText;
+            element.setAttribute('data-text', finalText);
+          }
+        }
+
+        step();
+      }
+
+      if (mainGameTitle) {
+        mainGameTitle.addEventListener('click', () => {
+          audio.init();
+          audio.playGlitch();
+          scrambleText(mainGameTitle, "PROYECTO SENTINEL", 650);
+        });
+      }
+
+      // Decodificación inicial al cargar
+      setTimeout(() => {
+        scrambleText(mainGameTitle, "PROYECTO SENTINEL", 750);
+      }, 350);
+
+      // Temporizador HUD
+      function startTimer() {
+        timerInterval = setInterval(() => {
+          timerSeconds++;
+          const mins = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+          const secs = String(timerSeconds % 60).padStart(2, '0');
+          timerDisplay.textContent = `${mins}:${secs}`;
+        }, 1000);
+      }
+
+      /* ----------------------------------------------------------------------
+         5. SISTEMA DE PONENTES ARCADE (CANVAS CHROMA-KEY & SPRITES)
+         ---------------------------------------------------------------------- */
+      const SpeakerEngine = (function () {
+        // Player 1 (Izquierda): Mario Seoane - Traje negro y gafas (sprites_p1.png con fallback a .jpg)
+        // Player 2 (Derecha): Iván Navarrete - Abrigo beige mirando al centro (sprites_p2.png con fallback a .jpg)
+        const CONFIG = {
+          p1: {
+            id: 'p1',
+            src: 'assets/sprites/sprites_p1.png',
+            fallbackSrc: 'assets/sprites/sprites_p1.jpg',
+            containerId: 'speaker-p1',
+            canvasId: 'canvas-p1',
+            badgeId: 'badge-p1',
+            label: '1P SPEAKING',
+            altLabel: '1P STANDBY'
+          },
+          p2: {
+            id: 'p2',
+            src: 'assets/sprites/sprites_p2.png',
+            fallbackSrc: 'assets/sprites/sprites_p2.jpg',
+            containerId: 'speaker-p2',
+            canvasId: 'canvas-p2',
+            badgeId: 'badge-p2',
+            label: '2P SPEAKING',
+            altLabel: '2P STANDBY'
+          }
+        };
+
+        const speakers = {
+          p1: { ...CONFIG.p1, loaded: false, frames: [], width: 0, height: 0, container: null, canvas: null, badge: null },
+          p2: { ...CONFIG.p2, loaded: false, frames: [], width: 0, height: 0, container: null, canvas: null, badge: null }
+        };
+
+        let activeSpeaker = 'p1';
+        let manualOverride = false;
+        let isCelebrating = false;
+        let celebrationTimer = null;
+        let talkAnimTimer = null;
+        let talkStep = 0;
+        const TALK_SEQUENCE = [2, 3, 4, 3]; // Secuencia fluida de habla: alternar frames 2, 3 y 4
+
+        // Procesamiento en memoria: Recorte vertical y Chroma-Key verde
+        function processSpriteSheet(speakerObj, callback) {
+          const img = new Image();
+          let triedFallback = false;
+
+          function loadHandler() {
+            const w = img.naturalWidth || img.width;
+            const h = img.naturalHeight || img.height;
+
+            // 1. Recorte vertical: Si la imagen ya viene recortada (> 2.2 aspecto), usamos altura completa;
+            // si viniera con los rótulos inferiores (~16:9), descartamos el 42% inferior tomando el 58% superior.
+            const sourceHeight = (w / h < 2.2) ? Math.floor(h * 0.58) : h;
+            const frameWidth = Math.floor(w / 6);
+
+            const memCanvas = document.createElement('canvas');
+            memCanvas.width = w;
+            memCanvas.height = sourceHeight;
+            const ctx = memCanvas.getContext('2d', { willReadFrequently: true });
+            ctx.drawImage(img, 0, 0, w, sourceHeight, 0, 0, w, sourceHeight);
+
+            try {
+              const imgData = ctx.getImageData(0, 0, w, sourceHeight);
+              const data = imgData.data;
+
+              // 2. Eliminación de fondo verde croma (#00FF00 tolerante)
+              for (let i = 0; i < data.length; i += 4) {
+                const r = data[i];
+                const g = data[i + 1];
+                const b = data[i + 2];
+                if (g > 140 && g > r * 1.25 && g > b * 1.25) {
+                  data[i + 3] = 0; // Transparente
+                }
+              }
+              ctx.putImageData(imgData, 0, 0);
+            } catch (err) {
+              // Si el explorador bloquea getImageData en file://, las imágenes .png ya contienen el canal alfa transparente
+              console.info("Modo de compatibilidad file:// activo para sprites");
+            }
+
+            // 3. División en 6 frames individuales en canvas independientes
+            const frames = [];
+            for (let f = 0; f < 6; f++) {
+              const fCanvas = document.createElement('canvas');
+              fCanvas.width = frameWidth;
+              fCanvas.height = sourceHeight;
+              const fCtx = fCanvas.getContext('2d');
+              fCtx.drawImage(
+                memCanvas,
+                f * frameWidth, 0, frameWidth, sourceHeight,
+                0, 0, frameWidth, sourceHeight
+              );
+              frames.push(fCanvas);
+            }
+
+            callback({
+              frames,
+              frameWidth,
+              sourceHeight
+            });
+          }
+
+          img.onload = loadHandler;
+          img.onerror = function () {
+            if (!triedFallback && speakerObj.fallbackSrc) {
+              triedFallback = true;
+              img.src = speakerObj.fallbackSrc;
+            } else {
+              console.error("Error al cargar sprite sheet desde:", speakerObj.src);
+            }
+          };
+
+          img.src = speakerObj.src;
+        }
+
+        // Renderizado en el canvas visible del ponente
+        function renderFrame(speakerId, frameIndex) {
+          const s = speakers[speakerId];
+          if (!s || !s.loaded || !s.canvas) return;
+          const ctx = s.canvas.getContext('2d');
+          if (s.canvas.width !== s.width || s.canvas.height !== s.height) {
+            s.canvas.width = s.width;
+            s.canvas.height = s.height;
+          }
+          ctx.clearRect(0, 0, s.width, s.height);
+          const fCanvas = s.frames[frameIndex];
+          if (fCanvas) {
+            ctx.drawImage(fCanvas, 0, 0);
+          }
+        }
+
+        // Sincronización con la diapositiva actual
+        function update(slideIndex, isSlideChange = false) {
+          if (isSlideChange) {
+            manualOverride = false;
+          }
+
+          if (isCelebrating) {
+            applyState('p1', 'reacting', 5);
+            applyState('p2', 'reacting', 5);
+            return;
+          }
+
+          // 1. Diapositivas de portada y glitch (Slides 1 y 2 -> indices 0 y 1): Ocultos
+          if (slideIndex <= 1) {
+            applyState('p1', 'hidden', 0);
+            applyState('p2', 'hidden', 0);
+            return;
+          }
+
+          // 4. Última diapositiva (Slide 14 -> index 13): Celebración final / Misión cumplida
+          if (slideIndex >= 13) {
+            applyState('p1', 'reacting', 5);
+            applyState('p2', 'reacting', 5);
+            return;
+          }
+
+          // 2. Asignación automática de ponente por diapositiva:
+          // - Slides 3..6 (indices 2..5: Miembros, Vulnerabilidad, Diagnóstico, DAFO): Habla el ponente de la izquierda (p1)
+          // - Slides 7..13 (indices 6..12: Competidores hasta Planificación): Habla el ponente de la derecha (p2)
+          if (!manualOverride) {
+            if (slideIndex <= 5) {
+              activeSpeaker = 'p1'; // En miembros (slide 3) y contenido inicial (slides 4, 5, 6) habla el ponente de la izquierda
+            } else {
+              activeSpeaker = 'p2'; // A partir de la diapositiva 07 retoma el ponente de la derecha
+            }
+          }
+
+          const currentTalkFrame = TALK_SEQUENCE[talkStep % TALK_SEQUENCE.length];
+          if (activeSpeaker === 'p1') {
+            applyState('p1', 'active', currentTalkFrame);
+            applyState('p2', 'inactive', 0);
+          } else {
+            applyState('p1', 'inactive', 0);
+            applyState('p2', 'active', currentTalkFrame);
+          }
+        }
+
+        function applyState(speakerId, state, frameIndex) {
+          const s = speakers[speakerId];
+          if (!s || !s.container) return;
+
+          s.container.classList.remove('hidden', 'active', 'inactive', 'reacting');
+          s.container.classList.add(state);
+
+          if (s.badge) {
+            if (state === 'active') {
+              s.badge.textContent = s.label;
+            } else if (state === 'reacting') {
+              s.badge.textContent = '★ VICTORY ★';
+            } else {
+              s.badge.textContent = s.altLabel;
+            }
+          }
+
+          renderFrame(speakerId, frameIndex);
+        }
+
+        // Bucle de animación de habla (cada 180ms alternando frames 2, 3 y 4)
+        function startTalkLoop() {
+          if (talkAnimTimer) clearInterval(talkAnimTimer);
+          talkAnimTimer = setInterval(() => {
+            talkStep++;
+            const currentSlide = typeof currentIndex !== 'undefined' ? currentIndex : 0;
+            if (!isCelebrating && currentSlide >= 2 && currentSlide < 13) {
+              const currentTalkFrame = TALK_SEQUENCE[talkStep % TALK_SEQUENCE.length];
+              renderFrame(activeSpeaker, currentTalkFrame);
+            }
+          }, 180);
+        }
+
+        // Alternar ponente activo manualmente (clic o tecla C)
+        function toggle() {
+          activeSpeaker = (activeSpeaker === 'p1') ? 'p2' : 'p1';
+          manualOverride = true;
+          const currentSlide = typeof currentIndex !== 'undefined' ? currentIndex : 0;
+          update(currentSlide);
+          if (audio) {
+            audio.init();
+            audio.playBlip(true);
+          }
+        }
+
+        // Celebración de 2 segundos (tecla R)
+        function celebrate(durationMs = 2000) {
+          isCelebrating = true;
+          if (celebrationTimer) clearTimeout(celebrationTimer);
+          applyState('p1', 'reacting', 5);
+          applyState('p2', 'reacting', 5);
+
+          if (audio) {
+            audio.init();
+            audio.playVictory();
+          }
+
+          celebrationTimer = setTimeout(() => {
+            isCelebrating = false;
+            const currentSlide = typeof currentIndex !== 'undefined' ? currentIndex : 0;
+            update(currentSlide);
+          }, durationMs);
+        }
+
+        function init() {
+          ['p1', 'p2'].forEach(id => {
+            const s = speakers[id];
+            s.container = document.getElementById(s.containerId);
+            s.canvas = document.getElementById(s.canvasId);
+            s.badge = document.getElementById(s.badgeId);
+
+            if (s.container) {
+              s.container.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggle();
+              });
+            }
+
+            processSpriteSheet(s, data => {
+              s.frames = data.frames;
+              s.width = data.frameWidth;
+              s.height = data.sourceHeight;
+              s.loaded = true;
+              const currentSlide = typeof currentIndex !== 'undefined' ? currentIndex : 0;
+              update(currentSlide);
+            });
+          });
+
+          startTalkLoop();
+        }
+
+        // Resetear manualOverride al cambiar de diapositiva para que siga la regla de mitades
+        function onSlideChange(newIndex) {
+          manualOverride = false;
+          update(newIndex);
+        }
+
+        return {
+          init,
+          update: onSlideChange,
+          toggle,
+          celebrate
+        };
+      })();
+
+      // Inicialización
+      buildHpBar();
+      updateHUD();
+      startTimer();
+      SpeakerEngine.init();
+
+    })();
+  </script>
+</body>
+</html>
