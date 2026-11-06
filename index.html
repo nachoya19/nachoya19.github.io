@@ -397,6 +397,52 @@
         letter-spacing: 0.5px;
       }
 
+      /* Estilos para niveles bloqueados (LVL 03 y LVL 04) */
+      .map-level-node.is-locked .node-label-plate {
+        background: rgba(15, 23, 42, 0.94);
+        border: 2px dashed #64748b;
+        box-shadow: 0 3px 0 #000000;
+        opacity: 0.85;
+      }
+
+      .map-level-node.is-locked .node-lvl-code {
+        color: #94a3b8;
+      }
+
+      .map-level-node.is-locked .node-lvl-name {
+        color: #ef4444;
+      }
+
+      .map-level-node.is-locked .node-pedestal-ring {
+        background: radial-gradient(circle, #64748b 0%, #334155 70%, #0f172a 100%);
+        border-color: #94a3b8;
+      }
+
+      .map-level-node.is-locked:hover .node-label-plate,
+      .map-level-node.is-locked[data-active="true"] .node-label-plate {
+        background: #1c1326;
+        border-color: #ef4444;
+        box-shadow: 0 3px 0 #000000, 0 0 16px rgba(239, 68, 68, 0.7);
+        opacity: 1;
+      }
+
+      .map-level-node.is-locked:hover .node-lvl-code,
+      .map-level-node.is-locked[data-active="true"] .node-lvl-code {
+        color: #fca5a5;
+      }
+
+      .map-level-node.is-locked:hover .node-lvl-name,
+      .map-level-node.is-locked[data-active="true"] .node-lvl-name {
+        color: #ffffff;
+      }
+
+      .map-level-node.is-locked:hover .node-pedestal-ring,
+      .map-level-node.is-locked[data-active="true"] .node-pedestal-ring {
+        background: radial-gradient(circle, #ef4444 0%, #991b1b 70%, #450a0a 100%);
+        border-color: #fca5a5;
+        box-shadow: 0 0 12px rgba(239, 68, 68, 0.8), 0 2px 0 #000;
+      }
+
       /* Pedestal circular del nodo sobre el camino */
       .node-pedestal-ring {
         width: clamp(18px, 2.2vw, 28px);
@@ -490,6 +536,15 @@
         text-overflow: ellipsis;
       }
 
+      .preview-thumb-wrap.is-locked {
+        border-color: #ef4444;
+        box-shadow: 0 0 10px rgba(239, 68, 68, 0.45);
+      }
+
+      .preview-thumb-wrap.is-locked .preview-thumb-img {
+        filter: grayscale(80%) brightness(0.5);
+      }
+
       .btn-enter-stage {
         background: linear-gradient(180deg, #22c55e 0%, #15803d 100%);
         border: 2px solid #ffffff;
@@ -509,6 +564,33 @@
         background: linear-gradient(180deg, #4ade80 0%, #16a34a 100%);
         color: #000;
         text-shadow: none;
+      }
+
+      .btn-enter-stage.is-locked {
+        background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+        border: 2px solid #64748b;
+        box-shadow: 0 3px 0 #0f172a;
+        color: #94a3b8;
+        cursor: not-allowed;
+        animation: none;
+      }
+
+      .btn-enter-stage.is-locked:hover {
+        background: linear-gradient(180deg, #dc2626 0%, #991b1b 100%);
+        border-color: #fca5a5;
+        color: #ffffff;
+        box-shadow: 0 3px 0 #450a0a, 0 0 14px rgba(239, 68, 68, 0.75);
+      }
+
+      /* Animación de vibración / error en niveles bloqueados */
+      .is-shaking {
+        animation: locked-shake 0.32s ease-out !important;
+      }
+
+      @keyframes locked-shake {
+        0%, 100% { transform: translateX(0); }
+        20%, 60% { transform: translateX(-6px); }
+        40%, 80% { transform: translateX(6px); }
       }
 
       @keyframes pulse-play-btn {
@@ -688,37 +770,41 @@
           </span>
         </a>
 
-        <!-- LVL 03: Zona Volcánica / Fuego - Simulador Phishing -->
+        <!-- LVL 03: Zona Volcánica / Fuego - Bloqueado -->
         <a
-          href="Sprint2/index.html#solucion"
-          class="map-level-node"
+          href="#"
+          class="map-level-node is-locked"
           id="node-lvl-2"
           data-level="2"
+          data-locked="true"
           data-active="false"
           style="left: 63%; top: 64%;"
+          aria-label="LVL 03: Bloqueado. Próximamente."
         >
           <span class="node-cursor-arrow" aria-hidden="true">▼</span>
           <span class="node-pedestal-ring" aria-hidden="true"></span>
           <span class="node-label-plate">
-            <span class="node-lvl-code">LVL 03</span>
-            <span class="node-lvl-name">SIMULADOR</span>
+            <span class="node-lvl-code">🔒 LVL 03</span>
+            <span class="node-lvl-name">BLOQUEADO</span>
           </span>
         </a>
 
-        <!-- LVL 04: Castillo Final Sentinel - Simulacro Piloto / Contacto -->
+        <!-- LVL 04: Castillo Final Sentinel - Bloqueado -->
         <a
-          href="Sprint2/index.html#form"
-          class="map-level-node"
+          href="#"
+          class="map-level-node is-locked"
           id="node-lvl-3"
           data-level="3"
+          data-locked="true"
           data-active="false"
           style="left: 83%; top: 35%;"
+          aria-label="LVL 04: Bloqueado. Próximamente."
         >
           <span class="node-cursor-arrow" aria-hidden="true">▼</span>
           <span class="node-pedestal-ring" aria-hidden="true"></span>
           <span class="node-label-plate">
-            <span class="node-lvl-code">LVL 04</span>
-            <span class="node-lvl-name">PILOTO</span>
+            <span class="node-lvl-code">🔒 LVL 04</span>
+            <span class="node-lvl-name">BLOQUEADO</span>
           </span>
         </a>
 
@@ -947,6 +1033,27 @@
             osc.stop(now + i * 0.055 + 0.13);
           });
         }
+        playDeny() {
+          if (this.muted) return;
+          this.init();
+          if (!this.ctx) return;
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(140, now);
+          osc.frequency.setValueAtTime(90, now + 0.08);
+
+          gain.gain.setValueAtTime(0.18, now);
+          gain.gain.setValueAtTime(0.02, now + 0.07);
+          gain.gain.setValueAtTime(0.18, now + 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.24);
+        }
       }
 
       const audio = new RetroMapAudio();
@@ -964,7 +1071,8 @@
           href: 'presentacion.html',
           cover: 'assets/covers/cover_sprint1.jpg',
           mapX: 122,
-          mapY: 252
+          mapY: 252,
+          locked: false
         },
         {
           id: 1,
@@ -975,29 +1083,32 @@
           href: 'Sprint2/index.html',
           cover: 'assets/covers/cover_sprint2.jpg',
           mapX: 262,
-          mapY: 152
+          mapY: 152,
+          locked: false
         },
         {
           id: 2,
           code: 'LVL 03',
-          name: 'SIMULADOR',
-          title: 'LVL 03 · SIMULADOR ANTI-PHISHING',
-          desc: 'Fuerte de Lava · Prueba en vivo del escudo e intercepción de estafas',
-          href: 'Sprint2/index.html#solucion',
+          name: 'BLOQUEADO',
+          title: '🔒 LVL 03 · [BLOQUEADO]',
+          desc: 'Zona Volcánica · Nivel bloqueado. Próximamente en el siguiente Sprint',
+          href: '#',
           cover: 'assets/covers/cover_sprint2.jpg',
           mapX: 403,
-          mapY: 256
+          mapY: 256,
+          locked: true
         },
         {
           id: 3,
           code: 'LVL 04',
-          name: 'PILOTO',
-          title: 'LVL 04 · CASTILLO FINAL (PILOTO GRATIS)',
-          desc: 'Castillo Sentinel · Calculadora de ROI y activación de prueba piloto',
-          href: 'Sprint2/index.html#form',
+          name: 'BLOQUEADO',
+          title: '🔒 LVL 04 · [BLOQUEADO]',
+          desc: 'Castillo Final · Nivel bloqueado. Próximamente en el siguiente Sprint',
+          href: '#',
           cover: 'assets/covers/cover_sprint1.jpg',
           mapX: 531,
-          mapY: 140
+          mapY: 140,
+          locked: true
         }
       ];
 
@@ -1085,6 +1196,8 @@
         return pts;
       }
 
+      const previewThumbWrap = document.querySelector('.preview-thumb-wrap');
+
       function selectLevel(newIdx, playSfx = true) {
         if (isNavigating) return;
         const clamped = Math.max(0, Math.min(LEVELS.length - 1, newIdx));
@@ -1104,21 +1217,54 @@
         previewCoverImg.src = lvl.cover;
         previewTitle.textContent = lvl.title;
         previewDesc.textContent = lvl.desc;
-        btnEnterActive.href = lvl.href;
+
+        if (lvl.locked) {
+          if (previewThumbWrap) previewThumbWrap.classList.add('is-locked');
+          btnEnterActive.classList.add('is-locked');
+          btnEnterActive.textContent = '🔒 BLOQUEADO';
+          btnEnterActive.removeAttribute('href');
+          btnEnterActive.setAttribute('aria-disabled', 'true');
+        } else {
+          if (previewThumbWrap) previewThumbWrap.classList.remove('is-locked');
+          btnEnterActive.classList.remove('is-locked');
+          btnEnterActive.textContent = '▶ ENTRAR';
+          btnEnterActive.href = lvl.href;
+          btnEnterActive.removeAttribute('aria-disabled');
+        }
 
         if (playSfx) {
-          audio.playStep(currentLevel);
+          if (lvl.locked) {
+            audio.playDeny();
+          } else {
+            audio.playStep(currentLevel);
+          }
         }
       }
 
       function enterLevel(idx) {
         if (isNavigating) return;
+        const lvl = LEVELS[idx];
+        if (lvl.locked) {
+          selectLevel(idx, false);
+          audio.playDeny();
+          btnEnterActive.classList.remove('is-shaking');
+          void btnEnterActive.offsetWidth;
+          btnEnterActive.classList.add('is-shaking');
+          const nodeEl = nodeEls[idx];
+          if (nodeEl) {
+            nodeEl.classList.remove('is-shaking');
+            void nodeEl.offsetWidth;
+            nodeEl.classList.add('is-shaking');
+          }
+          return;
+        }
+
         selectLevel(idx, false);
         isNavigating = true;
         audio.playStartLevel();
         arcadeScene.classList.add('is-entering-level');
 
-        const destination = LEVELS[currentLevel].href;
+        const destination = lvl.href;
         setTimeout(() => {
           window.location.href = destination;
         }, 340);
@@ -1433,6 +1579,28 @@
         ctx.fillText('1P', hx - 6, hy - 20);
       }
 
+      function drawPixelPadlock(px, py, tick) {
+        const bob = Math.round(Math.sin(tick * 0.08) * 2.5);
+        const y = py + bob;
+
+        // Aura oscura de fondo
+        drawPixelRect(px - 10, y - 13, 20, 24, 'rgba(0, 0, 0, 0.55)');
+
+        // Arco de metal plateado (shackle)
+        drawPixelRect(px - 6, y - 12, 3, 7, '#94a3b8');
+        drawPixelRect(px + 3, y - 12, 3, 7, '#94a3b8');
+        drawPixelRect(px - 5, y - 14, 10, 3, '#f8fafc');
+
+        // Cuerpo dorado del candado
+        drawPixelRect(px - 8, y - 6, 16, 14, '#b45309');
+        drawPixelRect(px - 7, y - 5, 14, 12, '#f59e0b');
+        drawPixelRect(px - 6, y - 4, 12, 10, '#fde047');
+
+        // Ojo de la cerradura negro
+        drawPixelRect(px - 2, y - 1, 4, 4, '#0f172a');
+        drawPixelRect(px - 1, y + 3, 2, 3, '#0f172a');
+      }
+
       let tick = 0;
       function renderOverworld() {
         tick++;
@@ -1478,8 +1646,22 @@
         // Isla 4: Castillo Final Sentinel (Arriba-Derecha)
         drawIslandBase(531, 138, 78, 40, '#10b981', '#047857', '#334155', 'rgba(186, 230, 253, 0.35)');
 
+        // Penumbra / velo sobre biomas bloqueados (LVL 03 y LVL 04)
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.32)';
+        ctx.beginPath();
+        ctx.ellipse(403, 252, 74, 38, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.ellipse(531, 138, 76, 39, 0, 0, Math.PI * 2);
+        ctx.fill();
+
         // 5. Camino de tierra y piedra que une secuencialmente las 4 islas
         drawStoneDirtPath();
+
+        // Barrera / valla pixelada en el camino hacia las zonas bloqueadas
+        drawPixelRect(327, 206, 16, 4, '#ef4444');
+        drawPixelRect(329, 204, 12, 8, '#7f1d1d');
+        drawPixelRect(333, 202, 4, 12, '#fca5a5');
 
         // 6. Decoración de cada Bioma (Árboles, Ruinas, Cueva, Volcán, Castillo)
         const treeSway = Math.round(Math.sin(tick * 0.04));
@@ -1493,6 +1675,10 @@
         drawCastleBiome(531, 130, tick);
         drawPixelTree(478, 142, treeSway);
         drawPixelTree(582, 146, -treeSway);
+
+        // Candados pixel art flotantes sobre las zonas bloqueadas (LVL 03 y LVL 04)
+        drawPixelPadlock(403, 200, tick);
+        drawPixelPadlock(531, 80, tick + 20);
 
         // 7. Personaje pixelado listo para avanzar y caminando entre niveles
         drawHeroCharacter(tick);
