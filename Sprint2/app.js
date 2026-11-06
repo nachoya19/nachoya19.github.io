@@ -59,13 +59,13 @@
       id: "p1",
       src: "../assets/sprites/sprites_p1_clean.png",
       fallback: "../assets/sprites/sprites_p1.png",
-      name: "MARIO · ADMINISTRACIÓN"
+      name: "IVÁN · ADMINISTRACIÓN"
     },
     p2: {
       id: "p2",
       src: "../assets/sprites/sprites_p2_clean.png",
       fallback: "../assets/sprites/sprites_p2.png",
-      name: "IVÁN · COMPRAS Y OPERACIONES"
+      name: "MARIO · COMPRAS Y OPERACIONES"
     }
   };
 
@@ -139,28 +139,28 @@
   const zctx = zCanvas?.getContext("2d");
 
   // Frases de diálogo para cada trabajador
-  const marioLines = [
+  const ivanLines = [
     "¡Llega factura de 4.870 €!",
     "¿La abro o aviso con el escudo de Sentinel?",
     "Si me fijo en el remitente, ribera.co es falso...",
     "¡Menos mal que nos fijamos antes de transferir!",
     "Con Sentinel ya nadie cae en Administración."
   ];
-  const ivanLines = [
-    "¡El dominio .co es falso, Mario!",
+  const marioLines = [
+    "¡El dominio .co es falso, Iván!",
     "Ningún banco cambia de cuenta por correo sin avisar.",
     "Avisa con el escudo verde y sumamos +50 XP.",
     "Hemos bajado del 38% a menos del 8% de clics.",
     "¡Buen trabajo equipo, riesgo controlado!"
   ];
-  let marioLineIdx = 0;
   let ivanLineIdx = 0;
+  let marioLineIdx = 0;
 
   // Estado de los 2 personajes en el mundo 2D Zelda
   const workers = {
     p1: {
       id: "p1",
-      name: "MARIO",
+      name: "IVÁN",
       role: "ADMÓN",
       color: "#00e5ff",
       x: 180,
@@ -179,7 +179,7 @@
     },
     p2: {
       id: "p2",
-      name: "IVÁN",
+      name: "MARIO",
       role: "COMPRAS",
       color: "#f59e0b",
       x: 620,
@@ -262,8 +262,8 @@
   function getOfficeSpots() {
     const floorY = Math.max(320, ch * 0.60);
     return {
-      desk1: { x: cw * 0.18, y: floorY + 45, label: "Puesto de Mario" },
-      desk2: { x: cw * 0.82, y: floorY + 45, label: "Puesto de Iván" },
+      desk1: { x: cw * 0.18, y: floorY + 45, label: "Puesto de Iván" },
+      desk2: { x: cw * 0.82, y: floorY + 45, label: "Puesto de Mario" },
       terminal: { x: cw * 0.50, y: floorY + 70, label: "Terminal Factura" },
       serverL: { x: cw * 0.12, y: floorY - 50, label: "Servidor Alpha" },
       serverR: { x: cw * 0.88, y: floorY - 50, label: "Servidor Beta" },
@@ -363,10 +363,10 @@
 
     // 4. Props de la Oficina
     const d1 = spots.desk1;
-    drawDesk(ctx, d1.x, d1.y, "MARIO · ADMÓN", "#00e5ff", "#10b981", time, true);
+    drawDesk(ctx, d1.x, d1.y, "IVÁN · ADMÓN", "#00e5ff", "#10b981", time, true);
 
     const d2 = spots.desk2;
-    drawDesk(ctx, d2.x, d2.y, "IVÁN · COMPRAS", "#f59e0b", "#00e5ff", time, false);
+    drawDesk(ctx, d2.x, d2.y, "MARIO · COMPRAS", "#f59e0b", "#00e5ff", time, false);
 
     const term = spots.terminal;
     drawCentralTerminal(ctx, term.x, term.y, time);
@@ -673,12 +673,12 @@
       w.facing = w.x < other.x ? 1 : -1;
       other.facing = other.x < w.x ? 1 : -1;
       if (w.id === "p1") {
-        w.bubbleText = marioLines[marioLineIdx % marioLines.length];
-        marioLineIdx++;
-        w.bubbleTimer = 4.5;
-      } else {
         w.bubbleText = ivanLines[ivanLineIdx % ivanLines.length];
         ivanLineIdx++;
+        w.bubbleTimer = 4.5;
+      } else {
+        w.bubbleText = marioLines[marioLineIdx % marioLines.length];
+        marioLineIdx++;
         w.bubbleTimer = 4.5;
       }
     }
@@ -760,11 +760,11 @@
 
     if (Math.min(distM, distI) < 70) {
       if (targetWorker.id === "p1") {
-        marioLineIdx = (marioLineIdx + 1) % marioLines.length;
-        targetWorker.bubbleText = marioLines[marioLineIdx];
-      } else {
         ivanLineIdx = (ivanLineIdx + 1) % ivanLines.length;
         targetWorker.bubbleText = ivanLines[ivanLineIdx];
+      } else {
+        marioLineIdx = (marioLineIdx + 1) % marioLines.length;
+        targetWorker.bubbleText = marioLines[marioLineIdx];
       }
       targetWorker.bubbleTimer = 5.0;
       targetWorker.jumpOffset = 12;
@@ -783,20 +783,20 @@
   initWorkerPositions();
   requestAnimationFrame(zeldaGameLoop);
 
-  $("#btn-ask-mario")?.addEventListener("click", () => {
+  $("#btn-ask-ivan")?.addEventListener("click", () => {
     audio.playBlip(true);
     workers.p1.facing = 1;
-    marioLineIdx = (marioLineIdx + 1) % marioLines.length;
-    workers.p1.bubbleText = marioLines[marioLineIdx];
+    ivanLineIdx = (ivanLineIdx + 1) % ivanLines.length;
+    workers.p1.bubbleText = ivanLines[ivanLineIdx];
     workers.p1.bubbleTimer = 6.0;
     workers.p1.jumpOffset = 14;
   });
 
-  $("#btn-ask-ivan")?.addEventListener("click", () => {
+  $("#btn-ask-mario")?.addEventListener("click", () => {
     audio.playBlip(true);
     workers.p2.facing = -1;
-    ivanLineIdx = (ivanLineIdx + 1) % ivanLines.length;
-    workers.p2.bubbleText = ivanLines[ivanLineIdx];
+    marioLineIdx = (marioLineIdx + 1) % marioLines.length;
+    workers.p2.bubbleText = marioLines[marioLineIdx];
     workers.p2.bubbleTimer = 6.0;
     workers.p2.jumpOffset = 14;
   });
