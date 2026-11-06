@@ -57,14 +57,14 @@
   const speakerConfig = {
     p1: {
       id: "p1",
-      src: "assets/sprites/sprites_p1_clean.png",
-      fallback: "assets/sprites/sprites_p1.png",
+      src: "../assets/sprites/sprites_p1_clean.png",
+      fallback: "../assets/sprites/sprites_p1.png",
       name: "MARIO · ADMINISTRACIÓN"
     },
     p2: {
       id: "p2",
-      src: "assets/sprites/sprites_p2_clean.png",
-      fallback: "assets/sprites/sprites_p2.png",
+      src: "../assets/sprites/sprites_p2_clean.png",
+      fallback: "../assets/sprites/sprites_p2.png",
       name: "IVÁN · COMPRAS Y OPERACIONES"
     }
   };
