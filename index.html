@@ -49,7 +49,9 @@
         width: 100%;
         height: 100%;
         overflow: hidden;
-        background: radial-gradient(circle at 50% 45%, #4a0e78 0%, #24064d 60%, #120229 100%);
+        /* Fondo continuo en tonos púrpuras que se funde perfectamente con el mueble retro */
+        background-color: #38075f;
+        background-image: radial-gradient(circle at 50% 50%, #6d28d9 0%, #4c1d95 38%, #2e0854 75%, #18022d 100%);
         font-family: var(--pixel-font);
         color: #ffffff;
         user-select: none;
@@ -69,22 +71,35 @@
       }
 
       /* ====================================================================
-         CONTENEDOR CON LA PROPORCIÓN EXACTA (2752 x 1536) DE LA ARCADE
-         Conserva intacto el mueble, joysticks, botones, luces y marquesina
+         CONTENEDOR CON ZOOM INMERSIVO Y SIN BORDES LATERALES
+         Cubre completamente la pantalla eliminando márgenes negros laterales
+         y aumenta el tamaño de la pantalla, mandos y detalles pixel-art
          ==================================================================== */
       .arcade-scene-container {
         position: relative;
-        width: min(100vw, calc(100dvh * (2752 / 1536)));
-        height: min(100dvh, calc(100vw * (1536 / 2752)));
+        /* max() garantiza que tanto el ancho como el alto cubran el 100% del viewport */
+        width: max(100vw, calc(100dvh * (2752 / 1536)));
+        height: max(100dvh, calc(100vw * (1536 / 2752)));
         aspect-ratio: 2752 / 1536;
         overflow: hidden;
-        box-shadow: 0 0 90px rgba(0, 0, 0, 0.95);
+        /* Zoom inmersivo centrado en la pantalla y panel de mandos */
+        transform: scale(1.10);
+        transform-origin: center 46%;
         transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease;
+      }
+
+      @media (max-width: 680px), (max-aspect-ratio: 3/4) {
+        .arcade-scene-container {
+          width: 100vw;
+          height: calc(100vw * (1536 / 2752));
+          transform: scale(1.04);
+          transform-origin: center center;
+        }
       }
 
       /* Zoom inmersivo hacia la pantalla al entrar en un nivel */
       .arcade-scene-container.is-entering-level {
-        transform: scale(1.95) translateY(5%);
+        transform: scale(2.35) translateY(4%);
         filter: brightness(1.25);
       }
 
@@ -1167,13 +1182,17 @@
       let isNavigating = false;
 
       // Posición animada del héroe pixelado sobre el camino
+      let heroIsland = 0; // Isla accesible actual del héroe (0 = LVL 01, 1 = LVL 02). ¡NUNCA puede ser >= 2!
+      let barricadeAlert = 0; // Contador de alerta y sacudida de la barrera
       const hero = {
         x: LEVELS[0].mapX - 24,
         y: LEVELS[0].mapY - 12,
         targetX: LEVELS[0].mapX - 24,
         targetY: LEVELS[0].mapY - 12,
         waypoints: [],
-        facing: 1
+        facing: 1,
+        bump: 0,
+        deniedBubble: 0
       };
 
       function buildWaypoints(fromIdx, toIdx) {
@@ -1201,15 +1220,44 @@
       function selectLevel(newIdx, playSfx = true) {
         if (isNavigating) return;
         const clamped = Math.max(0, Math.min(LEVELS.length - 1, newIdx));
+        const lvl = LEVELS[clamped];
+
+        // EL MUÑECO TIENE PROHIBIDO IR A LOS NIVELES BLOQUEADOS (LVL 03 Y LVL 04)
+        if (lvl.locked) {
+          // Si el jugador intenta ir a una zona bloqueada:
+          // Si el muñeco estaba en LVL 01, avanza solo hasta LVL 02 (el punto máximo permitido)
+          if (heroIsland !== 1) {
+            hero.facing = 1;
+            hero.waypoints = buildWaypoints(heroIsland, 1);
+            heroIsland = 1;
+          }
+          // El muñeco mira hacia la barrera, recibe un impacto/retroceso y muestra bocadillo de bloqueo
+          hero.facing = 1;
+          hero.bump = 14;
+          hero.deniedBubble = 55;
+          barricadeAlert = 45;
+
+          const nodeEl = nodeEls[clamped];
+          if (nodeEl) {
+            nodeEl.classList.remove('is-shaking');
+            void nodeEl.offsetWidth;
+            nodeEl.classList.add('is-shaking');
+          }
+        } else {
+          // Nivel accesible (LVL 01 o LVL 02): el muñeco camina normalmente
+          if (clamped !== heroIsland) {
+            hero.facing = clamped > heroIsland ? 1 : -1;
+            hero.waypoints = buildWaypoints(heroIsland, clamped);
+            heroIsland = clamped;
+          }
+        }
+
         if (clamped !== currentLevel) {
-          hero.facing = clamped > currentLevel ? 1 : -1;
-          hero.waypoints = buildWaypoints(currentLevel, clamped);
           score += 150;
           hudScoreText.textContent = String(score).padStart(6, '0');
         }
         currentLevel = clamped;
 
-        const lvl = LEVELS[currentLevel];
         nodeEls.forEach((el, idx) => {
           el.setAttribute('data-active', idx === currentLevel ? 'true' : 'false');
         });
@@ -1247,6 +1295,10 @@
         if (lvl.locked) {
           selectLevel(idx, false);
           audio.playDeny();
+          hero.facing = 1;
+          hero.bump = 18;
+          hero.deniedBubble = 60;
+          barricadeAlert = 50;
           btnEnterActive.classList.remove('is-shaking');
           void btnEnterActive.offsetWidth;
           btnEnterActive.classList.add('is-shaking');
@@ -1273,7 +1325,7 @@
       // Eventos en los nodos del mapa
       nodeEls.forEach((nodeEl, idx) => {
         nodeEl.addEventListener('mouseenter', () => {
-          if (currentLevel !== idx) selectLevel(idx, true);
+          if (currentLevel !== idx) selectLevel(idx, false);
         });
         nodeEl.addEventListener('focus', () => {
           if (currentLevel !== idx) selectLevel(idx, false);
@@ -1546,8 +1598,17 @@
           }
         }
 
+        // Rebote rítmico de respiración/pasos
         const bob = Math.sin(tick * 0.15) * 2.5;
-        const hx = Math.round(hero.x);
+
+        // Efecto de retroceso / vibración si intenta entrar en nivel bloqueado
+        let bumpX = 0;
+        if (hero.bump > 0) {
+          hero.bump--;
+          bumpX = (hero.bump % 4 < 2 ? 3 : -3);
+        }
+
+        const hx = Math.round(hero.x + bumpX);
         const hy = Math.round(hero.y + bob);
 
         // Sombra bajo los pies del personaje
@@ -1577,6 +1638,21 @@
         ctx.fillStyle = '#00ff66';
         ctx.font = '6px "Press Start 2P", monospace';
         ctx.fillText('1P', hx - 6, hy - 20);
+
+        // Bocadillo pixel-art de 'BLOQUEADO' cuando intenta cruzar a zona bloqueada
+        if (hero.deniedBubble > 0) {
+          hero.deniedBubble--;
+          const bx = hx;
+          const by = hy - 38;
+          drawPixelRect(bx - 12, by - 9, 24, 16, '#0f172a');
+          drawPixelRect(bx - 11, by - 8, 22, 14, '#ef4444');
+          drawPixelRect(bx - 2, by + 6, 4, 3, '#ef4444');
+          drawPixelRect(bx - 7, by - 6, 14, 10, '#ffffff');
+          // Icono pixel de candado dentro del bocadillo
+          drawPixelRect(bx - 3, by - 4, 6, 6, '#b45309');
+          drawPixelRect(bx - 2, by - 6, 4, 3, '#1e293b');
+          drawPixelRect(bx - 1, by - 2, 2, 2, '#ffffff');
+        }
       }
 
       function drawPixelPadlock(px, py, tick) {
@@ -1659,9 +1735,14 @@
         drawStoneDirtPath();
 
         // Barrera / valla pixelada en el camino hacia las zonas bloqueadas
-        drawPixelRect(327, 206, 16, 4, '#ef4444');
-        drawPixelRect(329, 204, 12, 8, '#7f1d1d');
-        drawPixelRect(333, 202, 4, 12, '#fca5a5');
+        let barrShake = 0;
+        if (barricadeAlert > 0) {
+          barricadeAlert--;
+          barrShake = (barricadeAlert % 4 < 2 ? 3 : -3);
+        }
+        drawPixelRect(327 + barrShake, 206, 16, 4, barricadeAlert > 0 ? '#fde047' : '#ef4444');
+        drawPixelRect(329 + barrShake, 204, 12, 8, '#7f1d1d');
+        drawPixelRect(333 + barrShake, 202, 4, 12, barricadeAlert > 0 ? '#ffffff' : '#fca5a5');
 
         // 6. Decoración de cada Bioma (Árboles, Ruinas, Cueva, Volcán, Castillo)
         const treeSway = Math.round(Math.sin(tick * 0.04));
@@ -1677,8 +1758,9 @@
         drawPixelTree(582, 146, -treeSway);
 
         // Candados pixel art flotantes sobre las zonas bloqueadas (LVL 03 y LVL 04)
-        drawPixelPadlock(403, 200, tick);
-        drawPixelPadlock(531, 80, tick + 20);
+        const padShake = barricadeAlert > 0 ? (barricadeAlert % 4 < 2 ? 2 : -2) : 0;
+        drawPixelPadlock(403 + padShake, 200, tick);
+        drawPixelPadlock(531 + padShake, 80, tick + 20);
 
         // 7. Personaje pixelado listo para avanzar y caminando entre niveles
         drawHeroCharacter(tick);
