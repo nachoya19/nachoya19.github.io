@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sentinel — Entrena a tu equipo frente a estafas por correo practicando</title>
+  <meta name="description" content="Sentinel envía correos trampa inofensivos a tu plantilla. Quien cae aprende al instante; quien avisa suma puntos. Pasa del 40% de clics a menos del 10% en 90 días sin informático en plantilla.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><polygon points='16,2 29,7 29,17 16,30 3,17 3,7' fill='%230b101d' stroke='%2300e5ff' stroke-width='2.5'/><circle cx='16' cy='15' r='4.5' fill='%2310b981'/></svg>">
+
+  <!-- Tipografías: Space Grotesk (Display), Plus Jakarta Sans (Body), Share Tech Mono (Telemetría), Press Start 2P (Detalles Arcade) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Press+Start+2P&family=Share+Tech+Mono&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- CAPA CRT SUTIL (DESACTIVADA POR DEFECTO PARA LECTURA IMPECABLE) -->
+  <div id="crt-overlay" class="crt-overlay disabled" aria-hidden="true"></div>
+
+  <!-- BARRA SUPERIOR DE RETORNO AL SELECTOR ARCADE -->
+  <header class="onepage-arcade-topbar">
+    <a href="../index.html" class="btn-return-arcade" title="Volver al Selector de Niveles Arcade">
+      <span class="btn-return-icon" aria-hidden="true">🕹️</span>
+      <span class="btn-return-text">◀ VOLVER AL SELECTOR ARCADE</span>
+    </a>
+  </header>
+
+  <main id="main">
+
+    <!-- ======================================================================
+         HERO: ESCENA EN VIVO DE LOS 2 TRABAJADORES + RETO DEL CORREO TRAMPA
+         ====================================================================== -->
+    <!-- ======================================================================
+         HERO: NIVEL 2D RETRO ROLLO ZELDA (SPRITES LIBRES + TEXTO SUPERPUESTO)
+         ====================================================================== -->
+    <section class="hero-section hero-zelda-section" id="hero" data-section="hero">
+      
+      <!-- LIENZO 2D DEL NIVEL ESTILO ZELDA (FONDO DINÁMICO A PANTALLA COMPLETA) -->
+      <canvas id="zelda-game-canvas" class="zelda-game-canvas" aria-label="Nivel 2D interactivo de la oficina con Mario e Iván"></canvas>
+
+      <!-- VIÑETA Y SCANLINES SUTILES PARA INTEGRACIÓN VISUAL -->
+      <div class="zelda-viewport-vignette" aria-hidden="true"></div>
+
+      <!-- CAPA SUPERPUESTA AL NIVEL (TÍTULO PURO SENTINEL SIN CARDS) -->
+      <div class="hero-zelda-overlay" id="office-scene">
+        
+        <div class="hero-brand-clean">
+          <h1 class="hero-pure-title font-display">SENTINEL</h1>
+        </div>
+
+        <div class="hero-pure-scroll-cue font-mono">
+          <span>DESLIZA PARA CONTINUAR</span>
+          <span class="scroll-arrow">&darr;</span>
+        </div>
+
+      </div>
+
+    </section>
+
+        <!-- ======================================================================
+         01. EL PROBLEMA: EL CORREO ATRAVIESA EL ANTIVIRUS TRADICIONAL
+         ====================================================================== -->
+    <section class="section-problem" id="problema" data-section="problema">
+      <div class="wrap">
+
+        <!-- Barrera visual que el correo viajero atraviesa al hacer scroll -->
+        <div class="firewall-gate" id="firewall-gate" data-packet-dock="firewall">
+          <div class="gate-header font-mono">
+            <span class="gate-title">BARRERA TÉCNICA: ANTIVIRUS Y FIREWALL TRADICIONAL</span>
+            <span class="gate-status" id="gate-status-badge">ESPERANDO CORREO...</span>
+          </div>
+          <div class="gate-scanner-beam">
+            <div class="beam-line"></div>
+            <div class="gate-Pass-msg" id="gate-pass-msg">
+              <span class="pass-icon">⚠️</span>
+              <div>
+                <strong>El antivirus lo deja pasar sin alertas</strong>
+                <p>No lleva ningún archivo infectado: solo un texto persuasivo pidiendo pagar una factura o iniciar sesión.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-header">
+          <span class="section-index font-mono">01 // EL PROBLEMA REAL EN LAS PYMES</span>
+          <h2 class="section-title">
+            Casi todos los ataques entran por una persona, <br>
+            <span class="text-danger">no por un fallo del ordenador.</span>
+          </h2>
+          <p class="section-lead">
+            Puedes tener un buen informático y el mejor antivirus, pero ninguna herramienta técnica impide que un empleado con prisa introduzca su contraseña o pague una factura en la cuenta equivocada.
+          </p>
+        </div>
+
+        <!-- 3 Bloques Visuales de Impacto Directo -->
+        <div class="problem-stats-grid" data-packet-dock="problem">
+          
+          <article class="stat-impact-card">
+            <div class="stat-top-row">
+              <span class="stat-tag font-mono">ORIGEN DEL INCIDENTE</span>
+              <span class="stat-pill danger font-mono">DATO GLOBAL</span>
+            </div>
+            <div class="stat-huge-num text-cyan font-display" data-count="95" data-suffix="%">95%</div>
+            <h3>Empiezan por un error humano</h3>
+            <p>
+              Un correo que imita al banco, a una empresa de paquetería o a un proveedor habitual. Basta un solo clic entre toda tu plantilla para dar acceso a la empresa.
+            </p>
+          </article>
+
+          <article class="stat-impact-card highlight-danger">
+            <div class="stat-top-row">
+              <span class="stat-tag font-mono">IMPACTO EN UNA PYME</span>
+              <span class="stat-pill danger font-mono">COSTE MEDIO</span>
+            </div>
+            <div class="stat-huge-num text-danger font-display">35k€ – 80k€</div>
+            <h3>De pérdidas por cada brecha</h3>
+            <p>
+              Entre transferencias desviadas, días con la empresa parada sin poder facturar, recuperación de sistemas y clientes que pierden la confianza.
+            </p>
+          </article>
+
+          <article class="stat-impact-card">
+            <div class="stat-top-row">
+              <span class="stat-tag font-mono">FORMACIÓN TRADICIONAL</span>
+              <span class="stat-pill warning font-mono">INEFICAZ</span>
+            </div>
+            <div class="stat-huge-num text-gold font-display">0%</div>
+            <h3>De eficacia con vídeos teóricos</h3>
+            <p>
+              Los cursos en vídeo de una hora se ven una vez al año por obligación, con prisa, y se olvidan a la semana siguiente. No entrenan el reflejo diario.
+            </p>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         02. LA SOLUCIÓN: SCROLLYTELLING STICKY (EL ESCUDO INTERCEPTA EL CORREO)
+         ====================================================================== -->
+    <section class="section-solution" id="solucion" data-section="solucion">
+      <div class="wrap">
+
+        <div class="section-header">
+          <span class="section-index font-mono text-green">02 // LA SOLUCIÓN SENTINEL</span>
+          <h2 class="section-title">
+            Tu equipo aprende practicando en su correo real, <br>
+            <span class="text-green">sin vídeos aburridos ni tecnicismos.</span>
+          </h2>
+          <p class="section-lead">
+            Sentinel envía de vez en cuando correos trampa 100% inofensivos. Haz scroll (o pulsa en cada paso) para ver cómo transformamos una amenaza en un hábito de seguridad:
+          </p>
+        </div>
+
+        <!-- CONTENEDOR STICKY DE SCROLLYTELLING (4 PASOS) -->
+        <div class="scrolly-solution-track" id="solution-track">
+          <div class="scrolly-solution-sticky" data-packet-dock="solution">
+            
+            <!-- Barra de progreso de los 4 pasos -->
+            <div class="solution-steps-nav" role="tablist" aria-label="Pasos del método Sentinel">
+              <button type="button" class="step-tab is-active" data-step="0" role="tab" aria-selected="true">
+                <span class="step-tab-num font-mono">01</span>
+                <span class="step-tab-label">Llega el señuelo</span>
+              </button>
+              <button type="button" class="step-tab" data-step="1" role="tab" aria-selected="false">
+                <span class="step-tab-num font-mono">02</span>
+                <span class="step-tab-label">Susto didáctico</span>
+              </button>
+              <button type="button" class="step-tab" data-step="2" role="tab" aria-selected="false">
+                <span class="step-tab-num font-mono">03</span>
+                <span class="step-tab-label">Avisar da +50 XP</span>
+              </button>
+              <button type="button" class="step-tab" data-step="3" role="tab" aria-selected="false">
+                <span class="step-tab-num font-mono">04</span>
+                <span class="step-tab-label">Riesgo &lt; 10%</span>
+              </button>
+            </div>
+
+            <!-- Escenario de transformación en 2 columnas -->
+            <div class="solution-stage-grid">
+              
+              <!-- Izquierda: Tarjetas narrativas que cambian con el scroll -->
+              <div class="solution-cards-stack">
+                
+                <!-- Paso 1 -->
+                <article class="sol-step-panel is-active" data-panel="0">
+                  <div class="sol-step-badge font-mono text-cyan">PASO 01 DE 04 · EN LA BANDEJA REAL</div>
+                  <h3>Llega un correo trampa inofensivo</h3>
+                  <p>
+                    Cada pocas semanas, tus empleados reciben un correo que imita las estafas reales que circulan en España: una factura pendiente, un paquete retenido o un aviso del banco.
+                  </p>
+                  <ul class="sol-check-list">
+                    <li>Adaptado al puesto de cada persona (administración, compras, ventas).</li>
+                    <li>Totalmente seguro: ningún dato sale de tu empresa.</li>
+                  </ul>
+                </article>
+
+                <!-- Paso 2 -->
+                <article class="sol-step-panel" data-panel="1">
+                  <div class="sol-step-badge font-mono text-danger">PASO 02 DE 04 · APRENDIZAJE EN 0 SEGUNDOS</div>
+                  <h3>Si alguien cae, lo entiende al instante</h3>
+                  <p>
+                    Si un empleado hace clic, no hay broncas ni cursos eternos. En ese mismo segundo ve qué habría perdido la empresa y las 3 pistas exactas que delataban el engaño.
+                  </p>
+                  <ul class="sol-check-list">
+                    <li>Ese pequeño susto en caliente se recuerda 10 veces más que un vídeo.</li>
+                    <li>Explicado en 20 segundos con lenguaje claro y visual.</li>
+                  </ul>
+                </article>
+
+                <!-- Paso 3 -->
+                <article class="sol-step-panel" data-panel="2">
+                  <div class="sol-step-badge font-mono text-gold">PASO 03 DE 04 · CULTURA POSITIVA</div>
+                  <h3>Si lo detecta, avisa en 1 clic y gana +50 XP</h3>
+                  <p>
+                    Cuando alguien sospecha de un correo, pulsa el botón de Sentinel. Si acierta, suma puntos para su departamento y convierte la precaución en un hábito compartido.
+                  </p>
+                  <ul class="sol-check-list">
+                    <li>Más de un <strong>80% de participación y avisos</strong> en la plantilla.</li>
+                    <li>Convierte a tus empleados en el mejor cortafuegos de la empresa.</li>
+                  </ul>
+                </article>
+
+                <!-- Paso 4 -->
+                <article class="sol-step-panel" data-panel="3">
+                  <div class="sol-step-badge font-mono text-green">PASO 04 DE 04 · RESULTADOS MEDIBLES</div>
+                  <h3>Tú ves cómo baja el riesgo a menos del 10%</h3>
+                  <p>
+                    En tu panel de gerente ves de un vistazo cuántos ataques se han frenado, cómo mejora cada departamento en 90 días y descargas los justificantes de formación.
+                  </p>
+                  <ul class="sol-check-list">
+                    <li>Pasas del <strong>35–40% de caídas a menos del 10%</strong> en 3 meses.</li>
+                    <li>Informes listos para auditorías del <strong>RGPD y aseguradoras</strong>.</li>
+                  </ul>
+                </article>
+
+                <!-- Controles manuales adicionales -->
+                <div class="sol-manual-controls">
+                  <button type="button" class="btn-step-nav" id="sol-prev">&larr; Paso anterior</button>
+                  <span class="sol-progress-indicator font-mono" id="sol-counter">PASO 01 / 04</span>
+                  <button type="button" class="btn-step-nav" id="sol-next">Siguiente paso &rarr;</button>
+                </div>
+
+              </div>
+
+              <!-- Derecha: Cápsula Visual de Transformación del Objeto Viajero -->
+              <div class="solution-visualizer-box" id="solution-visualizer" data-step-state="0">
+                <div class="vis-top-bar font-mono">
+                  <span>ESCUDO SENTINEL · INTERCEPTOR ACTIVO</span>
+                  <span class="vis-state-pill" id="vis-state-pill">FASE 1: SEÑUELO</span>
+                </div>
+
+                <!-- El objeto transformándose en el centro -->
+                <div class="vis-stage">
+                  
+                  <!-- Vista Paso 1: El sobre señuelo -->
+                  <div class="vis-card is-active" data-vis="0">
+                    <div class="morph-envelope">
+                      <span class="morph-icon">
+                        <svg class="sol-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-10 7L2 7"></path></svg>
+                      </span>
+                      <span class="morph-tag font-mono">SIMULACRO CONTROLADO</span>
+                    </div>
+                    <div class="vis-mock-mail">
+                      <div class="mock-row"><span class="mock-dot cyan"></span><strong>Factura pendiente: cambio de IBAN</strong></div>
+                      <div class="mock-row dim"><span>Enviado automáticamente un martes a las 10:15</span></div>
+                    </div>
+                  </div>
+
+                  <!-- Vista Paso 2: El susto didáctico -->
+                  <div class="vis-card" data-vis="1">
+                    <div class="morph-envelope alert">
+                      <span class="morph-icon">
+                        <svg class="sol-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                      </span>
+                      <span class="morph-tag font-mono">FEEDBACK EN 0 SEGUNDOS</span>
+                    </div>
+                    <div class="vis-mock-clues">
+                      <div class="clue-pill">1. Dominio .co falso</div>
+                      <div class="clue-pill">2. Cambio de IBAN por email</div>
+                      <div class="clue-pill">3. Urgencia antes de las 14h</div>
+                    </div>
+                  </div>
+
+                  <!-- Vista Paso 3: Transformación en Insignia +50 XP -->
+                  <div class="vis-card" data-vis="2">
+                    <div class="morph-shield-badge">
+                      <span class="shield-big">
+                        <svg class="sol-icon-svg green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                      </span>
+                      <span class="shield-xp font-arcade">+50 XP</span>
+                      <span class="shield-sub font-mono">AMENAZA FRENADA POR EL EQUIPO</span>
+                    </div>
+                    <div class="vis-ranking-mini font-mono">
+                      <div><span><strong class="rank-pos text-gold font-arcade">#1</strong> Administración</span><strong class="text-green">94% detectados</strong></div>
+                      <div><span><strong class="rank-pos text-cyan font-arcade">#2</strong> Compras y Almacén</span><strong class="text-cyan">88% detectados</strong></div>
+                    </div>
+                  </div>
+
+                  <!-- Vista Paso 4: Caída del riesgo a <10% -->
+                  <div class="vis-card" data-vis="3">
+                    <div class="vis-chart-box">
+                      <div class="chart-header font-mono">
+                        <span>EMPLEADOS QUE CAEN EN ESTAFAS</span>
+                        <strong class="text-green">-78% DE RIESGO</strong>
+                      </div>
+                      <div class="chart-bars">
+                        <div class="chart-col">
+                          <div class="bar-wrap"><div class="bar-fill danger" style="height: 82%;"></div></div>
+                          <strong class="font-mono text-danger">38%</strong>
+                          <span>Mes 1</span>
+                        </div>
+                        <div class="chart-col">
+                          <div class="bar-wrap"><div class="bar-fill gold" style="height: 45%;"></div></div>
+                          <strong class="font-mono text-gold">19%</strong>
+                          <span>Mes 2</span>
+                        </div>
+                        <div class="chart-col">
+                          <div class="bar-wrap"><div class="bar-fill green" style="height: 18%;"></div></div>
+                          <strong class="font-mono text-green">7%</strong>
+                          <span>Mes 3 (90 días)</span>
+                        </div>
+                      </div>
+                      <div class="chart-rgpd-badge font-mono">
+                        ✓ Certificado de formación RGPD listo para descargar
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <!-- RESUMEN DE BENEFICIOS PARA LA EMPRESA -->
+        <div class="benefits-bento">
+          <div class="benefits-header">
+            <span class="font-mono text-cyan">RESULTADOS DE NEGOCIO</span>
+            <h3>Diseñado para pymes que quieren resultados sin complicaciones</h3>
+          </div>
+          <div class="benefits-grid">
+            <div class="benefit-card">
+              <span class="benefit-num font-mono">&lt; 10%</span>
+              <h4>Menos clics en 90 días</h4>
+              <p>Reducimos la tasa de empleados que caen del 35–40% inicial a menos del 10% en solo tres meses.</p>
+            </div>
+            <div class="benefit-card">
+              <span class="benefit-num font-mono">+80%</span>
+              <h4>Empleados que avisan a tiempo</h4>
+              <p>Más del 80% de la plantilla adquiere el reflejo de reportar los correos dudosos antes de que nadie pique.</p>
+            </div>
+            <div class="benefit-card">
+              <span class="benefit-num font-mono">0 TI</span>
+              <h4>Sin informático en plantilla</h4>
+              <p>No hay que instalar programas ni configurar servidores. Los simulacros se envían solos y tú solo recibes el resumen.</p>
+            </div>
+            <div class="benefit-card">
+              <span class="benefit-num font-mono">RGPD</span>
+              <h4>Cumplimiento demostrable</h4>
+              <p>Informes listos para demostrar que formas a tu personal ante inspecciones de protección de datos o aseguradoras.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         03. VÍDEO CONCEPTUAL INTERACTIVO (30 SEGUNDOS)
+         ====================================================================== -->
+    <section class="section-video" id="video" data-section="video">
+      <div class="wrap">
+
+        <div class="section-header" data-packet-dock="video">
+          <span class="section-index font-mono text-gold">03 // VÍDEO CONCEPTUAL (30 SEGUNDOS)</span>
+          <h2 class="section-title">
+            Un lunes cualquiera con Sentinel: <br>
+            <span class="text-gold">mira el recorrido completo en 30 segundos.</span>
+          </h2>
+          <p class="section-lead">
+            Así vive tu plantilla el paso desde el primer tropiezo hasta tener el riesgo bajo control.
+          </p>
+        </div>
+
+        <figure class="cinema-player" id="player">
+          
+          <!-- Marco Cinematográfico -->
+          <div class="cinema-viewport" aria-hidden="true">
+            
+            <div class="cinema-topbar font-mono">
+              <span class="cinema-rec"><i class="rec-dot"></i> RECORRIDO INTERACTIVO · CASO REAL PYME</span>
+              <span class="cinema-timer" id="cinema-timer">00:00 / 00:30</span>
+            </div>
+
+            <!-- Escena 0: Llega el correo -->
+            <div class="v-scene is-on" data-scene="0">
+              <div class="cine-card">
+                <div class="cine-card-head font-mono">
+                  <span>ESCENA 01 · BANDEJA DE ENTRADA DE MARTA (ADMINISTRACIÓN)</span>
+                  <span>LUNES 09:12</span>
+                </div>
+                <div class="cine-inbox-list">
+                  <div class="cine-mail-item">
+                    <span class="cine-from">Mensajería Norte</span>
+                    <span class="cine-subj">Entrega programada de material de oficina</span>
+                    <span class="cine-hour font-mono">08:45</span>
+                  </div>
+                  <div class="cine-mail-item is-highlight">
+                    <span class="cine-badge font-arcade">NUEVO</span>
+                    <span class="cine-from"><strong>Suministros Ribera</strong></span>
+                    <span class="cine-subj"><strong>Factura 2026-1184: cambio urgente de cuenta bancaria</strong></span>
+                    <span class="cine-hour font-mono">09:12</span>
+                  </div>
+                  <div class="cine-mail-item">
+                    <span class="cine-from">Asesoría Fiscal Pardo</span>
+                    <span class="cine-subj">Resumen de liquidación trimestral</span>
+                    <span class="cine-hour font-mono">Ayer</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Escena 1: El clic con prisa -->
+            <div class="v-scene" data-scene="1">
+              <div class="cine-card cine-click-scene">
+                <div class="cine-card-head font-mono">
+                  <span>ESCENA 02 · CON LAS PRISAS DE LA MAÑANA</span>
+                  <span>09:13</span>
+                </div>
+                <div class="cine-click-stage">
+                  <p class="cine-context">Marta tiene 15 pagos pendientes antes del mediodía y pulsa en el archivo sin fijarse en el remitente:</p>
+                  <div class="cine-fake-btn">
+                    <span class="pdf-tag font-mono">PDF</span>
+                    <strong>Descargar Factura_2026-1184_Ribera.pdf (4.870 €)</strong>
+                    <div class="animated-cursor"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Escena 2: El aprendizaje al instante -->
+            <div class="v-scene" data-scene="2">
+              <div class="cine-card cine-alert-scene">
+                <div class="cine-card-head font-mono">
+                  <span>ESCENA 03 · INTERVENCIÓN DIDÁCTICA DE SENTINEL</span>
+                  <span>09:13 (0 SEG)</span>
+                </div>
+                <div class="cine-alert-body">
+                  <span class="cine-pill-alert font-arcade">⚡ TRANQUILA, MARTA: ERA UN SIMULACRO DE SENTINEL</span>
+                  <h3>Un atacante real habría robado tu contraseña y desviado 4.870 €</h3>
+                  <div class="cine-clues-row font-mono">
+                    <span>1. El dominio era .co y no .es</span>
+                    <span>2. Nunca se cambia un IBAN por email</span>
+                    <span>3. Te metían prisa artificial</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Escena 3: Dos semanas después, detecta y gana puntos -->
+            <div class="v-scene" data-scene="3">
+              <div class="cine-card cine-win-scene">
+                <div class="cine-card-head font-mono">
+                  <span>ESCENA 04 · DOS SEMANAS DESPUÉS</span>
+                  <span>HÁBITO CREADO</span>
+                </div>
+                <div class="cine-win-body">
+                  <div class="cine-xp-burst font-arcade">+50 XP</div>
+                  <h3>Marta detecta un correo falso y avisa en un clic</h3>
+                  <p>Al recordar el simulacro anterior, revisa el remitente, pulsa <strong>«Marcar como sospechoso»</strong> y suma puntos para Administración.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Escena 4: El panel del gerente -->
+            <div class="v-scene" data-scene="4">
+              <div class="cine-card cine-dash-scene">
+                <div class="cine-card-head font-mono">
+                  <span>ESCENA 05 · PANEL DE GERENCIA A LOS 90 DÍAS</span>
+                  <span class="text-green">RIESGO &lt; 10%</span>
+                </div>
+                <div class="cine-dash-rows font-mono">
+                  <div class="cine-dept-line">
+                    <span>Administración</span>
+                    <span class="old-val">38% caían</span>
+                    <span>&rarr;</span>
+                    <strong class="new-val text-green">6% caen · 89% avisan</strong>
+                  </div>
+                  <div class="cine-dept-line">
+                    <span>Ventas y Comercial</span>
+                    <span class="old-val">34% caían</span>
+                    <span>&rarr;</span>
+                    <strong class="new-val text-green">7% caen · 84% avisan</strong>
+                  </div>
+                  <div class="cine-dept-line">
+                    <span>Compras y Almacén</span>
+                    <span class="old-val">41% caían</span>
+                    <span>&rarr;</span>
+                    <strong class="new-val text-green">9% caen · 81% avisan</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Botón grande de reproducción sobre el vídeo -->
+            <button type="button" class="btn-cinema-overlay" id="play-big">
+              <span class="play-circle">▶</span>
+              <span>
+                <strong>Reproducir recorrido completo (30s)</strong>
+                <small class="font-mono">Haz clic para iniciar o salta entre las 5 escenas abajo</small>
+              </span>
+            </button>
+
+          </div>
+
+          <!-- Subtítulo narrativo sincronizado -->
+          <figcaption class="cinema-caption" id="caption" aria-live="polite">
+            Lunes, 09:12. A Marta, de administración, le llega un correo urgente de un proveedor habitual.
+          </figcaption>
+
+          <!-- Controles y capítulos del vídeo -->
+          <div class="cinema-controls">
+            <button type="button" class="btn-cinema-play" id="play" aria-label="Reproducir o pausar vídeo">▶</button>
+            <div class="cinema-chapters" role="group" aria-label="Escenas del vídeo">
+              <button type="button" data-go="0" aria-current="true">
+                <span class="bar"><i></i></span>
+                <span class="ch-num font-mono">01</span>
+                <span class="ch-name">Llega el correo</span>
+              </button>
+              <button type="button" data-go="1">
+                <span class="bar"><i></i></span>
+                <span class="ch-num font-mono">02</span>
+                <span class="ch-name">Clic con prisa</span>
+              </button>
+              <button type="button" data-go="2">
+                <span class="bar"><i></i></span>
+                <span class="ch-num font-mono">03</span>
+                <span class="ch-name">Aprende al acto</span>
+              </button>
+              <button type="button" data-go="3">
+                <span class="bar"><i></i></span>
+                <span class="ch-num font-mono">04</span>
+                <span class="ch-name">Detecta (+50 XP)</span>
+              </button>
+              <button type="button" data-go="4">
+                <span class="bar"><i></i></span>
+                <span class="ch-num font-mono">05</span>
+                <span class="ch-name">Resultados &lt;10%</span>
+              </button>
+            </div>
+          </div>
+
+        </figure>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         Q&A: PREGUNTAS FRECUENTES (RESPUESTAS CLARAS PARA GERENTES)
+         ====================================================================== -->
+    <section class="section-faq" id="faq" data-section="faq">
+      <div class="wrap">
+
+        <div class="section-header">
+          <span class="section-index font-mono text-cyan">Q&amp;A // RESOLVEMOS TUS DUDAS</span>
+          <h2 class="section-title">
+            Preguntas frecuentes sobre Sentinel
+          </h2>
+          <p class="section-lead">
+            Todo lo que necesitas saber antes de empezar a entrenar a tu equipo, explicado sin tecnicismos ni letra pequeña.
+          </p>
+        </div>
+
+        <div class="faq-list">
+
+          <details class="faq-item" name="sentinel-faq" open>
+            <summary class="faq-question">
+              <span class="faq-q-text">¿Necesitamos un informático o departamento de TI para ponerlo en marcha?</span>
+              <span class="faq-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </span>
+            </summary>
+            <div class="faq-answer">
+              <p>
+                Para nada. Sentinel es una plataforma 100% en la nube diseñada específicamente para empresas sin equipo técnico. No hay que instalar ningún programa en los ordenadores ni configurar servidores complejos. En menos de 15 minutos queda configurado y los simulacros se gestionan automáticamente.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq-item" name="sentinel-faq">
+            <summary class="faq-question">
+              <span class="faq-q-text">¿Qué ocurre si un empleado comete un fallo y pincha en un simulacro?</span>
+              <span class="faq-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </span>
+            </summary>
+            <div class="faq-answer">
+              <p>
+                Cero broncas, cero castigos y cero señalamientos. Nuestro método se basa en el aprendizaje en positivo: en ese mismo segundo se abre una pantalla explicativa de 20 segundos que le muestra con amabilidad las 3 pistas clave que delataban la trampa. Ese pequeño susto en caliente genera 10 veces más retención que un curso teórico aburrido.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq-item" name="sentinel-faq">
+            <summary class="faq-question">
+              <span class="faq-q-text">¿Cumple Sentinel con la normativa de protección de datos (RGPD)?</span>
+              <span class="faq-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </span>
+            </summary>
+            <div class="faq-answer">
+              <p>
+                Cumplimiento estricto al 100%. Todos los datos de tu empresa están alojados en centros de datos seguros dentro de la Unión Europea y cifrados de punto a punto. Además, la plataforma emite automáticamente certificados e informes periódicos de formación continua válidos para demostrar diligencia ante inspecciones de la AEPD y ante compañías de seguros.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq-item" name="sentinel-faq">
+            <summary class="faq-question">
+              <span class="faq-q-text">¿Cuánto tiempo le quita esto a mi equipo en su jornada diaria?</span>
+              <span class="faq-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </span>
+            </summary>
+            <div class="faq-answer">
+              <p>
+                Menos de 1 minuto al mes por trabajador. No obligamos a tu plantilla a perder horas en vídeos teóricos ni presentaciones eternas. El entrenamiento ocurre dentro de la propia rutina del día a día, directamente en la bandeja de entrada, convirtiendo la detección en un reflejo natural sin frenar el ritmo de trabajo.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq-item" name="sentinel-faq">
+            <summary class="faq-question">
+              <span class="faq-q-text">¿En qué consiste el simulacro piloto gratuito de 48 horas?</span>
+              <span class="faq-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </span>
+            </summary>
+            <div class="faq-answer">
+              <p>
+                Preparamos un primer correo trampa realista y completamente inofensivo adaptado al sector de tu empresa. Lo enviamos a las personas que elijas y, en 48 horas, revisamos juntos en una breve videollamada de 15 minutos el porcentaje exacto de empleados que habrían caído. Es un diagnóstico real, sin coste y sin ningún compromiso de contratación.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq-item" name="sentinel-faq">
+            <summary class="faq-question">
+              <span class="faq-q-text">¿Pueden filtrarse contraseñas o datos reales durante las pruebas?</span>
+              <span class="faq-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </span>
+            </summary>
+            <div class="faq-answer">
+              <p>
+                Rotundamente no. Las páginas de destino de los simulacros son entornos estériles y aislados controlados por Sentinel. Si un empleado introduce datos por error, el sistema bloquea inmediatamente el formulario, no almacena ninguna contraseña en disco y únicamente registra el evento anónimo para fines estadísticos de formación.
+              </p>
+            </div>
+          </details>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         04. LLAMADA A LA ACCIÓN (CTA): SIMULACRO PILOTO GRATIS
+         ====================================================================== -->
+    <section class="section-cta" id="demo" data-section="demo">
+      <div class="wrap cta-grid">
+
+        <div class="cta-copy-col">
+          <span class="section-index font-mono text-cyan">04 // PRUEBA EN TU EMPRESA SIN COSTE</span>
+          <h2 class="cta-title">
+            Descubre cuántos empleados caerían hoy <br>
+            <span class="text-cyan">antes de que lo pruebe un estafador real.</span>
+          </h2>
+          <p class="cta-lead">
+            Te preparamos un <strong>primer simulacro gratuito</strong> adaptado a tu empresa y en 48 horas vemos juntos el resultado en una llamada de 15 minutos. Sin compromiso ni permanencia.
+          </p>
+
+          <ul class="cta-perks-list">
+            <li>
+              <span class="perk-check">✓</span>
+              <div>
+                <strong>Listo en 15 minutos</strong>
+                <span>Sin instalar nada en los ordenadores ni necesitar informático.</span>
+              </div>
+            </li>
+            <li>
+              <span class="perk-check">✓</span>
+              <div>
+                <strong>Diagnóstico confidencial de tu plantilla</strong>
+                <span>Sabrás el porcentaje exacto de riesgo por departamento desde el primer día.</span>
+              </div>
+            </li>
+            <li>
+              <span class="perk-check">✓</span>
+              <div>
+                <strong>100% inofensivo y conforme al RGPD</strong>
+                <span>Diseñado para enseñar en positivo, sin exponer datos reales.</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Tarjeta del Formulario donde aterriza el Objeto Viajero -->
+        <div class="cta-form-col" data-packet-dock="cta">
+          <div class="cta-landing-slot" id="cta-landing-slot">
+            <span class="slot-icon">🛡️</span>
+            <span class="font-mono">DESTINO FINAL DEL RECORRIDO: TU SIMULACRO PILOTO GRATIS</span>
+          </div>
+
+          <form class="pilot-form" id="form" novalidate>
+            <div class="form-top-row">
+              <h3>Solicitar simulacro piloto gratuito</h3>
+              <span class="free-badge font-arcade">0 € · SIN COMPROMISO</span>
+            </div>
+
+            <div class="field">
+              <label for="f-name">Tu nombre y apellidos</label>
+              <input id="f-name" name="name" type="text" autocomplete="name" placeholder="Ej. Carlos Martínez" required>
+            </div>
+
+            <div class="field">
+              <label for="f-email">Email de trabajo</label>
+              <input id="f-email" name="email" type="email" autocomplete="email" placeholder="carlos@tuempresa.es" required>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="f-company">Nombre de la empresa</label>
+                <input id="f-company" name="company" type="text" autocomplete="organization" placeholder="Ej. Suministros Norte SL" required>
+              </div>
+
+              <div class="field">
+                <label for="f-size">Personas con correo</label>
+                <select id="f-size" name="size" required>
+                  <option value="">Selecciona tamaño</option>
+                  <option value="1-10">Hasta 10 personas</option>
+                  <option value="11-50">De 11 a 50 personas</option>
+                  <option value="51-250">De 51 a 250 personas</option>
+                  <option value="250+">Más de 250 personas</option>
+                </select>
+              </div>
+            </div>
+
+            <p class="form-error" id="form-error" role="alert" hidden></p>
+
+            <button type="submit" class="btn-submit-pilot" id="btn-submit">
+              <span>Quiero mi simulacro gratuito</span>
+              <span class="btn-arrow">&rarr;</span>
+            </button>
+
+            <p class="form-footnote font-mono">
+              Te contactaremos en menos de 24h laborables para activar la prueba.
+            </p>
+          </form>
+
+          <!-- Confirmación tras enviar -->
+          <div class="pilot-done-card" id="done" hidden tabindex="-1" role="status">
+            <div class="done-pill font-arcade">✓ SOLICITUD REGISTRADA</div>
+            <h3>¡Tu simulacro piloto está en marcha!</h3>
+            <p id="done-text">
+              Te escribiremos en menos de 24 horas laborables para preparar el primer simulacro inofensivo con tu equipo.
+            </p>
+            <div class="done-ticket-box font-mono">
+              <span>TICKET DE RESERVA: <strong id="done-ref" class="text-gold">SNT-88219</strong></span>
+              <span class="text-green">● PRIORIDAD PYME ACTIVADA</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- PIE DE PÁGINA PROFESIONAL B2B (CERO MENCIONES ACADÉMICAS) -->
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div class="footer-brand">
+        <div class="footer-brand-row">
+          <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true">
+            <polygon points="16,2 29,7 29,17 16,30 3,17 3,7" fill="#101726" stroke="#00e5ff" stroke-width="2.2"/>
+            <circle cx="16" cy="15" r="4.5" fill="#10b981"/>
+          </svg>
+          <span class="brand-wordmark font-display">SENTINEL</span>
+        </div>
+        <p>
+          Entrenamiento práctico de ciberseguridad para pymes. Convertimos a tu plantilla en tu primera línea de defensa frente al fraude por correo electrónico.
+        </p>
+      </div>
+      <div class="footer-meta font-mono">
+        <div>CUMPLIMIENTO RGPD · DATOS CIFRADOS EN UE</div>
+        <div>&copy; 2026 SENTINEL SECURITY SL · TODOS LOS DERECHOS RESERVADOS</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
