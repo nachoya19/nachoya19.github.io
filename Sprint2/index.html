@@ -65,24 +65,6 @@
     <section class="section-problem" id="problema" data-section="problema">
       <div class="wrap">
 
-        <!-- Barrera visual que el correo viajero atraviesa al hacer scroll -->
-        <div class="firewall-gate" id="firewall-gate" data-packet-dock="firewall">
-          <div class="gate-header font-mono">
-            <span class="gate-title">BARRERA TÉCNICA: ANTIVIRUS Y FIREWALL TRADICIONAL</span>
-            <span class="gate-status" id="gate-status-badge">ESPERANDO CORREO...</span>
-          </div>
-          <div class="gate-scanner-beam">
-            <div class="beam-line"></div>
-            <div class="gate-Pass-msg" id="gate-pass-msg">
-              <span class="pass-icon">⚠️</span>
-              <div>
-                <strong>El antivirus lo deja pasar sin alertas</strong>
-                <p>No lleva ningún archivo infectado: solo un texto persuasivo pidiendo pagar una factura o iniciar sesión.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <div class="section-header">
           <span class="section-index font-mono">01 // EL PROBLEMA REAL EN LAS PYMES</span>
           <h2 class="section-title">
@@ -107,6 +89,22 @@
             <p>
               Un correo que imita al banco, a una empresa de paquetería o a un proveedor habitual. Basta un solo clic entre toda tu plantilla para dar acceso a la empresa.
             </p>
+            <!-- Recurso gráfico: Barra proporcional y vectores comunes -->
+            <div class="stat-visual-bar">
+              <div class="stat-bar-header font-mono">
+                <span class="text-cyan">95% FACTOR HUMANO</span>
+                <span class="text-muted">5% VULNERABILIDAD TÉCNICA</span>
+              </div>
+              <div class="stat-segmented-track">
+                <div class="segment-fill cyan" style="width: 95%;"></div>
+                <div class="segment-fill dim" style="width: 5%;"></div>
+              </div>
+            </div>
+            <div class="stat-vector-chips">
+              <span class="vector-chip font-mono">🎣 Suplantación de identidad</span>
+              <span class="vector-chip font-mono">🧾 Factura con IBAN falso</span>
+              <span class="vector-chip font-mono">🔐 Falsa alerta de contraseñas</span>
+            </div>
           </article>
 
           <article class="stat-impact-card highlight-danger">
@@ -119,6 +117,24 @@
             <p>
               Entre transferencias desviadas, días con la empresa parada sin poder facturar, recuperación de sistemas y clientes que pierden la confianza.
             </p>
+            <!-- Recurso gráfico: Desglose de costes con barras visuales -->
+            <div class="stat-cost-breakdown font-mono">
+              <div class="cost-item">
+                <div class="cost-row"><span>Transferencias desviadas</span><strong class="text-danger">~42.000 €</strong></div>
+                <div class="cost-bar-track"><div class="cost-bar-fill danger" style="width: 75%;"></div></div>
+              </div>
+              <div class="cost-item">
+                <div class="cost-row"><span>Parada de actividad (3-5 días)</span><strong class="text-gold">~24.000 €</strong></div>
+                <div class="cost-bar-track"><div class="cost-bar-fill gold" style="width: 48%;"></div></div>
+              </div>
+              <div class="cost-item">
+                <div class="cost-row"><span>Peritaje y recuperación</span><strong class="text-cyan">~14.000 €</strong></div>
+                <div class="cost-bar-track"><div class="cost-bar-fill cyan" style="width: 28%;"></div></div>
+              </div>
+            </div>
+            <div class="stat-alert-callout font-mono">
+              ⚠️ El 60% de las pymes atacadas quiebran en 6 meses (Datos INCIBE)
+            </div>
           </article>
 
           <article class="stat-impact-card">
@@ -131,6 +147,32 @@
             <p>
               Los cursos en vídeo de una hora se ven una vez al año por obligación, con prisa, y se olvidan a la semana siguiente. No entrenan el reflejo diario.
             </p>
+            <!-- Recurso gráfico: Curva de retención y caída en el olvido -->
+            <div class="stat-retention-curve font-mono">
+              <div class="curve-step">
+                <span class="curve-dot gold"></span>
+                <div class="curve-info">
+                  <strong>Día 1: Vídeo de 1h anual</strong>
+                  <span>100% visto por obligación</span>
+                </div>
+              </div>
+              <div class="curve-arrow text-gold">▼</div>
+              <div class="curve-step">
+                <span class="curve-dot dim"></span>
+                <div class="curve-info">
+                  <strong>Día 7: Rutina y prisas diarias</strong>
+                  <span>&lt; 5% de retención real</span>
+                </div>
+              </div>
+              <div class="curve-arrow text-danger">▼</div>
+              <div class="curve-step alert">
+                <span class="curve-dot danger"></span>
+                <div class="curve-info">
+                  <strong class="text-danger">Ataque real: Clic accidental</strong>
+                  <span>0% reflejo automático bajo presión</span>
+                </div>
+              </div>
+            </div>
           </article>
 
         </div>
@@ -151,182 +193,142 @@
             <span class="text-green">sin vídeos aburridos ni tecnicismos.</span>
           </h2>
           <p class="section-lead">
-            Sentinel envía de vez en cuando correos trampa 100% inofensivos. Haz scroll (o pulsa en cada paso) para ver cómo transformamos una amenaza en un hábito de seguridad:
+            Sentinel envía de vez en cuando correos trampa 100% inofensivos. Haz scroll para ver cómo transformamos una amenaza en un hábito de seguridad:
           </p>
         </div>
 
-        <!-- CONTENEDOR STICKY DE SCROLLYTELLING (4 PASOS) -->
+        <!-- CONTENEDOR STICKY DE SCROLLYTELLING A PANTALLA COMPLETA (4 ESCENAS) -->
         <div class="scrolly-solution-track" id="solution-track">
           <div class="scrolly-solution-sticky" data-packet-dock="solution">
-            
-            <!-- Barra de progreso de los 4 pasos -->
-            <div class="solution-steps-nav" role="tablist" aria-label="Pasos del método Sentinel">
-              <button type="button" class="step-tab is-active" data-step="0" role="tab" aria-selected="true">
-                <span class="step-tab-num font-mono">01</span>
-                <span class="step-tab-label">Llega el señuelo</span>
-              </button>
-              <button type="button" class="step-tab" data-step="1" role="tab" aria-selected="false">
-                <span class="step-tab-num font-mono">02</span>
-                <span class="step-tab-label">Susto didáctico</span>
-              </button>
-              <button type="button" class="step-tab" data-step="2" role="tab" aria-selected="false">
-                <span class="step-tab-num font-mono">03</span>
-                <span class="step-tab-label">Avisar da +50 XP</span>
-              </button>
-              <button type="button" class="step-tab" data-step="3" role="tab" aria-selected="false">
-                <span class="step-tab-num font-mono">04</span>
-                <span class="step-tab-label">Riesgo &lt; 10%</span>
-              </button>
-            </div>
 
-            <!-- Escenario de transformación en 2 columnas -->
-            <div class="solution-stage-grid">
+            <!-- Escena a pantalla completa: Información a la izquierda + Gran Icono Flotante a la derecha -->
+            <div class="solution-stage-grid" data-active-step="0">
               
-              <!-- Izquierda: Tarjetas narrativas que cambian con el scroll -->
+              <!-- Izquierda: Información clara, grande y directamente sobre el fondo -->
               <div class="solution-cards-stack">
-                
-                <!-- Paso 1 -->
-                <article class="sol-step-panel is-active" data-panel="0">
-                  <div class="sol-step-badge font-mono text-cyan">PASO 01 DE 04 · EN LA BANDEJA REAL</div>
-                  <h3>Llega un correo trampa inofensivo</h3>
-                  <p>
-                    Cada pocas semanas, tus empleados reciben un correo que imita las estafas reales que circulan en España: una factura pendiente, un paquete retenido o un aviso del banco.
-                  </p>
-                  <ul class="sol-check-list">
-                    <li>Adaptado al puesto de cada persona (administración, compras, ventas).</li>
-                    <li>Totalmente seguro: ningún dato sale de tu empresa.</li>
-                  </ul>
-                </article>
+                <div class="sol-panels-viewport">
 
-                <!-- Paso 2 -->
-                <article class="sol-step-panel" data-panel="1">
-                  <div class="sol-step-badge font-mono text-danger">PASO 02 DE 04 · APRENDIZAJE EN 0 SEGUNDOS</div>
-                  <h3>Si alguien cae, lo entiende al instante</h3>
-                  <p>
-                    Si un empleado hace clic, no hay broncas ni cursos eternos. En ese mismo segundo ve qué habría perdido la empresa y las 3 pistas exactas que delataban el engaño.
-                  </p>
-                  <ul class="sol-check-list">
-                    <li>Ese pequeño susto en caliente se recuerda 10 veces más que un vídeo.</li>
-                    <li>Explicado en 20 segundos con lenguaje claro y visual.</li>
-                  </ul>
-                </article>
+                  <!-- Paso 1: Correo (Azul) -->
+                  <article class="sol-step-panel is-active" data-panel="0">
+                    <h3 class="sol-title-blue">Llega un correo trampa inofensivo</h3>
+                    <p>
+                      Tu equipo recibe en su bandeja habitual un correo que imita una estafa real en España: una factura urgente, un paquete retenido o un aviso del banco.
+                    </p>
+                    <ul class="sol-check-list">
+                      <li>Adaptado al puesto de cada persona (administración, compras, ventas).</li>
+                      <li>100% seguro: ningún dato sale de tu empresa ni instala nada.</li>
+                    </ul>
+                  </article>
 
-                <!-- Paso 3 -->
-                <article class="sol-step-panel" data-panel="2">
-                  <div class="sol-step-badge font-mono text-gold">PASO 03 DE 04 · CULTURA POSITIVA</div>
-                  <h3>Si lo detecta, avisa en 1 clic y gana +50 XP</h3>
-                  <p>
-                    Cuando alguien sospecha de un correo, pulsa el botón de Sentinel. Si acierta, suma puntos para su departamento y convierte la precaución en un hábito compartido.
-                  </p>
-                  <ul class="sol-check-list">
-                    <li>Más de un <strong>80% de participación y avisos</strong> en la plantilla.</li>
-                    <li>Convierte a tus empleados en el mejor cortafuegos de la empresa.</li>
-                  </ul>
-                </article>
+                  <!-- Paso 2: Virus (Naranja) -->
+                  <article class="sol-step-panel" data-panel="1">
+                    <h3 class="sol-title-orange">Si alguien cae, lo entiende al instante</h3>
+                    <p>
+                      Si un empleado hace clic, no hay virus ni broncas. En ese mismo segundo ve qué habría perdido la empresa y las 3 pistas que delataban el engaño.
+                    </p>
+                    <ul class="sol-check-list">
+                      <li>Ese pequeño susto en caliente se recuerda 10 veces más que un vídeo.</li>
+                      <li>Explicado en 20 segundos con lenguaje visual y directo.</li>
+                    </ul>
+                  </article>
 
-                <!-- Paso 4 -->
-                <article class="sol-step-panel" data-panel="3">
-                  <div class="sol-step-badge font-mono text-green">PASO 04 DE 04 · RESULTADOS MEDIBLES</div>
-                  <h3>Tú ves cómo baja el riesgo a menos del 10%</h3>
-                  <p>
-                    En tu panel de gerente ves de un vistazo cuántos ataques se han frenado, cómo mejora cada departamento en 90 días y descargas los justificantes de formación.
-                  </p>
-                  <ul class="sol-check-list">
-                    <li>Pasas del <strong>35–40% de caídas a menos del 10%</strong> en 3 meses.</li>
-                    <li>Informes listos para auditorías del <strong>RGPD y aseguradoras</strong>.</li>
-                  </ul>
-                </article>
+                  <!-- Paso 3: Rayo (Amarillo) -->
+                  <article class="sol-step-panel" data-panel="2">
+                    <h3 class="sol-title-yellow">Si lo detecta, avisa en 1 clic y gana +50 XP</h3>
+                    <p>
+                      Cuando alguien sospecha de un correo, pulsa el botón de Sentinel. Si acierta, suma puntos para su departamento y protege al resto del equipo.
+                    </p>
+                    <ul class="sol-check-list">
+                      <li>Más de un <strong>80% de participación y avisos</strong> en la plantilla.</li>
+                      <li>Convierte a tus empleados en el mejor cortafuegos de la empresa.</li>
+                    </ul>
+                  </article>
 
-                <!-- Controles manuales adicionales -->
-                <div class="sol-manual-controls">
-                  <button type="button" class="btn-step-nav" id="sol-prev">&larr; Paso anterior</button>
-                  <span class="sol-progress-indicator font-mono" id="sol-counter">PASO 01 / 04</span>
-                  <button type="button" class="btn-step-nav" id="sol-next">Siguiente paso &rarr;</button>
+                  <!-- Paso 4: Escudo (Verde) -->
+                  <article class="sol-step-panel" data-panel="3">
+                    <h3 class="sol-title-green">El riesgo baja a menos del 10% en 90 días</h3>
+                    <p>
+                      En tu panel de gerente ves de un vistazo cuántos ataques se han frenado, cómo mejora cada área y descargas los justificantes oficiales.
+                    </p>
+                    <ul class="sol-check-list">
+                      <li>Pasas del <strong>35–40% de caídas a menos del 10%</strong> en 3 meses.</li>
+                      <li>Informes listos para auditorías del <strong>RGPD y aseguradoras</strong>.</li>
+                    </ul>
+                  </article>
+
                 </div>
-
               </div>
 
-              <!-- Derecha: Cápsula Visual de Transformación del Objeto Viajero -->
+              <!-- Derecha: Gran Objeto / Icono Flotante siempre en la misma posición -->
               <div class="solution-visualizer-box" id="solution-visualizer" data-step-state="0">
-                <div class="vis-top-bar font-mono">
-                  <span>ESCUDO SENTINEL · INTERCEPTOR ACTIVO</span>
-                  <span class="vis-state-pill" id="vis-state-pill">FASE 1: SEÑUELO</span>
-                </div>
-
-                <!-- El objeto transformándose en el centro -->
                 <div class="vis-stage">
                   
-                  <!-- Vista Paso 1: El sobre señuelo -->
+                  <!-- Icono 1: Correo / Carta (Azul) -->
                   <div class="vis-card is-active" data-vis="0">
-                    <div class="morph-envelope">
-                      <span class="morph-icon">
-                        <svg class="sol-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-10 7L2 7"></path></svg>
-                      </span>
-                      <span class="morph-tag font-mono">SIMULACRO CONTROLADO</span>
-                    </div>
-                    <div class="vis-mock-mail">
-                      <div class="mock-row"><span class="mock-dot cyan"></span><strong>Factura pendiente: cambio de IBAN</strong></div>
-                      <div class="mock-row dim"><span>Enviado automáticamente un martes a las 10:15</span></div>
+                    <div class="holo-object-wrap theme-blue">
+                      <div class="holo-floating-icon">
+                        <svg class="holo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <rect x="2" y="4" width="20" height="16" rx="2.5"></rect>
+                          <path d="m22 7-10 7L2 7"></path>
+                        </svg>
+                      </div>
+                      <div class="holo-floor-shadow" aria-hidden="true"></div>
                     </div>
                   </div>
 
-                  <!-- Vista Paso 2: El susto didáctico -->
+                  <!-- Icono 2: Virus (Naranja) -->
                   <div class="vis-card" data-vis="1">
-                    <div class="morph-envelope alert">
-                      <span class="morph-icon">
-                        <svg class="sol-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-                      </span>
-                      <span class="morph-tag font-mono">FEEDBACK EN 0 SEGUNDOS</span>
-                    </div>
-                    <div class="vis-mock-clues">
-                      <div class="clue-pill">1. Dominio .co falso</div>
-                      <div class="clue-pill">2. Cambio de IBAN por email</div>
-                      <div class="clue-pill">3. Urgencia antes de las 14h</div>
+                    <div class="holo-object-wrap theme-orange">
+                      <div class="holo-floating-icon">
+                        <svg class="holo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <circle cx="12" cy="12" r="5.5"></circle>
+                          <circle cx="10.2" cy="10.8" r="0.8" fill="currentColor"></circle>
+                          <circle cx="13.8" cy="10.8" r="0.8" fill="currentColor"></circle>
+                          <path d="M9.8 14.2c1.2-.8 3.2-.8 4.4 0"></path>
+                          <path d="M12 2v4.5"></path>
+                          <path d="M10 2h4"></path>
+                          <path d="M12 17.5V22"></path>
+                          <path d="M10 22h4"></path>
+                          <path d="M2 12h4.5"></path>
+                          <path d="M2 10v4"></path>
+                          <path d="M17.5 12H22"></path>
+                          <path d="M22 10v4"></path>
+                          <path d="m4.93 4.93 3.18 3.18"></path>
+                          <path d="m3.5 6.3 2.8-2.8"></path>
+                          <path d="m15.89 15.89 3.18 3.18"></path>
+                          <path d="m17.7 20.5 2.8-2.8"></path>
+                          <path d="m19.07 4.93-3.18 3.18"></path>
+                          <path d="m17.7 3.5 2.8 2.8"></path>
+                          <path d="m8.11 15.89-3.18 3.18"></path>
+                          <path d="m6.3 20.5-2.8-2.8"></path>
+                        </svg>
+                      </div>
+                      <div class="holo-floor-shadow" aria-hidden="true"></div>
                     </div>
                   </div>
 
-                  <!-- Vista Paso 3: Transformación en Insignia +50 XP -->
+                  <!-- Icono 3: Rayo (Amarillo) -->
                   <div class="vis-card" data-vis="2">
-                    <div class="morph-shield-badge">
-                      <span class="shield-big">
-                        <svg class="sol-icon-svg green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
-                      </span>
-                      <span class="shield-xp font-arcade">+50 XP</span>
-                      <span class="shield-sub font-mono">AMENAZA FRENADA POR EL EQUIPO</span>
-                    </div>
-                    <div class="vis-ranking-mini font-mono">
-                      <div><span><strong class="rank-pos text-gold font-arcade">#1</strong> Administración</span><strong class="text-green">94% detectados</strong></div>
-                      <div><span><strong class="rank-pos text-cyan font-arcade">#2</strong> Compras y Almacén</span><strong class="text-cyan">88% detectados</strong></div>
+                    <div class="holo-object-wrap theme-yellow">
+                      <div class="holo-floating-icon">
+                        <svg class="holo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
+                      </div>
+                      <div class="holo-floor-shadow" aria-hidden="true"></div>
                     </div>
                   </div>
 
-                  <!-- Vista Paso 4: Caída del riesgo a <10% -->
+                  <!-- Icono 4: Escudo (Verde) -->
                   <div class="vis-card" data-vis="3">
-                    <div class="vis-chart-box">
-                      <div class="chart-header font-mono">
-                        <span>EMPLEADOS QUE CAEN EN ESTAFAS</span>
-                        <strong class="text-green">-78% DE RIESGO</strong>
+                    <div class="holo-object-wrap theme-green">
+                      <div class="holo-floating-icon">
+                        <svg class="holo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                          <path d="m9 12 2 2 4-4"></path>
+                        </svg>
                       </div>
-                      <div class="chart-bars">
-                        <div class="chart-col">
-                          <div class="bar-wrap"><div class="bar-fill danger" style="height: 82%;"></div></div>
-                          <strong class="font-mono text-danger">38%</strong>
-                          <span>Mes 1</span>
-                        </div>
-                        <div class="chart-col">
-                          <div class="bar-wrap"><div class="bar-fill gold" style="height: 45%;"></div></div>
-                          <strong class="font-mono text-gold">19%</strong>
-                          <span>Mes 2</span>
-                        </div>
-                        <div class="chart-col">
-                          <div class="bar-wrap"><div class="bar-fill green" style="height: 18%;"></div></div>
-                          <strong class="font-mono text-green">7%</strong>
-                          <span>Mes 3 (90 días)</span>
-                        </div>
-                      </div>
-                      <div class="chart-rgpd-badge font-mono">
-                        ✓ Certificado de formación RGPD listo para descargar
-                      </div>
+                      <div class="holo-floor-shadow" aria-hidden="true"></div>
                     </div>
                   </div>
 

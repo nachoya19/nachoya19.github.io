@@ -1029,18 +1029,16 @@
   function setSolutionStep(idx, playSound = false) {
     const clamped = Math.max(0, Math.min(3, idx));
     if (clamped === activeSolutionStep && !playSound) return;
-    const isStepChange = clamped !== activeSolutionStep;
     activeSolutionStep = clamped;
     if (playSound) audio.playBlip(true);
 
     const stageGrid = $(".solution-stage-grid");
-    if (stageGrid && isStepChange) {
-      stageGrid.classList.remove("glitch-active");
-      void stageGrid.offsetWidth;
-      stageGrid.classList.add("glitch-active");
-      setTimeout(() => {
-        stageGrid.classList.remove("glitch-active");
-      }, 350);
+    if (stageGrid) {
+      stageGrid.dataset.activeStep = String(clamped);
+    }
+    const solVis = $("#solution-visualizer");
+    if (solVis) {
+      solVis.dataset.stepState = String(clamped);
     }
 
     stepTabs.forEach((tab, i) => {
@@ -1051,24 +1049,11 @@
     stepPanels.forEach((panel, i) => {
       const on = i === clamped;
       panel.classList.toggle("is-active", on);
-      if (on && isStepChange) {
-        const badge = panel.querySelector(".sol-step-badge");
-        if (badge) {
-          badge.classList.remove("is-glitching");
-          void badge.offsetWidth;
-          badge.classList.add("is-glitching");
-        }
-      }
     });
     visCards.forEach((card, i) => card.classList.toggle("is-active", i === clamped));
 
     if (visStatePill) {
       visStatePill.textContent = stepStateLabels[clamped];
-      if (isStepChange) {
-        visStatePill.classList.remove("is-glitching");
-        void visStatePill.offsetWidth;
-        visStatePill.classList.add("is-glitching");
-      }
     }
     if (solCounter) solCounter.textContent = `PASO 0${clamped + 1} / 04`;
   }
