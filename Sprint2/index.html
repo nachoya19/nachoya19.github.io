@@ -33,28 +33,30 @@
          HERO: ESCENA EN VIVO DE LOS 2 TRABAJADORES + RETO DEL CORREO TRAMPA
          ====================================================================== -->
     <!-- ======================================================================
-         HERO: NIVEL 2D RETRO ROLLO ZELDA (SPRITES LIBRES + TEXTO SUPERPUESTO)
+         HERO: TRACK SCROLLYTELLING (CIELO ESTRELLADO NOCTURNO -> OFICINA CON SPRITES)
          ====================================================================== -->
-    <section class="hero-section hero-zelda-section" id="hero" data-section="hero">
+    <section class="hero-section hero-zelda-section hero-scroll-track" id="hero" data-section="hero">
       
-      <!-- LIENZO 2D DEL NIVEL ESTILO ZELDA (FONDO DINÁMICO A PANTALLA COMPLETA) -->
-      <canvas id="zelda-game-canvas" class="zelda-game-canvas" aria-label="Nivel 2D interactivo de la oficina con Mario, Iván y Nacho"></canvas>
+      <div class="hero-sticky-stage" id="hero-stage">
+        <!-- LIENZO 2D DEL NIVEL (FONDO DINÁMICO: CIELO NOCTURNO PIXEL ART + OFICINA) -->
+        <canvas id="zelda-game-canvas" class="zelda-game-canvas" aria-label="Nivel 2D interactivo con cielo estrellado pixel art y oficina con Mario, Iván y Nacho"></canvas>
 
-      <!-- VIÑETA Y SCANLINES SUTILES PARA INTEGRACIÓN VISUAL -->
-      <div class="zelda-viewport-vignette" aria-hidden="true"></div>
+        <!-- VIÑETA Y SCANLINES SUTILES PARA INTEGRACIÓN VISUAL -->
+        <div class="zelda-viewport-vignette" aria-hidden="true"></div>
 
-      <!-- CAPA SUPERPUESTA AL NIVEL (TÍTULO PURO SENTINEL SIN CARDS) -->
-      <div class="hero-zelda-overlay" id="office-scene">
-        
-        <div class="hero-brand-clean">
-          <h1 class="hero-pure-title font-display">SENTINEL</h1>
+        <!-- CAPA SUPERPUESTA AL NIVEL (TÍTULO SENTINEL CON ESCALADO AL SCROLLEAR) -->
+        <div class="hero-zelda-overlay" id="office-scene">
+          
+          <div class="hero-brand-clean" id="hero-brand">
+            <h1 class="hero-pure-title font-display" id="hero-title">SENTINEL</h1>
+          </div>
+
+          <div class="hero-pure-scroll-cue font-mono" id="hero-scroll-cue">
+            <span>DESLIZA PARA CONTINUAR</span>
+            <span class="scroll-arrow">&darr;</span>
+          </div>
+
         </div>
-
-        <div class="hero-pure-scroll-cue font-mono">
-          <span>DESLIZA PARA CONTINUAR</span>
-          <span class="scroll-arrow">&darr;</span>
-        </div>
-
       </div>
 
     </section>

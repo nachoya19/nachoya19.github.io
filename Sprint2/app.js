@@ -279,6 +279,249 @@
   let dpr = 1;
   const wallH = 68;
 
+  // =========================================================================
+  // SISTEMA DE CIELO NOCTURNO PIXEL ART (ESTRELLAS, LUNA Y NUBES ANIMADAS)
+  // =========================================================================
+  let heroScrollProgress = 0;
+  const pixelStars = [];
+  const pixelClouds = [];
+  const shootingStars = [];
+  let shootingStarTimer = 3.0;
+
+  function initPixelSkyElements() {
+    pixelStars.length = 0;
+    pixelClouds.length = 0;
+
+    // 1. Estrellas pixeladas (distribuidas en el cielo superior de -ch a 0)
+    const starCount = Math.max(90, Math.min(180, Math.floor(cw / 7)));
+    const starColors = ["#ffffff", "#e0f2fe", "#00e5ff", "#fef08a", "#c084fc", "#93c5fd"];
+    for (let i = 0; i < starCount; i++) {
+      pixelStars.push({
+        x: Math.floor(Math.random() * cw),
+        y: Math.floor(-ch * 0.98 + Math.random() * ch * 0.95),
+        size: Math.random() < 0.65 ? 2 : (Math.random() < 0.7 ? 3 : 4),
+        color: starColors[Math.floor(Math.random() * starColors.length)],
+        speed: 1.5 + Math.random() * 3.5,
+        phase: Math.random() * Math.PI * 2,
+        isCross: Math.random() < 0.22
+      });
+    }
+
+    // 2. Nubes Pixel Art en 3 capas de paralaje escalonadas
+    // Capa 0: Lejana, pequeña y sutil
+    for (let i = 0; i < 4; i++) {
+      pixelClouds.push({
+        layer: 0,
+        x: (cw / 4) * i + (Math.random() - 0.5) * 80,
+        y: -ch * 0.80 + (i % 2) * 55,
+        w: 140 + (i % 3) * 35,
+        h: 46,
+        speed: 0.16 + (i % 2) * 0.05,
+        colorBase: "#070e20",
+        colorMid: "#0f1c3d",
+        colorRim: "#1e3362",
+        pixelSize: 4
+      });
+    }
+
+    // Capa 1: Media, más visible
+    for (let i = 0; i < 4; i++) {
+      pixelClouds.push({
+        layer: 1,
+        x: (cw / 4) * i + 40,
+        y: -ch * 0.54 + (i % 2) * 45,
+        w: 190 + (i % 2) * 45,
+        h: 62,
+        speed: 0.32 + (i % 2) * 0.08,
+        colorBase: "#09142c",
+        colorMid: "#152650",
+        colorRim: "#2a4b88",
+        pixelSize: 5
+      });
+    }
+
+    // Capa 2: Primer plano (grandes y esponjosas en pixel art)
+    for (let i = 0; i < 3; i++) {
+      pixelClouds.push({
+        layer: 2,
+        x: (cw / 3) * i + 20,
+        y: -ch * 0.30 + (i % 2) * 40,
+        w: 260 + (i % 2) * 60,
+        h: 84,
+        speed: 0.52 + (i % 2) * 0.1,
+        colorBase: "#0d1a38",
+        colorMid: "#1b3366",
+        colorRim: "#38bdf8",
+        pixelSize: 6
+      });
+    }
+  }
+
+  // Dibuja una nube retro en pixel art usando bloques escalonados
+  function drawPixelCloud(ctx, cloud) {
+    const p = cloud.pixelSize || 4;
+    const cx = Math.floor(cloud.x / p) * p;
+    const cy = Math.floor(cloud.y / p) * p;
+    const w = Math.floor(cloud.w / p) * p;
+    const h = Math.floor(cloud.h / p) * p;
+
+    // Domes (lóbulos redondeados pixelados de la nube)
+    const lobes = [
+      { rx: w * 0.22, ry: h * 0.38, cx: cx + w * 0.24, cy: cy + h * 0.55 },
+      { rx: w * 0.32, ry: h * 0.50, cx: cx + w * 0.52, cy: cy + h * 0.45 },
+      { rx: w * 0.24, ry: h * 0.36, cx: cx + w * 0.78, cy: cy + h * 0.58 }
+    ];
+
+    // 1. Cuerpo base de la nube (colorBase)
+    ctx.fillStyle = cloud.colorBase;
+    ctx.fillRect(cx, cy + Math.floor(h * 0.55 / p) * p, w, Math.floor(h * 0.45 / p) * p);
+
+    // 2. Relleno de los lóbulos pixelados (colorMid)
+    ctx.fillStyle = cloud.colorMid;
+    lobes.forEach(l => {
+      const topY = Math.floor((l.cy - l.ry) / p) * p;
+      const botY = Math.floor(l.cy / p) * p;
+      for (let y = topY; y <= botY; y += p) {
+        const dy = (y - l.cy) / l.ry;
+        if (Math.abs(dy) <= 1) {
+          const span = Math.floor(Math.sqrt(1 - dy * dy) * l.rx / p) * p;
+          ctx.fillRect(l.cx - span, y, span * 2, p);
+        }
+      }
+    });
+
+    // 3. Brillo de luz de luna en el borde superior (colorRim)
+    ctx.fillStyle = cloud.colorRim;
+    lobes.forEach(l => {
+      const topY = Math.floor((l.cy - l.ry) / p) * p;
+      for (let y = topY; y <= topY + p * 2; y += p) {
+        const dy = (y - l.cy) / l.ry;
+        if (Math.abs(dy) <= 1) {
+          const span = Math.floor(Math.sqrt(1 - dy * dy) * l.rx / p) * p;
+          ctx.fillRect(l.cx - span + p, y, (span - p) * 2, p);
+        }
+      }
+    });
+  }
+
+  // Actualiza la posición horizontal de las nubes y estrellas fugaces
+  function updatePixelSky(dt) {
+    pixelClouds.forEach(cloud => {
+      cloud.x += cloud.speed * (dt * 60);
+      if (cloud.x - cloud.w > cw) {
+        cloud.x = -cloud.w - 40;
+      }
+    });
+
+    // Estrellas fugaces periódicas
+    shootingStarTimer -= dt;
+    if (shootingStarTimer <= 0) {
+      shootingStarTimer = 3.5 + Math.random() * 4.0;
+      shootingStars.push({
+        x: Math.random() * cw * 0.7,
+        y: -ch * 0.95 + Math.random() * ch * 0.4,
+        vx: 6 + Math.random() * 3,
+        vy: 2.8 + Math.random() * 1.5,
+        life: 1.0,
+        len: 40 + Math.random() * 25
+      });
+    }
+
+    for (let i = shootingStars.length - 1; i >= 0; i--) {
+      const s = shootingStars[i];
+      s.x += s.vx * (dt * 60);
+      s.y += s.vy * (dt * 60);
+      s.life -= dt * 1.4;
+      if (s.life <= 0) {
+        shootingStars.splice(i, 1);
+      }
+    }
+  }
+
+  function spawnSkyShootingStar(startX, startY) {
+    shootingStars.push({
+      x: startX,
+      y: startY,
+      vx: 6 + Math.random() * 3,
+      vy: 2.8 + Math.random() * 1.5,
+      life: 1.0,
+      len: 45
+    });
+  }
+
+  // Renderiza el cielo nocturno pixel art
+  function renderPixelSky(ctx, time, cw, ch) {
+    // 1. Gradiente del cielo nocturno profundo
+    const skyGrad = ctx.createLinearGradient(0, -ch, 0, 40);
+    skyGrad.addColorStop(0.0, "#010308");
+    skyGrad.addColorStop(0.35, "#04091a");
+    skyGrad.addColorStop(0.68, "#08132e");
+    skyGrad.addColorStop(0.92, "#0e1d42");
+    skyGrad.addColorStop(1.0, "#050812");
+
+    ctx.fillStyle = skyGrad;
+    ctx.fillRect(0, -ch, cw, ch + 45);
+
+    // 2. Luna Creciente Pixel Art en la esquina superior derecha
+    const moonX = Math.floor(cw * 0.82 / 4) * 4;
+    const moonY = Math.floor(-ch * 0.76 / 4) * 4;
+    
+    // Halo suave alrededor de la luna
+    ctx.fillStyle = "rgba(254, 240, 138, 0.06)";
+    ctx.beginPath();
+    ctx.arc(moonX + 16, moonY + 16, 44, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Luna pixelada
+    ctx.fillStyle = "#fef08a";
+    ctx.fillRect(moonX + 6, moonY, 18, 4);
+    ctx.fillRect(moonX + 2, moonY + 4, 26, 4);
+    ctx.fillRect(moonX, moonY + 8, 30, 16);
+    ctx.fillRect(moonX + 2, moonY + 24, 26, 4);
+    ctx.fillRect(moonX + 6, moonY + 28, 18, 4);
+
+    // Sombra que forma el cuarto creciente
+    ctx.fillStyle = "#04091a";
+    ctx.fillRect(moonX + 12, moonY + 4, 18, 4);
+    ctx.fillRect(moonX + 10, moonY + 8, 22, 16);
+    ctx.fillRect(moonX + 12, moonY + 24, 18, 4);
+
+    // 3. Estrellas pixeladas titilando
+    pixelStars.forEach(s => {
+      const twinkle = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(time * s.speed + s.phase));
+      ctx.globalAlpha = twinkle;
+      ctx.fillStyle = s.color;
+      if (s.isCross) {
+        ctx.fillRect(s.x, s.y, 2, 2);
+        ctx.fillRect(s.x - 2, s.y, 2, 2);
+        ctx.fillRect(s.x + 2, s.y, 2, 2);
+        ctx.fillRect(s.x, s.y - 2, 2, 2);
+        ctx.fillRect(s.x, s.y + 2, 2, 2);
+      } else {
+        ctx.fillRect(s.x, s.y, s.size, s.size);
+      }
+    });
+    ctx.globalAlpha = 1.0;
+
+    // 4. Estrellas fugaces
+    shootingStars.forEach(s => {
+      ctx.strokeStyle = `rgba(0, 229, 255, ${Math.max(0, s.life * 0.85)})`;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(s.x - (s.vx / 3) * s.len * 0.25, s.y - (s.vy / 3) * s.len * 0.25);
+      ctx.lineTo(s.x, s.y);
+      ctx.stroke();
+
+      ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, s.life)})`;
+      ctx.fillRect(s.x - 1, s.y - 1, 3, 3);
+    });
+
+    // 5. Nubes pixel art flotando
+    pixelClouds.forEach(cloud => {
+      drawPixelCloud(ctx, cloud);
+    });
+  }
+
   function resizeCanvas() {
     if (!zCanvas) return;
     const rect = zCanvas.parentElement.getBoundingClientRect();
@@ -287,23 +530,23 @@
     ch = Math.max(480, rect.height);
     zCanvas.width = Math.floor(cw * dpr);
     zCanvas.height = Math.floor(ch * dpr);
+    initPixelSkyElements();
   }
 
   window.addEventListener("resize", resizeCanvas);
   resizeCanvas();
 
-  // Puntos clave de navegación en la oficina según dimensiones
+  // Puntos clave de navegación en la oficina (distribuidos en toda la pantalla)
   function getOfficeSpots() {
-    const floorY = Math.max(320, ch * 0.60);
     return {
-      desk1: { x: cw * 0.18, y: floorY + 45, label: "Puesto de Iván" },
-      desk2: { x: cw * 0.82, y: floorY + 45, label: "Puesto de Mario" },
-      desk3: { x: cw * 0.35, y: floorY - 20, label: "Puesto de Nacho" },
-      terminal: { x: cw * 0.50, y: floorY + 70, label: "Terminal Factura" },
-      serverL: { x: cw * 0.12, y: floorY - 50, label: "Servidor Alpha" },
-      serverR: { x: cw * 0.88, y: floorY - 50, label: "Servidor Beta" },
-      coffee: { x: cw * 0.08, y: floorY + 15, label: "Cafetera" },
-      meeting: { x: cw * 0.50, y: floorY, label: "Punto de encuentro" }
+      desk1: { x: cw * 0.22, y: wallH + 85, label: "Puesto de Iván" },
+      desk2: { x: cw * 0.78, y: wallH + 85, label: "Puesto de Mario" },
+      desk3: { x: cw * 0.36, y: ch * 0.52, label: "Puesto de Nacho" },
+      terminal: { x: cw * 0.65, y: ch * 0.52, label: "Terminal Factura" },
+      serverL: { x: cw * 0.10, y: ch * 0.78, label: "Servidor Alpha" },
+      serverR: { x: cw * 0.90, y: ch * 0.78, label: "Servidor Beta" },
+      coffee: { x: cw * 0.08, y: ch * 0.44, label: "Cafetera" },
+      meeting: { x: cw * 0.50, y: ch * 0.78, label: "Punto de encuentro" }
     };
   }
 
@@ -326,12 +569,11 @@
     workers.p3.targetY = spots.desk3.y;
   }
 
-  // Dibujar mapa Zelda 2D: suelo, alfombra cyber, paredes y muebles
+  // Dibujar mapa Zelda 2D: suelo amplio en toda la pantalla, alfombra cyber y muebles
   function renderZeldaMap(ctx, time) {
     const spots = getOfficeSpots();
-    const floorY = Math.max(320, ch * 0.60);
 
-    // 1. Suelo: Baldosas de 36x36
+    // 1. Suelo: Baldosas de 36x36 cubriendo toda la pantalla
     const tileSize = 36;
     for (let x = 0; x < cw; x += tileSize) {
       for (let y = 0; y < ch; y += tileSize) {
@@ -343,20 +585,20 @@
       }
     }
 
-    // 2. Alfombra central estilo Zelda / Cyber-Pad
-    const carpetX = cw * 0.12;
-    const carpetY = floorY - 60;
-    const carpetW = cw * 0.76;
-    const carpetH = Math.max(220, ch - carpetY - 35);
+    // 2. Alfombra central estilo Zelda / Cyber-Pad amplia que abarca toda la estancia
+    const carpetX = cw * 0.06;
+    const carpetY = wallH + 16;
+    const carpetW = cw * 0.88;
+    const carpetH = Math.max(260, ch - carpetY - 24);
 
-    ctx.fillStyle = "rgba(14, 25, 48, 0.75)";
+    ctx.fillStyle = "rgba(14, 25, 48, 0.78)";
     ctx.fillRect(carpetX, carpetY, carpetW, carpetH);
 
-    ctx.strokeStyle = "rgba(0, 229, 255, 0.3)";
+    ctx.strokeStyle = "rgba(0, 229, 255, 0.32)";
     ctx.lineWidth = 2;
     ctx.strokeRect(carpetX, carpetY, carpetW, carpetH);
 
-    ctx.strokeStyle = "rgba(0, 229, 255, 0.08)";
+    ctx.strokeStyle = "rgba(0, 229, 255, 0.1)";
     ctx.lineWidth = 1;
     ctx.strokeRect(carpetX + 12, carpetY + 12, carpetW - 24, carpetH - 24);
 
@@ -417,13 +659,15 @@
     const cof = spots.coffee;
     drawCoffeeStation(ctx, cof.x, cof.y, time);
 
-    drawCyberPlant(ctx, 40, ch * 0.38);
-    drawCyberPlant(ctx, cw - 65, ch * 0.38);
+    drawCyberPlant(ctx, 35, ch * 0.28);
+    drawCyberPlant(ctx, 35, ch * 0.68);
+    drawCyberPlant(ctx, cw - 65, ch * 0.28);
+    drawCyberPlant(ctx, cw - 65, ch * 0.68);
   }
 
   function drawDesk(ctx, x, y, label, labelColor, screenColor, time, hasCoffee) {
-    const dw = 96;
-    const dh = 48;
+    const dw = 104;
+    const dh = 50;
     const dx = x - dw / 2;
     const dy = y + 25;
 
@@ -436,10 +680,10 @@
     ctx.lineWidth = 1;
     ctx.strokeRect(dx, dy, dw, dh);
 
-    const mw = 32;
-    const mh = 22;
-    const mx = dx + 12;
-    const my = dy + 6;
+    const mw = 36;
+    const mh = 24;
+    const mx = dx + 14;
+    const my = dy + 7;
 
     ctx.fillStyle = "#0c1220";
     ctx.fillRect(mx, my, mw, mh);
@@ -548,14 +792,14 @@
     if (!sObj || !sObj.loaded || !sObj.frames[wObj.frameIdx]) return;
 
     const frameCanvas = sObj.frames[wObj.frameIdx];
-    const targetW = 68;
-    const targetH = 135;
+    const targetW = 76;
+    const targetH = 150;
     const posX = wObj.x - targetW / 2;
     const posY = wObj.y - targetH + 10 - (wObj.jumpOffset || 0);
 
     ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
     ctx.beginPath();
-    ctx.ellipse(wObj.x, wObj.y + 6, 24, 7, 0, 0, Math.PI * 2);
+    ctx.ellipse(wObj.x, wObj.y + 6, 26, 8, 0, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.save();
@@ -733,11 +977,10 @@
 
   function pickNextGoal(w) {
     const spots = getOfficeSpots();
-    const goals = [spots.desk1, spots.desk2, spots.desk3, spots.terminal, spots.coffee, spots.meeting];
+    const goals = [spots.desk1, spots.desk2, spots.desk3, spots.terminal, spots.coffee, spots.meeting, spots.serverL, spots.serverR];
     const chosen = goals[Math.floor(Math.random() * goals.length)];
-    const floorY = Math.max(320, ch * 0.60);
-    w.targetX = Math.max(60, Math.min(cw - 60, chosen.x + (Math.random() - 0.5) * 60));
-    w.targetY = Math.max(floorY - 40, Math.min(ch - 50, chosen.y + (Math.random() - 0.5) * 35));
+    w.targetX = Math.max(70, Math.min(cw - 70, chosen.x + (Math.random() - 0.5) * 80));
+    w.targetY = Math.max(wallH + 50, Math.min(ch - 50, chosen.y + (Math.random() - 0.5) * 45));
     w.waitTimer = 2.5 + Math.random() * 2.5;
   }
 
@@ -753,6 +996,21 @@
 
       zctx.clearRect(0, 0, cw, ch);
 
+      // Desplazamiento vertical de cámara según el progreso del Hero:
+      // Cuando heroScrollProgress == 0: la cámara está en el cielo nocturno estrellado (cameraOffset = ch)
+      // Cuando heroScrollProgress == 1: la cámara está completamente en la oficina (cameraOffset = 0)
+      const cameraOffset = (1 - heroScrollProgress) * ch;
+
+      zctx.save();
+      zctx.translate(0, cameraOffset);
+
+      // 1. Cielo Nocturno y Nubes Pixel Art (en el rango vertical [-ch, 0])
+      updatePixelSky(dt);
+      if (cameraOffset > -20) {
+        renderPixelSky(zctx, timestamp / 1000, cw, ch);
+      }
+
+      // 2. Mapa y props de la oficina en el rango [0, ch]
       renderZeldaMap(zctx, timestamp / 1000);
       updateAndRenderParticles(zctx, dt);
 
@@ -768,7 +1026,8 @@
 
       renderList.forEach(item => renderWorker(zctx, item.w, item.s));
 
-      zctx.restore();
+      zctx.restore(); // restore cameraOffset
+      zctx.restore(); // restore dpr
     }
 
     requestAnimationFrame(zeldaGameLoop);
@@ -779,10 +1038,27 @@
     const clickX = e.clientX - rect.left;
     const clickY = e.clientY - rect.top;
 
+    const cameraOffset = (1 - heroScrollProgress) * ch;
+    const worldY = clickY - cameraOffset;
+
+    // Si aún estamos principalmente en el cielo nocturno:
+    if (heroScrollProgress < 0.65) {
+      spawnSkyShootingStar(clickX, worldY);
+      spawnParticle({
+        type: "ripple",
+        x: clickX,
+        y: worldY,
+        r: 6,
+        life: 0.8
+      });
+      audio.playBlip(true);
+      return;
+    }
+
     spawnParticle({
       type: "ripple",
       x: clickX,
-      y: clickY,
+      y: worldY,
       r: 4,
       life: 0.8
     });
@@ -790,7 +1066,7 @@
     audio.playBlip(true);
 
     const spots = getOfficeSpots();
-    const distTerminal = Math.hypot(spots.terminal.x - clickX, spots.terminal.y - clickY);
+    const distTerminal = Math.hypot(spots.terminal.x - clickX, spots.terminal.y - worldY);
     if (distTerminal < 55) {
       mailCard?.classList.remove("is-minimized");
       audio.playCoin();
@@ -798,18 +1074,17 @@
       return;
     }
 
-    const dist1 = Math.hypot(workers.p1.x - clickX, workers.p1.y - clickY);
-    const dist2 = Math.hypot(workers.p2.x - clickX, workers.p2.y - clickY);
-    const dist3 = Math.hypot(workers.p3.x - clickX, workers.p3.y - clickY);
+    const dist1 = Math.hypot(workers.p1.x - clickX, workers.p1.y - worldY);
+    const dist2 = Math.hypot(workers.p2.x - clickX, workers.p2.y - worldY);
+    const dist3 = Math.hypot(workers.p3.x - clickX, workers.p3.y - worldY);
 
     let targetWorker = workers.p1;
     let minDist = dist1;
     if (dist2 < minDist) { targetWorker = workers.p2; minDist = dist2; }
     if (dist3 < minDist) { targetWorker = workers.p3; minDist = dist3; }
 
-    const floorY = Math.max(320, ch * 0.60);
-    targetWorker.targetX = Math.max(60, Math.min(cw - 60, clickX));
-    targetWorker.targetY = Math.max(floorY - 45, Math.min(ch - 50, clickY));
+    targetWorker.targetX = Math.max(70, Math.min(cw - 70, clickX));
+    targetWorker.targetY = Math.max(wallH + 45, Math.min(ch - 50, worldY));
     targetWorker.waitTimer = 0;
 
     if (minDist < 70) {
@@ -1081,6 +1356,35 @@
     const scrollY = window.scrollY;
     const docHeight = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
     const totalProgress = Math.min(1, Math.max(0, scrollY / docHeight));
+
+    // Progreso dentro del Hero (Cielo Nocturno -> Oficina con Sprites)
+    const heroTrack = $("#hero");
+    const heroBrand = $("#hero-brand");
+    const heroCue = $("#hero-scroll-cue");
+    if (heroTrack) {
+      const heroRect = heroTrack.getBoundingClientRect();
+      const heroScrollable = heroTrack.offsetHeight - window.innerHeight;
+      if (heroScrollable > 0) {
+        heroScrollProgress = Math.min(1, Math.max(0, -heroRect.top / heroScrollable));
+      } else {
+        heroScrollProgress = 1;
+      }
+
+      if (heroBrand) {
+        // En scroll = 0: Escala grande (1.45) y centrado total en el cielo nocturno.
+        // Al scrollear: se va reduciendo (escala 0.58) y asciende suavemente
+        // hasta quedarse centrado arriba del todo en el centro (header estilo arcade retro)
+        const scale = 1.45 - heroScrollProgress * 0.87;
+        const translateY = -heroScrollProgress * (window.innerHeight * 0.44);
+        heroBrand.style.transform = `translate(-50%, calc(-50% + ${translateY}px)) scale(${scale})`;
+      }
+
+      if (heroCue) {
+        const cueOpacity = Math.max(0, 1 - heroScrollProgress * 3.5);
+        heroCue.style.opacity = String(cueOpacity);
+        heroCue.style.pointerEvents = cueOpacity < 0.1 ? "none" : "auto";
+      }
+    }
 
     // Posición vertical del objeto viajero y llenado de la línea
     if (railFill) railFill.style.height = `${totalProgress * 100}%`;
