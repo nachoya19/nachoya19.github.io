@@ -66,12 +66,19 @@
       src: "../assets/sprites/sprites_p2_clean.png",
       fallback: "../assets/sprites/sprites_p2.png",
       name: "MARIO · COMPRAS Y OPERACIONES"
+    },
+    p3: {
+      id: "p3",
+      src: "../assets/sprites/sprites_p3_clean.png",
+      fallback: "../assets/sprites/sprites_p3.png",
+      name: "NACHO · FRONTEND Y CÓDIGO"
     }
   };
 
   const speakers = {
     p1: { ...speakerConfig.p1, loaded: false, frames: [], w: 0, h: 0 },
-    p2: { ...speakerConfig.p2, loaded: false, frames: [], w: 0, h: 0 }
+    p2: { ...speakerConfig.p2, loaded: false, frames: [], w: 0, h: 0 },
+    p3: { ...speakerConfig.p3, loaded: false, frames: [], w: 0, h: 0 }
   };
 
   // Carga y recorte de los 6 fotogramas de cada spritesheet
@@ -153,10 +160,18 @@
     "Hemos bajado del 38% a menos del 8% de clics.",
     "¡Buen trabajo equipo, riesgo controlado!"
   ];
+  const nachoLines = [
+    "¡Revisando el código de la pasarela!",
+    "El phishing intenta suplantar el portal de pagos.",
+    "Todo parcheado: certificados SSL y dominios validados.",
+    "¡Sistema Sentinel en verde, cero vulnerabilidades!",
+    "Buen trabajo controlando la intrusión."
+  ];
   let ivanLineIdx = 0;
   let marioLineIdx = 0;
+  let nachoLineIdx = 0;
 
-  // Estado de los 2 personajes en el mundo 2D Zelda
+  // Estado de los 3 personajes en el mundo 2D Zelda
   const workers = {
     p1: {
       id: "p1",
@@ -194,6 +209,25 @@
       bubbleText: "¡El dominio .co es falso!",
       bubbleTimer: 6.0,
       waitTimer: 3.5,
+      jumpOffset: 0
+    },
+    p3: {
+      id: "p3",
+      name: "NACHO",
+      role: "DEV",
+      color: "#10b981",
+      x: 400,
+      y: 340,
+      targetX: 400,
+      targetY: 340,
+      speed: 1.6,
+      facing: 1,
+      state: "idle",
+      walkTimer: 0,
+      frameIdx: 0,
+      bubbleText: "¡Revisando el código de pagos!",
+      bubbleTimer: 5.5,
+      waitTimer: 2.8,
       jumpOffset: 0
     }
   };
@@ -264,6 +298,7 @@
     return {
       desk1: { x: cw * 0.18, y: floorY + 45, label: "Puesto de Iván" },
       desk2: { x: cw * 0.82, y: floorY + 45, label: "Puesto de Mario" },
+      desk3: { x: cw * 0.35, y: floorY - 20, label: "Puesto de Nacho" },
       terminal: { x: cw * 0.50, y: floorY + 70, label: "Terminal Factura" },
       serverL: { x: cw * 0.12, y: floorY - 50, label: "Servidor Alpha" },
       serverR: { x: cw * 0.88, y: floorY - 50, label: "Servidor Beta" },
@@ -284,6 +319,11 @@
     workers.p2.y = spots.desk2.y;
     workers.p2.targetX = spots.desk2.x;
     workers.p2.targetY = spots.desk2.y;
+
+    workers.p3.x = spots.desk3.x;
+    workers.p3.y = spots.desk3.y;
+    workers.p3.targetX = spots.desk3.x;
+    workers.p3.targetY = spots.desk3.y;
   }
 
   // Dibujar mapa Zelda 2D: suelo, alfombra cyber, paredes y muebles
@@ -367,6 +407,9 @@
 
     const d2 = spots.desk2;
     drawDesk(ctx, d2.x, d2.y, "MARIO · COMPRAS", "#f59e0b", "#00e5ff", time, false);
+
+    const d3 = spots.desk3;
+    drawDesk(ctx, d3.x, d3.y, "NACHO · DEV", "#10b981", "#00e5ff", time, true);
 
     const term = spots.terminal;
     drawCentralTerminal(ctx, term.x, term.y, time);
@@ -676,9 +719,13 @@
         w.bubbleText = ivanLines[ivanLineIdx % ivanLines.length];
         ivanLineIdx++;
         w.bubbleTimer = 4.5;
-      } else {
+      } else if (w.id === "p2") {
         w.bubbleText = marioLines[marioLineIdx % marioLines.length];
         marioLineIdx++;
+        w.bubbleTimer = 4.5;
+      } else if (w.id === "p3") {
+        w.bubbleText = nachoLines[nachoLineIdx % nachoLines.length];
+        nachoLineIdx++;
         w.bubbleTimer = 4.5;
       }
     }
@@ -686,7 +733,7 @@
 
   function pickNextGoal(w) {
     const spots = getOfficeSpots();
-    const goals = [spots.desk1, spots.desk2, spots.terminal, spots.coffee, spots.meeting];
+    const goals = [spots.desk1, spots.desk2, spots.desk3, spots.terminal, spots.coffee, spots.meeting];
     const chosen = goals[Math.floor(Math.random() * goals.length)];
     const floorY = Math.max(320, ch * 0.60);
     w.targetX = Math.max(60, Math.min(cw - 60, chosen.x + (Math.random() - 0.5) * 60));
@@ -710,11 +757,13 @@
       updateAndRenderParticles(zctx, dt);
 
       updateWorkerAI(workers.p1, workers.p2, dt);
-      updateWorkerAI(workers.p2, workers.p1, dt);
+      updateWorkerAI(workers.p2, workers.p3, dt);
+      updateWorkerAI(workers.p3, workers.p1, dt);
 
       const renderList = [
         { w: workers.p1, s: speakers.p1 },
-        { w: workers.p2, s: speakers.p2 }
+        { w: workers.p2, s: speakers.p2 },
+        { w: workers.p3, s: speakers.p3 }
       ].sort((a, b) => a.w.y - b.w.y);
 
       renderList.forEach(item => renderWorker(zctx, item.w, item.s));
@@ -749,29 +798,37 @@
       return;
     }
 
-    const distM = Math.hypot(workers.p1.x - clickX, workers.p1.y - clickY);
-    const distI = Math.hypot(workers.p2.x - clickX, workers.p2.y - clickY);
-    const targetWorker = distM < distI ? workers.p1 : workers.p2;
+    const dist1 = Math.hypot(workers.p1.x - clickX, workers.p1.y - clickY);
+    const dist2 = Math.hypot(workers.p2.x - clickX, workers.p2.y - clickY);
+    const dist3 = Math.hypot(workers.p3.x - clickX, workers.p3.y - clickY);
+
+    let targetWorker = workers.p1;
+    let minDist = dist1;
+    if (dist2 < minDist) { targetWorker = workers.p2; minDist = dist2; }
+    if (dist3 < minDist) { targetWorker = workers.p3; minDist = dist3; }
 
     const floorY = Math.max(320, ch * 0.60);
     targetWorker.targetX = Math.max(60, Math.min(cw - 60, clickX));
     targetWorker.targetY = Math.max(floorY - 45, Math.min(ch - 50, clickY));
     targetWorker.waitTimer = 0;
 
-    if (Math.min(distM, distI) < 70) {
+    if (minDist < 70) {
       if (targetWorker.id === "p1") {
         ivanLineIdx = (ivanLineIdx + 1) % ivanLines.length;
         targetWorker.bubbleText = ivanLines[ivanLineIdx];
-      } else {
+      } else if (targetWorker.id === "p2") {
         marioLineIdx = (marioLineIdx + 1) % marioLines.length;
         targetWorker.bubbleText = marioLines[marioLineIdx];
+      } else if (targetWorker.id === "p3") {
+        nachoLineIdx = (nachoLineIdx + 1) % nachoLines.length;
+        targetWorker.bubbleText = nachoLines[nachoLineIdx];
       }
       targetWorker.bubbleTimer = 5.0;
       targetWorker.jumpOffset = 12;
     }
   });
 
-  ["p1", "p2"].forEach((key) => {
+  ["p1", "p2", "p3"].forEach((key) => {
     loadSpeaker(speakers[key], (data) => {
       speakers[key].frames = data.frames;
       speakers[key].w = data.w;
@@ -864,11 +921,15 @@
 
       workers.p1.state = "alarm";
       workers.p2.state = "alarm";
+      workers.p3.state = "alarm";
       workers.p1.bubbleText = "¡Uff, era una trampa! 😱";
       workers.p2.bubbleText = "¡Casi transferimos 4.870 €!";
+      workers.p3.bubbleText = "¡Aislad la red inmediatamente!";
       workers.p1.bubbleTimer = 6.0;
       workers.p2.bubbleTimer = 6.0;
+      workers.p3.bubbleTimer = 6.0;
       spawnAlertMark(workers.p1.x, workers.p1.y);
+      spawnAlertMark(workers.p3.x, workers.p3.y);
 
       if (wallRisk) wallRisk.textContent = "CRÍTICO (FALLO)";
       failOutcome?.focus({ preventScroll: true });
@@ -888,15 +949,20 @@
 
       workers.p1.state = "celebrate";
       workers.p2.state = "celebrate";
+      workers.p3.state = "celebrate";
       workers.p1.jumpOffset = 22;
       workers.p2.jumpOffset = 22;
+      workers.p3.jumpOffset = 22;
       workers.p1.bubbleText = "¡Amenaza frenada! 🏆";
       workers.p2.bubbleText = "¡+50 XP sumados! Buen trabajo.";
+      workers.p3.bubbleText = "¡Reglas actualizadas en Sentinel!";
       workers.p1.bubbleTimer = 6.0;
       workers.p2.bubbleTimer = 6.0;
+      workers.p3.bubbleTimer = 6.0;
 
       spawnXpBurst(workers.p1.x, workers.p1.y, 25);
       spawnXpBurst(workers.p2.x, workers.p2.y, 25);
+      spawnXpBurst(workers.p3.x, workers.p3.y, 25);
 
       if (wallRisk) wallRisk.textContent = "PROTEGIDO (<8%)";
       winOutcome?.focus({ preventScroll: true });
@@ -914,10 +980,13 @@
 
       workers.p1.state = "idle";
       workers.p2.state = "idle";
+      workers.p3.state = "idle";
       workers.p1.bubbleText = "¡Llega factura de 4.870 €!";
       workers.p2.bubbleText = "¡El dominio .co es falso!";
+      workers.p3.bubbleText = "¡Revisando el código de pagos!";
       workers.p1.bubbleTimer = 5.0;
       workers.p2.bubbleTimer = 5.0;
+      workers.p3.bubbleTimer = 5.0;
 
       if (wallRisk) wallRisk.textContent = "ALTO (38%)";
       hideInspectUrl();
