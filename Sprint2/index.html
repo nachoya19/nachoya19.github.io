@@ -39,7 +39,7 @@
       
       <div class="hero-sticky-stage" id="hero-stage">
         <!-- LIENZO 2D DEL NIVEL (FONDO DINÁMICO: CIELO NOCTURNO PIXEL ART + OFICINA) -->
-        <canvas id="zelda-game-canvas" class="zelda-game-canvas" aria-label="Nivel 2D interactivo con cielo estrellado pixel art y oficina con Mario, Iván y Nacho"></canvas>
+        <canvas id="zelda-game-canvas" class="zelda-game-canvas" aria-label="Nivel 2D interactivo con cielo estrellado pixel art y oficina con Mario, Iván, Nacho y Nicolás"></canvas>
 
         <!-- VIÑETA Y SCANLINES SUTILES PARA INTEGRACIÓN VISUAL -->
         <div class="zelda-viewport-vignette" aria-hidden="true"></div>
@@ -51,11 +51,6 @@
             <h1 class="hero-pure-title font-arcade" id="hero-title">SENTINEL</h1>
           </div>
 
-          <div class="hero-pure-scroll-cue font-mono" id="hero-scroll-cue">
-            <span>DESLIZA PARA CONTINUAR</span>
-            <span class="scroll-arrow">&darr;</span>
-          </div>
-
         </div>
       </div>
 
@@ -64,122 +59,313 @@
         <!-- ======================================================================
          01. EL PROBLEMA: EL CORREO ATRAVIESA EL ANTIVIRUS TRADICIONAL
          ====================================================================== -->
-    <section class="section-problem" id="problema" data-section="problema">
-      <div class="wrap">
+    <!-- ======================================================================
+         01. EL PROBLEMA: CARRUSEL HORIZONTAL SCROLLYTELLING (3 ESCENAS PANTALLA COMPLETA)
+         ====================================================================== -->
+    <section class="problem-scrolly-section" id="problema" data-section="problema">
+      
+      <!-- Track vertical para scrollytelling suave con snap magnético -->
+      <div class="problem-scroll-track" id="problem-track">
+        
+        <!-- Viewport sticky a pantalla completa fija (100vh) -->
+        <div class="problem-sticky-stage" id="problem-stage" data-packet-dock="problem">
 
-        <div class="section-header">
-          <span class="section-index font-mono">01 // EL PROBLEMA REAL EN LAS PYMES</span>
-          <h2 class="section-title">
-            Casi todos los ataques entran por una persona, <br>
-            <span class="text-danger">no por un fallo del ordenador.</span>
-          </h2>
-          <p class="section-lead">
-            Puedes tener un buen informático y el mejor antivirus, pero ninguna herramienta técnica impide que un empleado con prisa introduzca su contraseña o pague una factura en la cuenta equivocada.
-          </p>
-        </div>
+          <!-- Contenedor horizontal continuo que desliza las 3 escenas -->
+          <div class="problem-carousel-slider" id="problem-slider">
 
-        <!-- 3 Bloques Visuales de Impacto Directo -->
-        <div class="problem-stats-grid" data-packet-dock="problem">
-          
-          <article class="stat-impact-card">
-            <div class="stat-top-row">
-              <span class="stat-tag font-mono">ORIGEN DEL INCIDENTE</span>
-              <span class="stat-pill danger font-mono">DATO GLOBAL</span>
-            </div>
-            <div class="stat-huge-num text-cyan font-display" data-count="95" data-suffix="%">95%</div>
-            <h3>Empiezan por un error humano</h3>
-            <p>
-              Un correo que imita al banco, a una empresa de paquetería o a un proveedor habitual. Basta un solo clic entre toda tu plantilla para dar acceso a la empresa.
-            </p>
-            <!-- Recurso gráfico: Barra proporcional y vectores comunes -->
-            <div class="stat-visual-bar">
-              <div class="stat-bar-header font-mono">
-                <span class="text-cyan">95% FACTOR HUMANO</span>
-                <span class="text-muted">5% VULNERABILIDAD TÉCNICA</span>
-              </div>
-              <div class="stat-segmented-track">
-                <div class="segment-fill cyan" style="width: 95%;"></div>
-                <div class="segment-fill dim" style="width: 5%;"></div>
-              </div>
-            </div>
-            <div class="stat-vector-chips">
-              <span class="vector-chip font-mono">🎣 Suplantación de identidad</span>
-              <span class="vector-chip font-mono">🧾 Factura con IBAN falso</span>
-              <span class="vector-chip font-mono">🔐 Falsa alerta de contraseñas</span>
-            </div>
-          </article>
+            <!-- ================= ESCENA 1: ORIGEN DEL INCIDENTE ================= -->
+            <article class="problem-fullscreen-scene scene-origin" data-scene-idx="0">
+              <div class="p-scene-container">
+                
+                <div class="p-scene-content">
+                  <h2 class="p-scene-title">
+                    El <span class="highlight-cyan font-display">95%</span> de las brechas entran por una persona
+                  </h2>
+                  <p class="p-scene-lead">
+                    No hace falta vulnerar un cortafuegos: basta un correo persuasivo para que un empleado con prisa entregue el acceso a la empresa.
+                  </p>
 
-          <article class="stat-impact-card highlight-danger">
-            <div class="stat-top-row">
-              <span class="stat-tag font-mono">IMPACTO EN UNA PYME</span>
-              <span class="stat-pill danger font-mono">COSTE MEDIO</span>
-            </div>
-            <div class="stat-huge-num text-danger font-display">35k€ – 80k€</div>
-            <h3>De pérdidas por cada brecha</h3>
-            <p>
-              Entre transferencias desviadas, días con la empresa parada sin poder facturar, recuperación de sistemas y clientes que pierden la confianza.
-            </p>
-            <!-- Recurso gráfico: Desglose de costes con barras visuales -->
-            <div class="stat-cost-breakdown font-mono">
-              <div class="cost-item">
-                <div class="cost-row"><span>Transferencias desviadas</span><strong class="text-danger">~42.000 €</strong></div>
-                <div class="cost-bar-track"><div class="cost-bar-fill danger" style="width: 75%;"></div></div>
-              </div>
-              <div class="cost-item">
-                <div class="cost-row"><span>Parada de actividad (3-5 días)</span><strong class="text-gold">~24.000 €</strong></div>
-                <div class="cost-bar-track"><div class="cost-bar-fill gold" style="width: 48%;"></div></div>
-              </div>
-              <div class="cost-item">
-                <div class="cost-row"><span>Peritaje y recuperación</span><strong class="text-cyan">~14.000 €</strong></div>
-                <div class="cost-bar-track"><div class="cost-bar-fill cyan" style="width: 28%;"></div></div>
-              </div>
-            </div>
-            <div class="stat-alert-callout font-mono">
-              ⚠️ El 60% de las pymes atacadas quiebran en 6 meses (Datos INCIBE)
-            </div>
-          </article>
-
-          <article class="stat-impact-card">
-            <div class="stat-top-row">
-              <span class="stat-tag font-mono">FORMACIÓN TRADICIONAL</span>
-              <span class="stat-pill warning font-mono">INEFICAZ</span>
-            </div>
-            <div class="stat-huge-num text-gold font-display">0%</div>
-            <h3>De eficacia con vídeos teóricos</h3>
-            <p>
-              Los cursos en vídeo de una hora se ven una vez al año por obligación, con prisa, y se olvidan a la semana siguiente. No entrenan el reflejo diario.
-            </p>
-            <!-- Recurso gráfico: Curva de retención y caída en el olvido -->
-            <div class="stat-retention-curve font-mono">
-              <div class="curve-step">
-                <span class="curve-dot gold"></span>
-                <div class="curve-info">
-                  <strong>Día 1: Vídeo de 1h anual</strong>
-                  <span>100% visto por obligación</span>
+                  <div class="p-attack-vectors">
+                    <div class="p-vector-card">
+                      <svg class="p-vector-svg text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                      </svg>
+                      <div class="p-vector-info">
+                        <strong>Suplantación de Identidad</strong>
+                        <span>Correos convincentes imitando a clientes, banca o paquetería urgente.</span>
+                      </div>
+                    </div>
+                    <div class="p-vector-card">
+                      <svg class="p-vector-svg text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <line x1="10" y1="9" x2="8" y2="9"/>
+                      </svg>
+                      <div class="p-vector-info">
+                        <strong>Factura con IBAN Falso</strong>
+                        <span>Aviso urgente de cambio de cuenta bancaria justo antes de transferir.</span>
+                      </div>
+                    </div>
+                    <div class="p-vector-card">
+                      <svg class="p-vector-svg text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                      </svg>
+                      <div class="p-vector-info">
+                        <strong>Robo de Credenciales</strong>
+                        <span>Falsas alertas urgentes para iniciar sesión en Microsoft o Google.</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div class="curve-arrow text-gold">▼</div>
-              <div class="curve-step">
-                <span class="curve-dot dim"></span>
-                <div class="curve-info">
-                  <strong>Día 7: Rutina y prisas diarias</strong>
-                  <span>&lt; 5% de retención real</span>
+
+                <!-- Gráfico Visual: Medidor Radial 95% vs 5% -->
+                <div class="p-scene-visual">
+                  <div class="p-radial-card">
+                    <div class="p-donut-wrapper">
+                      <svg class="p-donut-svg" viewBox="0 0 240 240" aria-label="Gráfico de donut: 95% factor humano, 5% fallo técnico">
+                        <circle class="p-donut-bg" cx="120" cy="120" r="95"></circle>
+                        <circle class="p-donut-meter meter-cyan" cx="120" cy="120" r="95" stroke-dasharray="597" stroke-dashoffset="30"></circle>
+                      </svg>
+                      <div class="p-donut-center">
+                        <span class="p-donut-number font-display text-cyan">95%</span>
+                        <span class="p-donut-sub font-mono">FACTOR HUMANO</span>
+                      </div>
+                    </div>
+
+                    <div class="p-legend-bar font-mono">
+                      <div class="p-leg-item">
+                        <span class="p-leg-dot cyan"></span>
+                        <strong class="text-cyan">95%</strong>
+                        <span>Factor Humano</span>
+                      </div>
+                      <div class="p-leg-item">
+                        <span class="p-leg-dot dim"></span>
+                        <strong class="text-muted">5%</strong>
+                        <span>Fallo Técnico</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+
               </div>
-              <div class="curve-arrow text-danger">▼</div>
-              <div class="curve-step alert">
-                <span class="curve-dot danger"></span>
-                <div class="curve-info">
-                  <strong class="text-danger">Ataque real: Clic accidental</strong>
-                  <span>0% reflejo automático bajo presión</span>
+            </article>
+
+            <!-- ================= ESCENA 2: IMPACTO EN UNA PYME ================= -->
+            <article class="problem-fullscreen-scene scene-impact" data-scene-idx="1">
+              <div class="p-scene-container">
+                
+                <div class="p-scene-content">
+                  <h2 class="p-scene-title">
+                    De <span class="highlight-danger font-display">35k€ a 80k€</span> de pérdidas por cada brecha
+                  </h2>
+                  <p class="p-scene-lead">
+                    El perjuicio económico va mucho más allá del robo: implica parálisis de facturación, costes periciales y quiebra del negocio.
+                  </p>
+
+                  <div class="p-incibe-alert">
+                    <svg class="alert-pulse-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                      <line x1="12" y1="9" x2="12" y2="13"/>
+                      <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                    <div class="alert-text">
+                      <strong class="font-mono text-danger">ALERTA OFICIAL INCIBE</strong>
+                      <p>El <strong>60% de las pymes</strong> atacadas con éxito cierran en los 6 meses posteriores a la intrusión.</p>
+                    </div>
+                  </div>
                 </div>
+
+                <!-- Gráfico Visual: Desglose Financiero con Barras Neón -->
+                <div class="p-scene-visual">
+                  <div class="p-financial-chart">
+                    <div class="chart-header font-mono">
+                      <span>DESGLOSE DEL COSTE MEDIO ESTIMADO</span>
+                      <span class="text-danger">HASTA 80.000 €</span>
+                    </div>
+
+                    <div class="financial-bars-stack font-mono">
+                      <div class="fin-bar-item">
+                        <div class="fin-bar-labels">
+                          <span>Transferencias desviadas</span>
+                          <strong class="text-danger">~42.000 €</strong>
+                        </div>
+                        <div class="fin-track">
+                          <div class="fin-fill danger" style="width: 78%;"></div>
+                        </div>
+                        <span class="fin-sub">Pagos bancarios a cuentas fraudulentas irrecuperables</span>
+                      </div>
+
+                      <div class="fin-bar-item">
+                        <div class="fin-bar-labels">
+                          <span>Parada de actividad (3 a 5 días)</span>
+                          <strong class="text-gold">~24.000 €</strong>
+                        </div>
+                        <div class="fin-track">
+                          <div class="fin-fill gold" style="width: 52%;"></div>
+                        </div>
+                        <span class="fin-sub">Empresa paralizada sin poder servir ni facturar</span>
+                      </div>
+
+                      <div class="fin-bar-item">
+                        <div class="fin-bar-labels">
+                          <span>Peritaje y recuperación técnica</span>
+                          <strong class="text-cyan">~14.000 €</strong>
+                        </div>
+                        <div class="fin-track">
+                          <div class="fin-fill cyan" style="width: 32%;"></div>
+                        </div>
+                        <span class="fin-sub">Auditoría forense, multas RGPD y rescate de sistemas</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               </div>
-            </div>
-          </article>
+            </article>
+
+            <!-- ================= ESCENA 3: FORMACIÓN TRADICIONAL ================= -->
+            <article class="problem-fullscreen-scene scene-training" data-scene-idx="2">
+              <div class="p-scene-container">
+                
+                <div class="p-scene-content">
+                  <h2 class="p-scene-title">
+                    <span class="highlight-gold font-display">0% de eficacia</span> con cursos teóricos en vídeo
+                  </h2>
+                  <p class="p-scene-lead">
+                    Los cursos anuales de una hora se ven por obligación y se olvidan a la semana. En una situación de estrés laboral, la teoría no activa reflejos.
+                  </p>
+
+                  <div class="p-training-contrast font-mono">
+                    <div class="contrast-col bad">
+                      <span class="contrast-title text-danger">
+                        <svg class="contrast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        CURSOS EN VÍDEO
+                      </span>
+                      <p>Vídeo de 1h al año.<br>Se olvida en 7 días.<br>0 reflejo bajo presión.</p>
+                    </div>
+                    <div class="contrast-col good">
+                      <span class="contrast-title text-green">
+                        <svg class="contrast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        MÉTODO SENTINEL
+                      </span>
+                      <p>Práctica en bandeja real.<br>Hábito reflejo continuo.<br>Riesgo &lt; 10% en 90 días.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Gráfico Visual: Curva del Olvido y Fallo Flotante -->
+                <div class="p-scene-visual">
+                  <div class="p-forgetting-visual font-mono">
+                    
+                    <div class="f-curve-header">
+                      <span class="f-curve-title">LA CURVA DEL OLVIDO: DE LA TEORÍA AL FALLO</span>
+                      <span class="f-curve-badge text-gold">INEFICACIA 0%</span>
+                    </div>
+
+                    <div class="f-curve-canvas-wrap">
+                      <svg class="f-curve-svg" viewBox="0 0 540 230" aria-label="Curva exponencial del olvido: 100% de retención en Día 1 cae por debajo del 5% en Día 7 y causa 0% de reflejo en el ataque">
+                        <defs>
+                          <linearGradient id="f-stroke-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#f59e0b"/>
+                            <stop offset="40%" stop-color="#fbbf24"/>
+                            <stop offset="75%" stop-color="#ff3366"/>
+                            <stop offset="100%" stop-color="#ef4444"/>
+                          </linearGradient>
+
+                          <linearGradient id="f-fill-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.25"/>
+                            <stop offset="55%" stop-color="#ff3366" stop-opacity="0.10"/>
+                            <stop offset="100%" stop-color="#ff3366" stop-opacity="0"/>
+                          </linearGradient>
+
+                          <filter id="f-neon-glow" x="-20%" y="-20%" width="140%" height="140%">
+                            <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
+                            <feMerge>
+                              <feMergeNode in="coloredBlur"/>
+                              <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                          </filter>
+                        </defs>
+
+                        <!-- Ejes y marcas horizontales de porcentaje -->
+                        <line x1="45" y1="35" x2="520" y2="35" stroke="rgba(245, 158, 11, 0.22)" stroke-dasharray="3 4"/>
+                        <text x="36" y="39" fill="rgba(245, 158, 11, 0.75)" font-size="11" text-anchor="end">100%</text>
+
+                        <line x1="45" y1="110" x2="520" y2="110" stroke="rgba(255, 255, 255, 0.08)" stroke-dasharray="3 4"/>
+                        <text x="36" y="114" fill="rgba(255, 255, 255, 0.35)" font-size="11" text-anchor="end">50%</text>
+
+                        <line x1="45" y1="185" x2="520" y2="185" stroke="rgba(255, 51, 102, 0.28)" stroke-dasharray="3 4"/>
+                        <text x="36" y="189" fill="rgba(255, 51, 102, 0.75)" font-size="11" text-anchor="end">0%</text>
+
+                        <!-- Área sombreada bajo la curva descendente -->
+                        <path class="f-area-path" d="M 60 35 C 130 45, 180 165, 270 178 C 345 188, 420 185, 480 185 L 480 205 L 60 205 Z" fill="url(#f-fill-grad)" />
+
+                        <!-- Trazado de la curva del olvido -->
+                        <path class="f-curve-stroke" d="M 60 35 C 130 45, 180 165, 270 178 C 345 188, 420 185, 480 185" fill="none" stroke="url(#f-stroke-grad)" stroke-width="4" stroke-linecap="round" filter="url(#f-neon-glow)" />
+
+                        <!-- Nodo 1: Día 1 -->
+                        <g transform="translate(60, 35)">
+                          <circle r="12" fill="rgba(245, 158, 11, 0.2)" class="f-node-pulse-gold"/>
+                          <circle r="5.5" fill="#f59e0b" stroke="#ffffff" stroke-width="2"/>
+                        </g>
+
+                        <!-- Flecha indicadora Día 1 -> Día 7 -->
+                        <text x="165" y="105" fill="rgba(255, 255, 255, 0.4)" font-size="10" letter-spacing="1">7 DÍAS DE RUTINA &darr;</text>
+
+                        <!-- Nodo 2: Día 7 -->
+                        <g transform="translate(270, 178)">
+                          <circle r="9" fill="rgba(255, 255, 255, 0.12)"/>
+                          <circle r="4.5" fill="#94a3b8" stroke="#ffffff" stroke-width="1.5"/>
+                        </g>
+
+                        <!-- Flecha indicadora Día 7 -> Ataque -->
+                        <text x="345" y="170" fill="rgba(255, 51, 102, 0.65)" font-size="10" letter-spacing="1">ATAQUE REAL &darr;</text>
+
+                        <!-- Nodo 3: Ataque Real -->
+                        <g transform="translate(480, 185)">
+                          <circle r="14" fill="rgba(255, 51, 102, 0.3)" class="f-node-pulse-danger"/>
+                          <circle r="6" fill="#ff3366" stroke="#ffffff" stroke-width="2"/>
+                        </g>
+                      </svg>
+                    </div>
+
+                    <!-- 3 Hitos visuales flotantes alineados directamente bajo el gráfico -->
+                    <div class="f-milestones-row">
+                      <div class="f-milestone-col gold">
+                        <span class="f-ms-tag">DÍA 1</span>
+                        <strong class="f-ms-stat text-gold">100% VISTO</strong>
+                        <p class="f-ms-desc">Vídeo anual de 1 hora visto por obligación y con prisa.</p>
+                      </div>
+
+                      <div class="f-milestone-col dim">
+                        <span class="f-ms-tag">DÍA 7</span>
+                        <strong class="f-ms-stat text-muted">&lt; 5% RETENCIÓN</strong>
+                        <p class="f-ms-desc">Olvido casi total: la rutina y la carga diaria borran la teoría.</p>
+                      </div>
+
+                      <div class="f-milestone-col danger">
+                        <span class="f-ms-tag">ATAQUE</span>
+                        <strong class="f-ms-stat text-danger">0% REFLEJO</strong>
+                        <p class="f-ms-desc">Clic accidental: bajo presión y prisas, la teoría no activa reflejos.</p>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+            </article>
+
+          </div>
 
         </div>
 
       </div>
+
     </section>
 
     <!-- ======================================================================

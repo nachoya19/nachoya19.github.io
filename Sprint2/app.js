@@ -72,13 +72,20 @@
       src: "../assets/sprites/sprites_p3_clean.png",
       fallback: "../assets/sprites/sprites_p3.png",
       name: "NACHO · FRONTEND Y CÓDIGO"
+    },
+    p4: {
+      id: "p4",
+      src: "../assets/sprites/sprites_p4_clean.png",
+      fallback: "../assets/sprites/sprites_p4.png",
+      name: "NICOLÁS · SCRUM MASTER Y CIBERSEGURIDAD"
     }
   };
 
   const speakers = {
     p1: { ...speakerConfig.p1, loaded: false, frames: [], w: 0, h: 0 },
     p2: { ...speakerConfig.p2, loaded: false, frames: [], w: 0, h: 0 },
-    p3: { ...speakerConfig.p3, loaded: false, frames: [], w: 0, h: 0 }
+    p3: { ...speakerConfig.p3, loaded: false, frames: [], w: 0, h: 0 },
+    p4: { ...speakerConfig.p4, loaded: false, frames: [], w: 0, h: 0 }
   };
 
   // Carga y recorte de los 6 fotogramas de cada spritesheet
@@ -167,11 +174,19 @@
     "¡Sistema Sentinel en verde, cero vulnerabilidades!",
     "Buen trabajo controlando la intrusión."
   ];
+  const nicoLines = [
+    "¡Revisad los encabezados DKIM y SPF!",
+    "Sprint en marcha: 0 incidentes reportados.",
+    "Ciberseguridad activa: bloqueando dominios fraudulentos.",
+    "¡Buen reporte! Eso suma puntos al equipo.",
+    "Protección perimetral y concienciación al 100%."
+  ];
   let ivanLineIdx = 0;
   let marioLineIdx = 0;
   let nachoLineIdx = 0;
+  let nicoLineIdx = 0;
 
-  // Estado de los 3 personajes en el mundo 2D Zelda
+  // Estado de los 4 personajes en el mundo 2D Zelda
   const workers = {
     p1: {
       id: "p1",
@@ -228,6 +243,25 @@
       bubbleText: "¡Revisando el código de pagos!",
       bubbleTimer: 5.5,
       waitTimer: 2.8,
+      jumpOffset: 0
+    },
+    p4: {
+      id: "p4",
+      name: "NICOLÁS",
+      role: "SCRUM",
+      color: "#38bdf8",
+      x: 520,
+      y: 340,
+      targetX: 520,
+      targetY: 340,
+      speed: 1.55,
+      facing: -1,
+      state: "idle",
+      walkTimer: 0,
+      frameIdx: 0,
+      bubbleText: "¡Ciberseguridad perimetral activa!",
+      bubbleTimer: 5.0,
+      waitTimer: 3.2,
       jumpOffset: 0
     }
   };
@@ -288,17 +322,23 @@
   const shootingStars = [];
   let shootingStarTimer = 3.0;
 
+  // Altura total del cielo nocturno para que sea amplio y no revele los sprites al inicio
+  function getSkyHeight() {
+    return Math.round(ch * 1.65);
+  }
+
   function initPixelSkyElements() {
     pixelStars.length = 0;
     pixelClouds.length = 0;
+    const skyH = getSkyHeight();
 
-    // 1. Estrellas pixeladas (distribuidas en el cielo superior de -ch a 0)
-    const starCount = Math.max(90, Math.min(180, Math.floor(cw / 7)));
+    // 1. Estrellas pixeladas (distribuidas en el cielo superior de -skyH a 0)
+    const starCount = Math.max(120, Math.min(220, Math.floor(cw / 5.5)));
     const starColors = ["#ffffff", "#e0f2fe", "#00e5ff", "#fef08a", "#c084fc", "#93c5fd"];
     for (let i = 0; i < starCount; i++) {
       pixelStars.push({
         x: Math.floor(Math.random() * cw),
-        y: Math.floor(-ch * 0.98 + Math.random() * ch * 0.95),
+        y: Math.floor(-skyH * 0.98 + Math.random() * skyH * 0.95),
         size: Math.random() < 0.65 ? 2 : (Math.random() < 0.7 ? 3 : 4),
         color: starColors[Math.floor(Math.random() * starColors.length)],
         speed: 1.5 + Math.random() * 3.5,
@@ -309,11 +349,11 @@
 
     // 2. Nubes Pixel Art en 3 capas de paralaje escalonadas
     // Capa 0: Lejana, pequeña y sutil
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 5; i++) {
       pixelClouds.push({
         layer: 0,
-        x: (cw / 4) * i + (Math.random() - 0.5) * 80,
-        y: -ch * 0.80 + (i % 2) * 55,
+        x: (cw / 4) * (i % 4) + (Math.random() - 0.5) * 80,
+        y: -skyH * 0.84 + (i * 0.14) * skyH,
         w: 140 + (i % 3) * 35,
         h: 46,
         speed: 0.16 + (i % 2) * 0.05,
@@ -325,11 +365,11 @@
     }
 
     // Capa 1: Media, más visible
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 5; i++) {
       pixelClouds.push({
         layer: 1,
-        x: (cw / 4) * i + 40,
-        y: -ch * 0.54 + (i % 2) * 45,
+        x: (cw / 4) * (i % 4) + 40,
+        y: -skyH * 0.60 + (i * 0.13) * skyH,
         w: 190 + (i % 2) * 45,
         h: 62,
         speed: 0.32 + (i % 2) * 0.08,
@@ -341,11 +381,11 @@
     }
 
     // Capa 2: Primer plano (grandes y esponjosas en pixel art)
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 4; i++) {
       pixelClouds.push({
         layer: 2,
-        x: (cw / 3) * i + 20,
-        y: -ch * 0.30 + (i % 2) * 40,
+        x: (cw / 3) * (i % 3) + 20,
+        y: -skyH * 0.35 + (i * 0.10) * skyH,
         w: 260 + (i % 2) * 60,
         h: 84,
         speed: 0.52 + (i % 2) * 0.1,
@@ -414,12 +454,13 @@
     });
 
     // Estrellas fugaces periódicas
+    const skyH = getSkyHeight();
     shootingStarTimer -= dt;
     if (shootingStarTimer <= 0) {
       shootingStarTimer = 3.5 + Math.random() * 4.0;
       shootingStars.push({
         x: Math.random() * cw * 0.7,
-        y: -ch * 0.95 + Math.random() * ch * 0.4,
+        y: -skyH * 0.95 + Math.random() * skyH * 0.45,
         vx: 6 + Math.random() * 3,
         vy: 2.8 + Math.random() * 1.5,
         life: 1.0,
@@ -439,9 +480,10 @@
   }
 
   function spawnSkyShootingStar(startX, startY) {
+    const skyH = getSkyHeight();
     shootingStars.push({
-      x: startX,
-      y: startY,
+      x: startX !== undefined ? startX : Math.random() * cw * 0.7,
+      y: startY !== undefined ? startY : -skyH * 0.92 + Math.random() * skyH * 0.5,
       vx: 6 + Math.random() * 3,
       vy: 2.8 + Math.random() * 1.5,
       life: 1.0,
@@ -451,20 +493,22 @@
 
   // Renderiza el cielo nocturno pixel art
   function renderPixelSky(ctx, time, cw, ch) {
+    const skyH = getSkyHeight();
+
     // 1. Gradiente del cielo nocturno profundo
-    const skyGrad = ctx.createLinearGradient(0, -ch, 0, 40);
+    const skyGrad = ctx.createLinearGradient(0, -skyH, 0, 40);
     skyGrad.addColorStop(0.0, "#010308");
-    skyGrad.addColorStop(0.35, "#04091a");
-    skyGrad.addColorStop(0.68, "#08132e");
-    skyGrad.addColorStop(0.92, "#0e1d42");
+    skyGrad.addColorStop(0.28, "#04091a");
+    skyGrad.addColorStop(0.60, "#08132e");
+    skyGrad.addColorStop(0.88, "#0e1d42");
     skyGrad.addColorStop(1.0, "#050812");
 
     ctx.fillStyle = skyGrad;
-    ctx.fillRect(0, -ch, cw, ch + 45);
+    ctx.fillRect(0, -skyH - 20, cw, skyH + 65);
 
-    // 2. Luna Creciente Pixel Art en la esquina superior derecha
+    // 2. Luna Creciente Pixel Art en la esquina superior derecha del cielo inicial
     const moonX = Math.floor(cw * 0.82 / 4) * 4;
-    const moonY = Math.floor(-ch * 0.76 / 4) * 4;
+    const moonY = Math.floor((-skyH + ch * 0.20) / 4) * 4;
     
     // Halo suave alrededor de la luna
     ctx.fillStyle = "rgba(254, 240, 138, 0.06)";
@@ -539,10 +583,11 @@
   // Puntos clave de navegación en la oficina (distribuidos en toda la pantalla)
   function getOfficeSpots() {
     return {
-      desk1: { x: cw * 0.22, y: wallH + 85, label: "Puesto de Iván" },
-      desk2: { x: cw * 0.78, y: wallH + 85, label: "Puesto de Mario" },
-      desk3: { x: cw * 0.36, y: ch * 0.52, label: "Puesto de Nacho" },
-      terminal: { x: cw * 0.65, y: ch * 0.52, label: "Terminal Factura" },
+      desk1: { x: cw * 0.20, y: wallH + 85, label: "Puesto de Iván" },
+      desk4: { x: cw * 0.50, y: wallH + 85, label: "Puesto de Nicolás" },
+      desk2: { x: cw * 0.80, y: wallH + 85, label: "Puesto de Mario" },
+      desk3: { x: cw * 0.32, y: ch * 0.52, label: "Puesto de Nacho" },
+      terminal: { x: cw * 0.68, y: ch * 0.52, label: "Terminal Factura" },
       serverL: { x: cw * 0.10, y: ch * 0.78, label: "Servidor Alpha" },
       serverR: { x: cw * 0.90, y: ch * 0.78, label: "Servidor Beta" },
       coffee: { x: cw * 0.08, y: ch * 0.44, label: "Cafetera" },
@@ -557,6 +602,11 @@
     workers.p1.y = spots.desk1.y;
     workers.p1.targetX = spots.desk1.x;
     workers.p1.targetY = spots.desk1.y;
+
+    workers.p4.x = spots.desk4.x;
+    workers.p4.y = spots.desk4.y;
+    workers.p4.targetX = spots.desk4.x;
+    workers.p4.targetY = spots.desk4.y;
 
     workers.p2.x = spots.desk2.x;
     workers.p2.y = spots.desk2.y;
@@ -646,6 +696,9 @@
     // 4. Props de la Oficina
     const d1 = spots.desk1;
     drawDesk(ctx, d1.x, d1.y, "IVÁN · ADMÓN", "#00e5ff", "#10b981", time, true);
+
+    const d4 = spots.desk4;
+    drawDesk(ctx, d4.x, d4.y, "NICOLÁS · SCRUM", "#38bdf8", "#00e5ff", time, false);
 
     const d2 = spots.desk2;
     drawDesk(ctx, d2.x, d2.y, "MARIO · COMPRAS", "#f59e0b", "#00e5ff", time, false);
@@ -812,7 +865,7 @@
     }
     ctx.restore();
 
-    if (wObj.bubbleText && wObj.bubbleTimer > 0) {
+    if (wObj.bubbleText && wObj.bubbleTimer > 0 && heroScrollProgress > 0.45) {
       drawCanvasBubble(ctx, wObj.x, posY - 10, wObj.name, wObj.color, wObj.bubbleText);
     }
   }
@@ -971,13 +1024,17 @@
         w.bubbleText = nachoLines[nachoLineIdx % nachoLines.length];
         nachoLineIdx++;
         w.bubbleTimer = 4.5;
+      } else if (w.id === "p4") {
+        w.bubbleText = nicoLines[nicoLineIdx % nicoLines.length];
+        nicoLineIdx++;
+        w.bubbleTimer = 4.5;
       }
     }
   }
 
   function pickNextGoal(w) {
     const spots = getOfficeSpots();
-    const goals = [spots.desk1, spots.desk2, spots.desk3, spots.terminal, spots.coffee, spots.meeting, spots.serverL, spots.serverR];
+    const goals = [spots.desk1, spots.desk2, spots.desk3, spots.desk4, spots.terminal, spots.coffee, spots.meeting, spots.serverL, spots.serverR];
     const chosen = goals[Math.floor(Math.random() * goals.length)];
     w.targetX = Math.max(70, Math.min(cw - 70, chosen.x + (Math.random() - 0.5) * 80));
     w.targetY = Math.max(wallH + 50, Math.min(ch - 50, chosen.y + (Math.random() - 0.5) * 45));
@@ -997,14 +1054,15 @@
       zctx.clearRect(0, 0, cw, ch);
 
       // Desplazamiento vertical de cámara según el progreso del Hero:
-      // Cuando heroScrollProgress == 0: la cámara está en el cielo nocturno estrellado (cameraOffset = ch)
+      // Cuando heroScrollProgress == 0: la cámara está en el cielo nocturno estrellado (cameraOffset = skyH)
       // Cuando heroScrollProgress == 1: la cámara está completamente en la oficina (cameraOffset = 0)
-      const cameraOffset = (1 - heroScrollProgress) * ch;
+      const skyH = getSkyHeight();
+      const cameraOffset = (1 - heroScrollProgress) * skyH;
 
       zctx.save();
       zctx.translate(0, cameraOffset);
 
-      // 1. Cielo Nocturno y Nubes Pixel Art (en el rango vertical [-ch, 0])
+      // 1. Cielo Nocturno y Nubes Pixel Art (en el rango vertical [-skyH, 0])
       updatePixelSky(dt);
       if (cameraOffset > -20) {
         renderPixelSky(zctx, timestamp / 1000, cw, ch);
@@ -1016,12 +1074,14 @@
 
       updateWorkerAI(workers.p1, workers.p2, dt);
       updateWorkerAI(workers.p2, workers.p3, dt);
-      updateWorkerAI(workers.p3, workers.p1, dt);
+      updateWorkerAI(workers.p3, workers.p4, dt);
+      updateWorkerAI(workers.p4, workers.p1, dt);
 
       const renderList = [
         { w: workers.p1, s: speakers.p1 },
         { w: workers.p2, s: speakers.p2 },
-        { w: workers.p3, s: speakers.p3 }
+        { w: workers.p3, s: speakers.p3 },
+        { w: workers.p4, s: speakers.p4 }
       ].sort((a, b) => a.w.y - b.w.y);
 
       renderList.forEach(item => renderWorker(zctx, item.w, item.s));
@@ -1038,11 +1098,12 @@
     const clickX = e.clientX - rect.left;
     const clickY = e.clientY - rect.top;
 
-    const cameraOffset = (1 - heroScrollProgress) * ch;
+    const skyH = getSkyHeight();
+    const cameraOffset = (1 - heroScrollProgress) * skyH;
     const worldY = clickY - cameraOffset;
 
     // Si aún estamos principalmente en el cielo nocturno:
-    if (heroScrollProgress < 0.65) {
+    if (heroScrollProgress < 0.70) {
       spawnSkyShootingStar(clickX, worldY);
       spawnParticle({
         type: "ripple",
@@ -1077,11 +1138,13 @@
     const dist1 = Math.hypot(workers.p1.x - clickX, workers.p1.y - worldY);
     const dist2 = Math.hypot(workers.p2.x - clickX, workers.p2.y - worldY);
     const dist3 = Math.hypot(workers.p3.x - clickX, workers.p3.y - worldY);
+    const dist4 = Math.hypot(workers.p4.x - clickX, workers.p4.y - worldY);
 
     let targetWorker = workers.p1;
     let minDist = dist1;
     if (dist2 < minDist) { targetWorker = workers.p2; minDist = dist2; }
     if (dist3 < minDist) { targetWorker = workers.p3; minDist = dist3; }
+    if (dist4 < minDist) { targetWorker = workers.p4; minDist = dist4; }
 
     targetWorker.targetX = Math.max(70, Math.min(cw - 70, clickX));
     targetWorker.targetY = Math.max(wallH + 45, Math.min(ch - 50, worldY));
@@ -1097,13 +1160,16 @@
       } else if (targetWorker.id === "p3") {
         nachoLineIdx = (nachoLineIdx + 1) % nachoLines.length;
         targetWorker.bubbleText = nachoLines[nachoLineIdx];
+      } else if (targetWorker.id === "p4") {
+        nicoLineIdx = (nicoLineIdx + 1) % nicoLines.length;
+        targetWorker.bubbleText = nicoLines[nicoLineIdx];
       }
       targetWorker.bubbleTimer = 5.0;
       targetWorker.jumpOffset = 12;
     }
   });
 
-  ["p1", "p2", "p3"].forEach((key) => {
+  ["p1", "p2", "p3", "p4"].forEach((key) => {
     loadSpeaker(speakers[key], (data) => {
       speakers[key].frames = data.frames;
       speakers[key].w = data.w;
@@ -1197,14 +1263,18 @@
       workers.p1.state = "alarm";
       workers.p2.state = "alarm";
       workers.p3.state = "alarm";
+      workers.p4.state = "alarm";
       workers.p1.bubbleText = "¡Uff, era una trampa! 😱";
       workers.p2.bubbleText = "¡Casi transferimos 4.870 €!";
       workers.p3.bubbleText = "¡Aislad la red inmediatamente!";
+      workers.p4.bubbleText = "¡Alerta perimetral! Bloqueando conexión.";
       workers.p1.bubbleTimer = 6.0;
       workers.p2.bubbleTimer = 6.0;
       workers.p3.bubbleTimer = 6.0;
+      workers.p4.bubbleTimer = 6.0;
       spawnAlertMark(workers.p1.x, workers.p1.y);
       spawnAlertMark(workers.p3.x, workers.p3.y);
+      spawnAlertMark(workers.p4.x, workers.p4.y);
 
       if (wallRisk) wallRisk.textContent = "CRÍTICO (FALLO)";
       failOutcome?.focus({ preventScroll: true });
@@ -1225,19 +1295,24 @@
       workers.p1.state = "celebrate";
       workers.p2.state = "celebrate";
       workers.p3.state = "celebrate";
+      workers.p4.state = "celebrate";
       workers.p1.jumpOffset = 22;
       workers.p2.jumpOffset = 22;
       workers.p3.jumpOffset = 22;
+      workers.p4.jumpOffset = 22;
       workers.p1.bubbleText = "¡Amenaza frenada! 🏆";
       workers.p2.bubbleText = "¡+50 XP sumados! Buen trabajo.";
       workers.p3.bubbleText = "¡Reglas actualizadas en Sentinel!";
+      workers.p4.bubbleText = "¡Protocolo completado con éxito! 🛡️";
       workers.p1.bubbleTimer = 6.0;
       workers.p2.bubbleTimer = 6.0;
       workers.p3.bubbleTimer = 6.0;
+      workers.p4.bubbleTimer = 6.0;
 
       spawnXpBurst(workers.p1.x, workers.p1.y, 25);
       spawnXpBurst(workers.p2.x, workers.p2.y, 25);
       spawnXpBurst(workers.p3.x, workers.p3.y, 25);
+      spawnXpBurst(workers.p4.x, workers.p4.y, 25);
 
       if (wallRisk) wallRisk.textContent = "PROTEGIDO (<8%)";
       winOutcome?.focus({ preventScroll: true });
@@ -1256,12 +1331,15 @@
       workers.p1.state = "idle";
       workers.p2.state = "idle";
       workers.p3.state = "idle";
+      workers.p4.state = "idle";
       workers.p1.bubbleText = "¡Llega factura de 4.870 €!";
       workers.p2.bubbleText = "¡El dominio .co es falso!";
       workers.p3.bubbleText = "¡Revisando el código de pagos!";
+      workers.p4.bubbleText = "¡Ciberseguridad perimetral activa!";
       workers.p1.bubbleTimer = 5.0;
       workers.p2.bubbleTimer = 5.0;
       workers.p3.bubbleTimer = 5.0;
+      workers.p4.bubbleTimer = 5.0;
 
       if (wallRisk) wallRisk.textContent = "ALTO (38%)";
       hideInspectUrl();
@@ -1279,8 +1357,34 @@
   const packetLabel = $("#packet-label");
   const packetBadge = $("#packet-badge");
 
-  const firewallGate = $("#firewall-gate");
-  const gateStatusBadge = $("#gate-status-badge");
+  // 01. EL PROBLEMA: Carrusel horizontal de 3 escenas centradas a pantalla completa
+  const problemTrack = $("#problem-track");
+  const problemSlider = $("#problem-slider");
+  let currentProblemScene = 0;
+
+  function updateProblemScene(progress) {
+    if (!problemSlider) return;
+    let nextScene = currentProblemScene;
+
+    // Umbrales con histeresis para evitar oscilaciones rápidas:
+    // Requiere un scroll deliberado y sostenido para cambiar de escena.
+    if (currentProblemScene === 0) {
+      if (progress > 0.36) nextScene = 1;
+    } else if (currentProblemScene === 1) {
+      if (progress < 0.28) nextScene = 0;
+      else if (progress > 0.70) nextScene = 2;
+    } else if (currentProblemScene === 2) {
+      if (progress < 0.62) nextScene = 1;
+    }
+
+    if (nextScene !== currentProblemScene) {
+      currentProblemScene = nextScene;
+      audio?.playBlip?.(false);
+    }
+
+    // Cada escena queda siempre 100% centrada (0vw, -100vw, -200vw). Imposible quedarse a medias.
+    problemSlider.style.transform = `translateX(-${currentProblemScene * 100}vw)`;
+  }
 
   const solutionTrack = $("#solution-track");
   const stepTabs = $$(".step-tab");
@@ -1360,7 +1464,6 @@
     // Progreso dentro del Hero (Cielo Nocturno -> Oficina con Sprites)
     const heroTrack = $("#hero");
     const heroBrand = $("#hero-brand");
-    const heroCue = $("#hero-scroll-cue");
     if (heroTrack) {
       const heroRect = heroTrack.getBoundingClientRect();
       const heroScrollable = heroTrack.offsetHeight - window.innerHeight;
@@ -1378,27 +1481,19 @@
         const translateY = -heroScrollProgress * (window.innerHeight * 0.44);
         heroBrand.style.transform = `translate(-50%, calc(-50% + ${translateY}px)) scale(${scale})`;
       }
-
-      if (heroCue) {
-        const cueOpacity = Math.max(0, 1 - heroScrollProgress * 3.5);
-        heroCue.style.opacity = String(cueOpacity);
-        heroCue.style.pointerEvents = cueOpacity < 0.1 ? "none" : "auto";
-      }
     }
 
     // Posición vertical del objeto viajero y llenado de la línea
     if (railFill) railFill.style.height = `${totalProgress * 100}%`;
     if (packetEl) packetEl.style.top = `${totalProgress * 84}%`;
 
-    // Comprobar paso por la barrera de Antivirus en 01. EL PROBLEMA
-    if (firewallGate) {
-      const gateRect = firewallGate.getBoundingClientRect();
-      const breached = gateRect.top < window.innerHeight * 0.65;
-      firewallGate.classList.toggle("is-breached", breached);
-      if (gateStatusBadge) {
-        gateStatusBadge.textContent = breached
-          ? "⚠️ SIN ARCHIVOS INFECTADOS: EL ANTIVIRUS LO DEJA PASAR"
-          : "ESPERANDO CORREO...";
+    // 01. EL PROBLEMA: Carrusel horizontal de 3 escenas centradas a pantalla completa
+    if (problemTrack) {
+      const pRect = problemTrack.getBoundingClientRect();
+      const pScrollable = problemTrack.offsetHeight - window.innerHeight;
+      if (pScrollable > 0) {
+        const pProgress = Math.min(1, Math.max(0, -pRect.top / pScrollable));
+        updateProblemScene(pProgress);
       }
     }
 

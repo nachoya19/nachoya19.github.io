@@ -201,7 +201,7 @@ button, input, select {
 .hero-zelda-section {
   position: relative;
   width: 100%;
-  min-height: 240vh;
+  min-height: 320vh;
   background: #010309;
   border-bottom: 1px solid var(--border);
 }
@@ -288,41 +288,6 @@ button, input, select {
   margin: 0;
   padding: 0;
   image-rendering: pixelated;
-}
-
-/* Indicador Minimalista de Desplazamiento */
-.hero-pure-scroll-cue {
-  position: absolute;
-  bottom: clamp(1.2rem, 3.5vh, 2.5rem);
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  font-size: 0.76rem;
-  letter-spacing: 0.14em;
-  color: var(--cyan);
-  pointer-events: none;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
-  animation: pulse-cue 2s ease-in-out infinite;
-  z-index: 10;
-  transition: opacity 0.2s ease-out;
-}
-
-.hero-pure-scroll-cue .scroll-arrow {
-  display: inline-block;
-  animation: bounce-cue 1.8s ease-in-out infinite;
-}
-
-@keyframes pulse-cue {
-  0%, 100% { opacity: 0.85; }
-  50% { opacity: 0.4; }
-}
-
-@keyframes bounce-cue {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(4px); }
 }
 
 /* ---------- Columna 2: El Correo Trampa Interactivo ---------- */
@@ -722,332 +687,521 @@ button, input, select {
 }
 
 /* ==========================================================================
-   01. EL PROBLEMA: BARRERA ANTIVIRUS + 3 TARJETAS DE IMPACTO
+   01. EL PROBLEMA: CARRUSEL HORIZONTAL SCROLLYTELLING (3 ESCENAS PANTALLA COMPLETA)
    ========================================================================== */
-.firewall-gate {
-  background: var(--surface);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--r-md);
-  padding: 1.25rem 1.65rem;
-  margin-bottom: 3rem;
+.problem-scrolly-section {
   position: relative;
-  overflow: hidden;
-  transition: border-color 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out);
-}
-.firewall-gate.is-breached {
-  border-color: var(--danger);
-  box-shadow: 0 0 28px rgba(255, 51, 102, 0.2);
+  width: 100%;
+  background: #010308;
 }
 
-.gate-header {
+.problem-scroll-track {
+  position: relative;
+  width: 100%;
+  min-height: 480vh;
+}
+
+.problem-sticky-stage {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 50%, #060b18 0%, #010308 100%);
+  border-bottom: 1px solid var(--border);
+  z-index: 5;
+}
+
+/* Slider Horizontal Continuo (300% ancho, 100vw cada escena) */
+.problem-carousel-slider {
+  display: flex;
+  width: 300%;
+  height: 100%;
+  will-change: transform;
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.problem-fullscreen-scene {
+  width: 100vw;
+  height: 100%;
+  flex-shrink: 0;
+  display: flex;
   align-items: center;
-  gap: 1rem;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--muted);
+  justify-content: center;
+  padding: clamp(2rem, 5vh, 4rem) clamp(1.5rem, 5vw, 5rem);
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+.p-scene-container {
+  width: 100%;
+  max-width: 1220px;
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(2.5rem, 5vw, 5.5rem);
+  align-items: center;
+}
+
+/* Tipografía y Contenido de Escena */
+.p-scene-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.14em;
   margin-bottom: 0.85rem;
 }
 
-.gate-status {
-  padding: 4px 10px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text);
-  font-size: 0.88rem;
-  font-weight: 700;
+.badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
 }
-.firewall-gate.is-breached .gate-status {
-  background: var(--danger-dim);
-  color: var(--danger);
-}
+.badge-dot.cyan { background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+.badge-dot.danger { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
+.badge-dot.gold { background: var(--gold); box-shadow: 0 0 8px var(--gold); }
 
-.gate-scanner-beam {
-  position: relative;
-  padding-top: 0.85rem;
-  border-top: 1px dashed var(--border-strong);
+.p-scene-title {
+  font-size: clamp(2rem, 3.8vw, 3.2rem);
+  line-height: 1.16;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin-bottom: 1.1rem;
 }
+.highlight-cyan { color: var(--cyan); text-shadow: 0 0 20px rgba(0, 229, 255, 0.4); }
+.highlight-danger { color: var(--danger); text-shadow: 0 0 20px rgba(255, 51, 102, 0.4); }
+.highlight-gold { color: var(--gold); text-shadow: 0 0 20px rgba(245, 158, 11, 0.4); }
 
-.gate-Pass-msg {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  font-size: 1.15rem;
-}
-.pass-icon {
-  font-size: 1.75rem;
-  flex-shrink: 0;
-}
-.gate-Pass-msg strong {
-  font-size: 1.18rem;
-  color: var(--text);
-}
-.gate-Pass-msg p {
+.p-scene-lead {
   color: var(--text-soft);
-  font-size: 1.05rem;
-  line-height: 1.55;
-  margin-top: 0.25rem;
+  font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+  line-height: 1.6;
+  max-width: 48ch;
+  margin-bottom: 1.6rem;
 }
 
-/* Diagrama visual de bypass del firewall */
-.gate-pipeline-visual {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-top: 1.25rem;
-  padding-top: 1rem;
-  border-top: 1px dashed var(--border-strong);
-  background: rgba(0, 0, 0, 0.28);
-  border-radius: var(--r-sm);
-  padding: 0.85rem 1.25rem;
-  flex-wrap: wrap;
-}
-.pipe-node {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-.pipe-icon {
-  font-size: 1.45rem;
-}
-.pipe-title {
-  font-size: 0.92rem;
-  font-weight: 700;
-}
-.pipe-desc {
-  font-size: 0.84rem;
-  color: var(--muted);
-}
-.pipe-connector {
-  font-size: 0.95rem;
-  letter-spacing: 0.08em;
-}
-.pipe-node-scanner {
-  background: rgba(16, 185, 129, 0.09);
-  border: 1px solid rgba(16, 185, 129, 0.32);
-  border-radius: var(--r-sm);
-  padding: 0.45rem 0.85rem;
-}
-.pipe-badge {
-  font-size: 0.78rem;
-  color: var(--muted);
-}
-.pipe-status {
-  font-size: 0.88rem;
-  font-weight: 700;
-}
-.pipe-node-target {
-  background: rgba(255, 51, 102, 0.09);
-  border: 1px solid rgba(255, 51, 102, 0.35);
-  border-radius: var(--r-sm);
-  padding: 0.45rem 0.85rem;
-}
-.pipe-sub {
-  font-size: 0.82rem;
-}
-
-.problem-stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.65rem;
-}
-
-.stat-impact-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  padding: 2.15rem;
+/* Vectores de Ataque (Escena 1) */
+.p-attack-vectors {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  transition: transform 0.25s var(--ease-out), border-color 0.25s var(--ease-out);
-}
-.stat-impact-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--border-strong);
-}
-.stat-impact-card.highlight-danger {
-  border-color: rgba(255, 51, 102, 0.35);
-  background: linear-gradient(180deg, rgba(255, 51, 102, 0.08) 0%, var(--surface) 100%);
 }
 
-.stat-top-row {
+.p-vector-card {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  background: transparent;
+  border: none;
+  border-left: 2px solid rgba(0, 229, 255, 0.25);
+  padding: 0.6rem 0.85rem;
+  transition: transform 0.25s, border-color 0.25s;
+}
+
+.p-vector-card:hover {
+  border-color: var(--cyan);
+  transform: translateX(6px);
+}
+
+.p-vector-svg {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.6));
+}
+
+.p-vector-icon {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.p-vector-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.p-vector-info strong {
+  font-size: 0.98rem;
+  color: #ffffff;
+}
+
+.p-vector-info span {
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+
+/* Gráfico Radial / Donut Chart (Escena 1 - Flotante sin panel) */
+.p-radial-card {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.p-donut-wrapper {
+  position: relative;
+  width: clamp(230px, 25vw, 290px);
+  height: clamp(230px, 25vw, 290px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 35px rgba(0, 229, 255, 0.2));
+}
+
+.p-donut-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.p-donut-bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 18;
+}
+
+.p-donut-meter {
+  fill: none;
+  stroke-width: 18;
+  stroke-linecap: round;
+}
+
+.meter-cyan {
+  stroke: var(--cyan);
+  filter: drop-shadow(0 0 10px rgba(0, 229, 255, 0.65));
+}
+
+.p-donut-center {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.p-donut-number {
+  font-size: clamp(2.8rem, 5vw, 4.2rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.p-donut-sub {
+  font-size: 0.76rem;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin-top: 0.25rem;
+}
+
+.p-legend-bar {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1.4rem;
+  font-size: 0.85rem;
+}
+
+.p-leg-item {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.p-leg-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.p-leg-dot.cyan { background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+.p-leg-dot.dim { background: rgba(255, 255, 255, 0.2); }
+
+/* Gráfico Financiero de Impacto (Escena 2 - Flotante sin paneles) */
+.p-incibe-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.1rem;
+  background: transparent;
+  border: none;
+  border-left: 3px solid var(--danger);
+  padding: 0.5rem 0 0.5rem 1.1rem;
+  margin-top: 1.5rem;
+}
+
+.alert-pulse-svg {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  color: var(--danger);
+  animation: alert-ping 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(255, 51, 102, 0.6));
+}
+
+.alert-pulse-icon {
+  font-size: 1.8rem;
+  animation: alert-ping 2s ease-in-out infinite;
+}
+
+@keyframes alert-ping {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+.alert-text strong {
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+}
+
+.alert-text p {
+  font-size: 1rem;
+  color: #fecdd3;
+  margin-top: 0.25rem;
+  line-height: 1.5;
+}
+
+.p-financial-chart {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0.5rem;
+  box-shadow: none;
+}
+
+.chart-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.88rem;
-  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
   color: var(--muted);
-  margin-bottom: 0.4rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.12);
+  margin-bottom: 1.4rem;
 }
 
-.stat-pill {
-  padding: 3px 9px;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  font-weight: 700;
-}
-.stat-pill.danger { background: var(--danger-dim); color: var(--danger); }
-.stat-pill.warning { background: var(--gold-dim); color: var(--gold); }
-
-.stat-huge-num {
-  font-size: clamp(2.8rem, 5vw, 3.8rem);
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.03em;
-  margin-bottom: 0.25rem;
+.financial-bars-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
-.stat-impact-card h3 {
-  font-family: var(--font-display);
-  font-size: 1.4rem;
-  line-height: 1.25;
-  margin-bottom: 0.25rem;
+.fin-bar-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
 
-.stat-impact-card p {
-  color: var(--text-soft);
-  font-size: 1.12rem;
-  line-height: 1.6;
-}
-
-/* Recurso gráfico Card 1: Factor Humano Segmented Bar */
-.stat-visual-bar {
-  margin-top: 0.75rem;
-  padding-top: 0.85rem;
-  border-top: 1px solid var(--border);
-}
-.stat-bar-header {
+.fin-bar-labels {
   display: flex;
   justify-content: space-between;
-  font-size: 0.82rem;
-  margin-bottom: 0.45rem;
-  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.92rem;
+  color: #ffffff;
 }
-.stat-segmented-track {
+
+.fin-bar-labels strong {
+  font-size: 1.05rem;
+}
+
+.fin-track {
   width: 100%;
   height: 12px;
   background: rgba(255, 255, 255, 0.06);
   border-radius: 6px;
-  display: flex;
   overflow: hidden;
-  gap: 2px;
-}
-.segment-fill.cyan {
-  background: var(--cyan);
-  box-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
-}
-.segment-fill.dim {
-  background: rgba(255, 255, 255, 0.15);
-}
-.stat-vector-chips {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  margin-top: 0.65rem;
-}
-.vector-chip {
-  background: rgba(0, 229, 255, 0.06);
-  border: 1px solid rgba(0, 229, 255, 0.22);
-  color: #e0f2fe;
-  font-size: 0.88rem;
-  padding: 0.35rem 0.65rem;
-  border-radius: var(--r-sm);
 }
 
-/* Recurso gráfico Card 2: Cost Breakdown Bars */
-.stat-cost-breakdown {
-  display: grid;
-  gap: 0.6rem;
-  margin-top: 0.75rem;
-  padding-top: 0.85rem;
-  border-top: 1px solid var(--border);
-}
-.cost-item {
-  display: grid;
-  gap: 0.25rem;
-}
-.cost-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.86rem;
-  color: var(--text-soft);
-}
-.cost-bar-track {
-  width: 100%;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 4px;
-  overflow: hidden;
-}
-.cost-bar-fill {
+.fin-fill {
   height: 100%;
-  border-radius: 4px;
-}
-.cost-bar-fill.danger { background: var(--danger); box-shadow: 0 0 8px rgba(255, 51, 102, 0.45); }
-.cost-bar-fill.gold { background: var(--gold); }
-.cost-bar-fill.cyan { background: var(--cyan); }
-.stat-alert-callout {
-  margin-top: 0.65rem;
-  padding: 0.5rem 0.75rem;
-  background: rgba(255, 51, 102, 0.12);
-  border: 1px solid rgba(255, 51, 102, 0.35);
-  border-radius: var(--r-sm);
-  font-size: 0.85rem;
-  color: #fecdd3;
-  line-height: 1.4;
+  border-radius: 6px;
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Recurso gráfico Card 3: Forgetting Curve */
-.stat-retention-curve {
+.fin-fill.danger {
+  background: var(--danger);
+  box-shadow: 0 0 12px rgba(255, 51, 102, 0.6);
+}
+
+.fin-fill.gold {
+  background: var(--gold);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
+}
+
+.fin-fill.cyan {
+  background: var(--cyan);
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.5);
+}
+
+.fin-sub {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+/* Curva del Olvido (Escena 3 - Flotante sin paneles) */
+.p-training-contrast {
   display: grid;
-  gap: 0.45rem;
-  margin-top: 0.75rem;
-  padding-top: 0.85rem;
-  border-top: 1px solid var(--border);
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
 }
-.curve-step {
-  display: flex;
+
+.contrast-col {
+  padding: 0.75rem 0 0.75rem 1rem;
+  background: transparent;
+  border-radius: 0;
+  font-size: 0.86rem;
+  line-height: 1.55;
+}
+
+.contrast-col.bad {
+  border: none;
+  border-left: 2px solid rgba(255, 51, 102, 0.45);
+}
+
+.contrast-col.good {
+  border: none;
+  border-left: 2px solid rgba(16, 185, 129, 0.45);
+}
+
+.contrast-title {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  display: inline-flex;
   align-items: center;
-  gap: 0.65rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border);
-  border-radius: var(--r-sm);
-  padding: 0.5rem 0.75rem;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
 }
-.curve-step.alert {
-  background: rgba(255, 51, 102, 0.08);
-  border-color: rgba(255, 51, 102, 0.35);
-}
-.curve-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
+
+.contrast-icon {
+  width: 16px;
+  height: 16px;
   flex-shrink: 0;
 }
-.curve-dot.gold { background: var(--gold); }
-.curve-dot.dim { background: var(--muted); }
-.curve-dot.danger { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
-.curve-info {
+
+/* Curva del Olvido Visual SVG (Escena 3) */
+.p-forgetting-visual {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  font-size: 0.85rem;
-  line-height: 1.35;
+  gap: 1rem;
 }
-.curve-info strong {
-  font-size: 0.92rem;
-  color: var(--text);
-}
-.curve-info span {
-  color: var(--muted);
+
+.f-curve-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  padding-bottom: 0.75rem;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.12);
 }
-.curve-arrow {
-  text-align: center;
-  font-size: 0.75rem;
-  line-height: 1;
+
+.f-curve-canvas-wrap {
+  width: 100%;
+  position: relative;
+}
+
+.f-curve-svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.f-node-pulse-gold {
+  animation: f-pulse-gold 2.2s infinite ease-in-out;
+}
+
+@keyframes f-pulse-gold {
+  0%, 100% { r: 9; opacity: 0.2; }
+  50% { r: 16; opacity: 0.5; }
+}
+
+.f-node-pulse-danger {
+  animation: f-pulse-danger 1.5s infinite ease-in-out;
+}
+
+@keyframes f-pulse-danger {
+  0%, 100% { r: 10; opacity: 0.3; }
+  50% { r: 18; opacity: 0.75; }
+}
+
+.f-milestones-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-top: 0.4rem;
+}
+
+.f-milestone-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  border-left: 2px solid rgba(255, 255, 255, 0.12);
+  padding-left: 0.85rem;
+}
+
+.f-milestone-col.gold {
+  border-left-color: var(--gold);
+}
+
+.f-milestone-col.dim {
+  border-left-color: rgba(255, 255, 255, 0.25);
+}
+
+.f-milestone-col.danger {
+  border-left-color: var(--danger);
+}
+
+.f-ms-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  opacity: 0.8;
+}
+
+.f-ms-stat {
+  font-size: 0.96rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.f-ms-desc {
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+@media (max-width: 960px) {
+  .problem-scroll-track {
+    min-height: 400vh;
+  }
+  .problem-fullscreen-scene {
+    padding: 3rem 1.25rem 2rem;
+    overflow-y: auto;
+  }
+  .p-scene-container {
+    grid-template-columns: 1fr;
+    gap: 1.8rem;
+  }
+  .p-scene-lead {
+    margin-bottom: 1rem;
+  }
+  .f-milestones-row {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
 }
 
 /* ==========================================================================
@@ -2080,7 +2234,7 @@ button, input, select {
 
 @media (max-width: 960px) {
   .hero-zelda-section {
-    min-height: 100svh;
+    min-height: 220svh;
   }
   .zelda-top-hud {
     font-size: 0.68rem;
