@@ -969,16 +969,27 @@ button, input, select {
   box-shadow: none;
 }
 
+.nowrap {
+  white-space: nowrap !important;
+}
+
 .chart-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
+  gap: 1.25rem;
   font-size: clamp(0.95rem, 1.2vw, 1.1rem);
   letter-spacing: 0.1em;
   color: var(--muted);
   padding-bottom: 1.2rem;
   border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
   margin-bottom: 1.8rem;
+}
+
+.chart-header span:last-child,
+.chart-header .text-danger {
+  white-space: nowrap !important;
+  flex-shrink: 0;
 }
 
 .financial-bars-stack {
@@ -996,13 +1007,28 @@ button, input, select {
 .fin-bar-labels {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
+  gap: 1.25rem;
   font-size: clamp(1.15rem, 1.55vw, 1.38rem);
   color: #ffffff;
 }
 
+.fin-bar-labels span {
+  min-width: 0;
+}
+
 .fin-bar-labels strong {
   font-size: clamp(1.35rem, 1.85vw, 1.68rem);
+  white-space: nowrap !important;
+  flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+  .chart-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.45rem;
+  }
 }
 
 .fin-track {
@@ -1050,14 +1076,11 @@ button, input, select {
   line-height: 1.6;
 }
 
-.contrast-col.bad {
-  border: none;
-  border-left: 3px solid rgba(255, 51, 102, 0.5);
-}
-
+.contrast-col.bad,
 .contrast-col.good {
   border: none;
-  border-left: 3px solid rgba(16, 185, 129, 0.5);
+  border-left: none;
+  padding-left: 0;
 }
 
 .contrast-title {
@@ -1076,23 +1099,40 @@ button, input, select {
   flex-shrink: 0;
 }
 
-/* Curva del Olvido Visual SVG (Escena 3) */
+/* Distribución ampliada para la Escena 3 (Curva del Olvido) */
+.scene-training .p-scene-container {
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.15fr);
+  gap: clamp(2.5rem, 5vw, 5.2rem);
+}
+
+/* Curva del Olvido Visual SVG Interactiva (Escena 3) */
 .p-forgetting-visual {
   width: 100%;
+  max-width: 680px;
   display: flex;
   flex-direction: column;
-  gap: 1.1rem;
+  gap: 1.35rem;
 }
 
 .f-curve-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: clamp(0.95rem, 1.2vw, 1.08rem);
+  padding-bottom: 0.95rem;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.16);
+}
+
+.f-curve-title {
+  font-size: clamp(1.05rem, 1.35vw, 1.25rem);
+  font-weight: 700;
   letter-spacing: 0.08em;
   color: var(--muted);
-  padding-bottom: 0.9rem;
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
+}
+
+.f-curve-badge {
+  font-size: clamp(1rem, 1.3vw, 1.2rem);
+  font-weight: 800;
+  letter-spacing: 0.06em;
 }
 
 .f-curve-canvas-wrap {
@@ -1104,70 +1144,192 @@ button, input, select {
   width: 100%;
   height: auto;
   overflow: visible;
+  display: block;
 }
 
-.f-node-pulse-gold {
-  animation: f-pulse-gold 2.2s infinite ease-in-out;
+/* Puntos interactivos sobre la curva */
+.f-interactive-node {
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.25s ease;
 }
 
-@keyframes f-pulse-gold {
-  0%, 100% { r: 9; opacity: 0.2; }
-  50% { r: 16; opacity: 0.5; }
+.f-interactive-node:hover {
+  filter: brightness(1.28);
 }
 
-.f-node-pulse-danger {
-  animation: f-pulse-danger 1.5s infinite ease-in-out;
+.f-interactive-node:focus-visible .f-node-halo {
+  stroke: #ffffff;
+  stroke-width: 2.5px;
 }
 
-@keyframes f-pulse-danger {
-  0%, 100% { r: 10; opacity: 0.3; }
-  50% { r: 18; opacity: 0.75; }
+/* Colores temáticos para cada punto */
+.f-interactive-node.node-gold {
+  --node-color: #f59e0b;
+  --node-glow: rgba(245, 158, 11, 0.7);
+  --node-soft: rgba(245, 158, 11, 0.25);
 }
 
-.f-milestones-row {
+.f-interactive-node.node-cyan {
+  --node-color: #38bdf8;
+  --node-glow: rgba(56, 189, 248, 0.7);
+  --node-soft: rgba(56, 189, 248, 0.22);
+}
+
+.f-interactive-node.node-danger {
+  --node-color: #ff3366;
+  --node-glow: rgba(255, 51, 102, 0.75);
+  --node-soft: rgba(255, 51, 102, 0.28);
+}
+
+.f-node-core {
+  fill: var(--node-color);
+  stroke: #ffffff;
+  stroke-width: 2.2px;
+  transition: r 0.3s ease, fill 0.3s ease, stroke-width 0.3s ease;
+}
+
+.f-node-halo {
+  fill: var(--node-soft);
+  transition: r 0.3s ease, opacity 0.3s ease;
+}
+
+.f-node-ping {
+  fill: none;
+  stroke: var(--node-color);
+  stroke-width: 2.2px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Estado ACTIVO del nodo: Faro pulsante de luz continua */
+.f-interactive-node.is-active .f-node-core {
+  r: 9.5px;
+  stroke-width: 2.8px;
+  filter: drop-shadow(0 0 12px var(--node-glow));
+}
+
+.f-interactive-node.is-active .f-node-halo {
+  r: 20px;
+  opacity: 0.7;
+  animation: f-active-halo 1.8s infinite ease-in-out;
+}
+
+.f-interactive-node.is-active .f-node-ping {
+  opacity: 1;
+  animation: f-beacon-ping 1.8s infinite cubic-bezier(0, 0.2, 0.8, 1);
+}
+
+@keyframes f-beacon-ping {
+  0% {
+    r: 12px;
+    opacity: 0.95;
+    stroke-width: 2.5px;
+  }
+  68% {
+    r: 28px;
+    opacity: 0.25;
+    stroke-width: 1.5px;
+  }
+  100% {
+    r: 35px;
+    opacity: 0;
+    stroke-width: 0.5px;
+  }
+}
+
+@keyframes f-active-halo {
+  0%, 100% {
+    r: 17px;
+    opacity: 0.45;
+  }
+  50% {
+    r: 23px;
+    opacity: 0.8;
+  }
+}
+
+/* Bloque dinámico único de texto flotante bajo el gráfico */
+.f-narrative-container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.6rem;
-  margin-top: 0.75rem;
+  grid-template-rows: 1fr;
+  width: 100%;
+  margin-top: 1.25rem;
+  min-height: 145px;
+  position: relative;
 }
 
-.f-milestone-col {
+.f-narrative-card {
+  grid-area: 1 / 1;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  border-left: 3px solid rgba(255, 255, 255, 0.15);
-  padding-left: 1rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition:
+    opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0.45s;
+  pointer-events: none;
 }
 
-.f-milestone-col.gold {
-  border-left-color: var(--gold);
+.f-narrative-card.is-active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
-.f-milestone-col.dim {
-  border-left-color: rgba(255, 255, 255, 0.28);
+.f-narrative-card.gold {
+  --line-glow: rgba(245, 158, 11, 0.65);
+  --accent-color: var(--gold);
 }
 
-.f-milestone-col.danger {
-  border-left-color: var(--danger);
+.f-narrative-card.cyan {
+  --line-glow: rgba(56, 189, 248, 0.65);
+  --accent-color: #38bdf8;
 }
 
-.f-ms-tag {
-  font-size: 0.82rem;
+.f-narrative-card.danger {
+  --line-glow: rgba(255, 51, 102, 0.75);
+  --accent-color: var(--danger);
+}
+
+.f-narrative-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
+.f-narrative-top {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.35rem;
+}
+
+.f-narrative-tag {
+  font-size: 0.92rem;
   font-weight: 700;
   letter-spacing: 0.12em;
-  opacity: 0.85;
+  color: var(--accent-color);
 }
 
-.f-ms-stat {
-  font-size: clamp(1.15rem, 1.45vw, 1.35rem);
-  font-weight: 700;
-  letter-spacing: 0.05em;
+.f-narrative-stat {
+  font-size: clamp(2rem, 3.2vw, 2.6rem);
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  color: var(--accent-color);
+  text-shadow: 0 0 28px var(--line-glow);
+  margin-bottom: 0.45rem;
+  line-height: 1.1;
 }
 
-.f-ms-desc {
-  font-size: clamp(0.9rem, 1.15vw, 1.02rem);
-  color: var(--muted);
-  line-height: 1.5;
+.f-narrative-desc {
+  font-size: clamp(1.1rem, 1.35vw, 1.25rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 620px;
 }
 
 @media (max-width: 960px) {
@@ -1185,9 +1347,9 @@ button, input, select {
   .p-scene-lead {
     margin-bottom: 1rem;
   }
-  .f-milestones-row {
-    grid-template-columns: 1fr;
-    gap: 0.85rem;
+  .f-narrative-container {
+    min-height: 160px;
+    margin-top: 1rem;
   }
 }
 
@@ -1588,7 +1750,8 @@ button, input, select {
 
 /* Resultados de Negocio: Texto flotante directamente sobre el fondo (sin cards ni paneles) */
 .benefits-bento {
-  margin-top: clamp(4rem, 7vw, 6.5rem);
+  margin-top: clamp(5rem, 9vw, 8.5rem);
+  margin-bottom: clamp(3.5rem, 6vw, 5.5rem);
   background: transparent;
   border: none;
   border-radius: 0;
@@ -1597,33 +1760,35 @@ button, input, select {
 }
 
 .benefits-header {
-  margin-bottom: clamp(2rem, 3.5vw, 3rem);
+  margin-bottom: clamp(2.8rem, 5vw, 4.2rem);
 }
 .benefits-header .text-cyan {
   display: inline-block;
-  font-size: 0.85rem;
-  letter-spacing: 0.12em;
-  margin-bottom: 0.45rem;
+  font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+  letter-spacing: 0.16em;
+  font-weight: 700;
+  margin-bottom: 0.65rem;
 }
 .benefits-header h3 {
   font-family: var(--font-display);
-  font-size: clamp(1.8rem, 3vw, 2.45rem);
-  line-height: 1.25;
+  font-size: clamp(2.2rem, 4vw, 3.25rem);
+  line-height: 1.18;
+  letter-spacing: -0.02em;
   color: #ffffff;
   margin-top: 0.25rem;
-  max-width: 840px;
+  max-width: 980px;
 }
 
 .benefits-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: clamp(1.75rem, 3vw, 2.8rem);
+  gap: clamp(2.2rem, 4vw, 3.8rem);
 }
 
 @media (max-width: 1024px) and (min-width: 768px) {
   .benefits-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 2.2rem;
+    gap: 2.8rem;
   }
 }
 
@@ -1638,29 +1803,28 @@ button, input, select {
   transition: transform 0.25s ease;
 }
 .benefit-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
 }
 
 .benefit-num {
   display: inline-block;
-  font-size: clamp(2.2rem, 3.6vw, 3rem);
-  font-weight: 800;
+  font-size: clamp(3.2rem, 5.5vw, 4.8rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
   color: var(--cyan);
-  text-shadow: 0 0 28px rgba(0, 229, 255, 0.45);
-  margin-bottom: 0.65rem;
+  text-shadow:
+    0 0 35px rgba(0, 229, 255, 0.55),
+    0 0 70px rgba(0, 229, 255, 0.22);
+  margin-bottom: 0.85rem;
   line-height: 1;
 }
 .benefit-card h4 {
   font-family: var(--font-display);
-  font-size: 1.25rem;
-  color: #ffffff;
-  margin-bottom: 0.5rem;
-  line-height: 1.35;
-}
-.benefit-card p {
-  font-size: 1.05rem;
-  line-height: 1.6;
-  color: var(--text-soft);
+  font-size: clamp(1.35rem, 1.8vw, 1.7rem);
+  font-weight: 600;
+  color: #f1f5f9;
+  line-height: 1.3;
+  margin-bottom: 0;
 }
 
 /* ==========================================================================

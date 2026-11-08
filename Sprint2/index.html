@@ -151,7 +151,7 @@
                 
                 <div class="p-scene-content">
                   <h2 class="p-scene-title">
-                    De <span class="highlight-danger font-display">35k€ a 80k€</span> de pérdidas por cada brecha
+                    De <span class="highlight-danger font-display nowrap">35k€ a 80k€</span> de pérdidas por cada brecha
                   </h2>
                   <p class="p-scene-lead">
                     El perjuicio económico va mucho más allá del robo: implica parálisis de facturación, costes periciales y quiebra del negocio.
@@ -175,14 +175,14 @@
                   <div class="p-financial-chart">
                     <div class="chart-header font-mono">
                       <span>DESGLOSE DEL COSTE MEDIO ESTIMADO</span>
-                      <span class="text-danger">HASTA 80.000 €</span>
+                      <span class="text-danger nowrap">HASTA 80.000&nbsp;€</span>
                     </div>
 
                     <div class="financial-bars-stack font-mono">
                       <div class="fin-bar-item">
                         <div class="fin-bar-labels">
                           <span>Transferencias desviadas</span>
-                          <strong class="text-danger">~42.000 €</strong>
+                          <strong class="text-danger nowrap">~42.000&nbsp;€</strong>
                         </div>
                         <div class="fin-track">
                           <div class="fin-fill danger" style="width: 78%;"></div>
@@ -192,7 +192,7 @@
                       <div class="fin-bar-item">
                         <div class="fin-bar-labels">
                           <span>Parada de actividad (3 a 5 días)</span>
-                          <strong class="text-gold">~24.000 €</strong>
+                          <strong class="text-gold nowrap">~24.000&nbsp;€</strong>
                         </div>
                         <div class="fin-track">
                           <div class="fin-fill gold" style="width: 52%;"></div>
@@ -202,7 +202,7 @@
                       <div class="fin-bar-item">
                         <div class="fin-bar-labels">
                           <span>Peritaje y recuperación técnica</span>
-                          <strong class="text-cyan">~14.000 €</strong>
+                          <strong class="text-cyan nowrap">~14.000&nbsp;€</strong>
                         </div>
                         <div class="fin-track">
                           <div class="fin-fill cyan" style="width: 32%;"></div>
@@ -251,27 +251,26 @@
                     
                     <div class="f-curve-header">
                       <span class="f-curve-title">LA CURVA DEL OLVIDO: DE LA TEORÍA AL FALLO</span>
-                      <span class="f-curve-badge text-gold">INEFICACIA 0%</span>
                     </div>
 
                     <div class="f-curve-canvas-wrap">
-                      <svg class="f-curve-svg" viewBox="0 0 540 230" aria-label="Curva exponencial del olvido: 100% de retención en Día 1 cae por debajo del 5% en Día 7 y causa 0% de reflejo en el ataque">
+                      <svg class="f-curve-svg" viewBox="0 0 660 270" aria-label="Curva interactiva del olvido: toca los puntos para explorar cómo cae la retención del 100% al 0%">
                         <defs>
                           <linearGradient id="f-stroke-grad" x1="0%" y1="0%" x2="100%" y2="0%">
                             <stop offset="0%" stop-color="#f59e0b"/>
-                            <stop offset="40%" stop-color="#fbbf24"/>
-                            <stop offset="75%" stop-color="#ff3366"/>
+                            <stop offset="38%" stop-color="#fbbf24"/>
+                            <stop offset="72%" stop-color="#ff3366"/>
                             <stop offset="100%" stop-color="#ef4444"/>
                           </linearGradient>
 
                           <linearGradient id="f-fill-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.25"/>
+                            <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.28"/>
                             <stop offset="55%" stop-color="#ff3366" stop-opacity="0.10"/>
                             <stop offset="100%" stop-color="#ff3366" stop-opacity="0"/>
                           </linearGradient>
 
                           <filter id="f-neon-glow" x="-20%" y="-20%" width="140%" height="140%">
-                            <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
+                            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
                             <feMerge>
                               <feMergeNode in="coloredBlur"/>
                               <feMergeNode in="SourceGraphic"/>
@@ -279,67 +278,95 @@
                           </filter>
                         </defs>
 
-                        <!-- Ejes y marcas horizontales de porcentaje -->
-                        <line x1="45" y1="35" x2="520" y2="35" stroke="rgba(245, 158, 11, 0.22)" stroke-dasharray="3 4"/>
-                        <text x="36" y="39" fill="rgba(245, 158, 11, 0.75)" font-size="11" text-anchor="end">100%</text>
+                        <!-- Ejes y marcas horizontales de porcentaje más grandes y nítidas -->
+                        <line x1="55" y1="42" x2="635" y2="42" stroke="rgba(245, 158, 11, 0.25)" stroke-dasharray="4 5"/>
+                        <text x="44" y="47" fill="rgba(245, 158, 11, 0.85)" font-size="14" font-weight="700" text-anchor="end">100%</text>
 
-                        <line x1="45" y1="110" x2="520" y2="110" stroke="rgba(255, 255, 255, 0.08)" stroke-dasharray="3 4"/>
-                        <text x="36" y="114" fill="rgba(255, 255, 255, 0.35)" font-size="11" text-anchor="end">50%</text>
+                        <line x1="55" y1="130" x2="635" y2="130" stroke="rgba(255, 255, 255, 0.1)" stroke-dasharray="4 5"/>
+                        <text x="44" y="135" fill="rgba(255, 255, 255, 0.45)" font-size="14" font-weight="700" text-anchor="end">50%</text>
 
-                        <line x1="45" y1="185" x2="520" y2="185" stroke="rgba(255, 51, 102, 0.28)" stroke-dasharray="3 4"/>
-                        <text x="36" y="189" fill="rgba(255, 51, 102, 0.75)" font-size="11" text-anchor="end">0%</text>
+                        <line x1="55" y1="218" x2="635" y2="218" stroke="rgba(255, 51, 102, 0.3)" stroke-dasharray="4 5"/>
+                        <text x="44" y="223" fill="rgba(255, 51, 102, 0.85)" font-size="14" font-weight="700" text-anchor="end">0%</text>
 
                         <!-- Área sombreada bajo la curva descendente -->
-                        <path class="f-area-path" d="M 60 35 C 130 45, 180 165, 270 178 C 345 188, 420 185, 480 185 L 480 205 L 60 205 Z" fill="url(#f-fill-grad)" />
+                        <path class="f-area-path" d="M 85 42 C 175 52, 230 188, 330 204 C 420 220, 490 218, 580 218 L 580 248 L 85 248 Z" fill="url(#f-fill-grad)" />
 
                         <!-- Trazado de la curva del olvido -->
-                        <path class="f-curve-stroke" d="M 60 35 C 130 45, 180 165, 270 178 C 345 188, 420 185, 480 185" fill="none" stroke="url(#f-stroke-grad)" stroke-width="4" stroke-linecap="round" filter="url(#f-neon-glow)" />
+                        <path class="f-curve-stroke" d="M 85 42 C 175 52, 230 188, 330 204 C 420 220, 490 218, 580 218" fill="none" stroke="url(#f-stroke-grad)" stroke-width="5" stroke-linecap="round" filter="url(#f-neon-glow)" />
 
-                        <!-- Nodo 1: Día 1 -->
-                        <g transform="translate(60, 35)">
-                          <circle r="12" fill="rgba(245, 158, 11, 0.2)" class="f-node-pulse-gold"/>
-                          <circle r="5.5" fill="#f59e0b" stroke="#ffffff" stroke-width="2"/>
+                        <!-- Indicador de momento crítico sobre la recta final -->
+                        <text x="415" y="196" fill="rgba(255, 51, 102, 0.8)" font-size="13" font-weight="600" letter-spacing="1.5">ATAQUE REAL &darr;</text>
+
+                        <!-- Índice cronológico situado abajo de la gráfica -->
+                        <line x1="330" y1="218" x2="330" y2="234" stroke="rgba(255, 255, 255, 0.25)" stroke-dasharray="2 2"/>
+                        <text x="330" y="254" text-anchor="middle" fill="rgba(255, 255, 255, 0.75)" font-size="12.5" font-weight="600" letter-spacing="1.4">7 DÍAS DE RUTINA &darr;</text>
+
+                        <!-- Puntos interactivos que muestran la información al tocarlos y avanzan cada 5s -->
+                        <!-- Nodo 0: Día 1 -->
+                        <g class="f-interactive-node is-active node-gold" data-curve-node="0" role="button" tabindex="0" aria-label="Punto 1: Día 1 - 100% Visto">
+                          <circle cx="85" cy="42" r="32" class="f-node-hitbox" fill="transparent" />
+                          <circle cx="85" cy="42" r="16" class="f-node-ping" />
+                          <circle cx="85" cy="42" r="14" class="f-node-halo" />
+                          <circle cx="85" cy="42" r="7.5" class="f-node-core" />
+                          <circle cx="85" cy="42" r="2.5" class="f-node-dot" fill="#ffffff" />
                         </g>
 
-                        <!-- Flecha indicadora Día 1 -> Día 7 -->
-                        <text x="165" y="105" fill="rgba(255, 255, 255, 0.4)" font-size="10" letter-spacing="1">7 DÍAS DE RUTINA &darr;</text>
-
-                        <!-- Nodo 2: Día 7 -->
-                        <g transform="translate(270, 178)">
-                          <circle r="9" fill="rgba(255, 255, 255, 0.12)"/>
-                          <circle r="4.5" fill="#94a3b8" stroke="#ffffff" stroke-width="1.5"/>
+                        <!-- Nodo 1: Día 7 -->
+                        <g class="f-interactive-node node-cyan" data-curve-node="1" role="button" tabindex="0" aria-label="Punto 2: Día 7 - Menos del 5% de Retención">
+                          <circle cx="330" cy="204" r="32" class="f-node-hitbox" fill="transparent" />
+                          <circle cx="330" cy="204" r="16" class="f-node-ping" />
+                          <circle cx="330" cy="204" r="14" class="f-node-halo" />
+                          <circle cx="330" cy="204" r="7.5" class="f-node-core" />
+                          <circle cx="330" cy="204" r="2.5" class="f-node-dot" fill="#ffffff" />
                         </g>
 
-                        <!-- Flecha indicadora Día 7 -> Ataque -->
-                        <text x="345" y="170" fill="rgba(255, 51, 102, 0.65)" font-size="10" letter-spacing="1">ATAQUE REAL &darr;</text>
-
-                        <!-- Nodo 3: Ataque Real -->
-                        <g transform="translate(480, 185)">
-                          <circle r="14" fill="rgba(255, 51, 102, 0.3)" class="f-node-pulse-danger"/>
-                          <circle r="6" fill="#ff3366" stroke="#ffffff" stroke-width="2"/>
+                        <!-- Nodo 2: Ataque Real -->
+                        <g class="f-interactive-node node-danger" data-curve-node="2" role="button" tabindex="0" aria-label="Punto 3: Ataque Real - 0% de Reflejo">
+                          <circle cx="580" cy="218" r="32" class="f-node-hitbox" fill="transparent" />
+                          <circle cx="580" cy="218" r="16" class="f-node-ping" />
+                          <circle cx="580" cy="218" r="14" class="f-node-halo" />
+                          <circle cx="580" cy="218" r="7.5" class="f-node-core" />
+                          <circle cx="580" cy="218" r="2.5" class="f-node-dot" fill="#ffffff" />
                         </g>
                       </svg>
                     </div>
 
-                    <!-- 3 Hitos visuales flotantes alineados directamente bajo el gráfico -->
-                    <div class="f-milestones-row">
-                      <div class="f-milestone-col gold">
-                        <span class="f-ms-tag">DÍA 1</span>
-                        <strong class="f-ms-stat text-gold">100% VISTO</strong>
-                        <p class="f-ms-desc">Vídeo anual de 1 hora visto por obligación y con prisa.</p>
+                    <!-- Bloque de texto interactivo dinámico (cambia según el punto activo o cada 5 segundos) -->
+                    <div class="f-narrative-container font-mono" id="f-narrative-container" aria-live="polite">
+                      
+                      <!-- Hito 0: Día 1 -->
+                      <div class="f-narrative-card is-active gold" data-narrative-idx="0">
+                        <div class="f-narrative-body">
+                          <div class="f-narrative-top">
+                            <span class="f-narrative-tag">DÍA 1</span>
+                          </div>
+                          <div class="f-narrative-stat">100% VISTO</div>
+                          <p class="f-narrative-desc">Vídeo anual de 1 hora visto por obligación y con prisa.</p>
+                        </div>
                       </div>
 
-                      <div class="f-milestone-col dim">
-                        <span class="f-ms-tag">DÍA 7</span>
-                        <strong class="f-ms-stat text-muted">&lt; 5% RETENCIÓN</strong>
-                        <p class="f-ms-desc">Olvido casi total: la rutina y la carga diaria borran la teoría.</p>
+                      <!-- Hito 1: Día 7 -->
+                      <div class="f-narrative-card cyan" data-narrative-idx="1">
+                        <div class="f-narrative-body">
+                          <div class="f-narrative-top">
+                            <span class="f-narrative-tag">DÍA 7</span>
+                          </div>
+                          <div class="f-narrative-stat">&lt; 5% RETENCIÓN</div>
+                          <p class="f-narrative-desc">Olvido casi total: la rutina y la carga diaria borran la teoría.</p>
+                        </div>
                       </div>
 
-                      <div class="f-milestone-col danger">
-                        <span class="f-ms-tag">ATAQUE</span>
-                        <strong class="f-ms-stat text-danger">0% REFLEJO</strong>
-                        <p class="f-ms-desc">Clic accidental: bajo presión y prisas, la teoría no activa reflejos.</p>
+                      <!-- Hito 2: Ataque -->
+                      <div class="f-narrative-card danger" data-narrative-idx="2">
+                        <div class="f-narrative-body">
+                          <div class="f-narrative-top">
+                            <span class="f-narrative-tag">ATAQUE</span>
+                          </div>
+                          <div class="f-narrative-stat">0% REFLEJO</div>
+                          <p class="f-narrative-desc">Clic accidental: bajo presión y prisas, la teoría no activa reflejos.</p>
+                        </div>
                       </div>
+
                     </div>
 
                   </div>
@@ -555,22 +582,18 @@
             <div class="benefit-card">
               <span class="benefit-num font-mono">&lt; 10%</span>
               <h4>Menos clics en 90 días</h4>
-              <p>Reducimos la tasa de empleados que caen del 35–40% inicial a menos del 10% en solo tres meses.</p>
             </div>
             <div class="benefit-card">
               <span class="benefit-num font-mono">+80%</span>
               <h4>Empleados que avisan a tiempo</h4>
-              <p>Más del 80% de la plantilla adquiere el reflejo de reportar los correos dudosos antes de que nadie pique.</p>
             </div>
             <div class="benefit-card">
               <span class="benefit-num font-mono">0 TI</span>
               <h4>Sin informático en plantilla</h4>
-              <p>No hay que instalar programas ni configurar servidores. Los simulacros se envían solos y tú solo recibes el resumen.</p>
             </div>
             <div class="benefit-card">
               <span class="benefit-num font-mono">RGPD</span>
               <h4>Cumplimiento demostrable</h4>
-              <p>Informes listos para demostrar que formas a tu personal ante inspecciones de protección de datos o aseguradoras.</p>
             </div>
           </div>
         </div>
@@ -643,7 +666,7 @@
                   <p class="cine-context">Marta tiene 15 pagos pendientes antes del mediodía y pulsa en el archivo sin fijarse en el remitente:</p>
                   <div class="cine-fake-btn">
                     <span class="pdf-tag font-mono">PDF</span>
-                    <strong>Descargar Factura_2026-1184_Ribera.pdf (4.870 €)</strong>
+                    <strong>Descargar Factura_2026-1184_Ribera.pdf (4.870&nbsp;€)</strong>
                     <div class="animated-cursor"></div>
                   </div>
                 </div>
@@ -659,7 +682,7 @@
                 </div>
                 <div class="cine-alert-body">
                   <span class="cine-pill-alert font-arcade">⚡ TRANQUILA, MARTA: ERA UN SIMULACRO DE SENTINEL</span>
-                  <h3>Un atacante real habría robado tu contraseña y desviado 4.870 €</h3>
+                  <h3>Un atacante real habría robado tu contraseña y desviado <span class="nowrap">4.870&nbsp;€</span></h3>
                   <div class="cine-clues-row font-mono">
                     <span>1. El dominio era .co y no .es</span>
                     <span>2. Nunca se cambia un IBAN por email</span>
@@ -942,7 +965,7 @@
           <form class="pilot-form" id="form" novalidate>
             <div class="form-top-row">
               <h3>Solicitar simulacro piloto gratuito</h3>
-              <span class="free-badge font-arcade">0 € · SIN COMPROMISO</span>
+              <span class="free-badge font-arcade nowrap">0&nbsp;€ · SIN COMPROMISO</span>
             </div>
 
             <div class="field">

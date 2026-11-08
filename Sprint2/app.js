@@ -1466,6 +1466,67 @@
     problemSlider.style.transform = `translateX(-${currentProblemScene * 100}vw)`;
   }
 
+  // 01.b CURVA DEL OLVIDO: Puntos interactivos con faro de luz + auto-avance cada 5s
+  const curveNodes = $$(".f-interactive-node");
+  const narrativeCards = $$(".f-narrative-card");
+  let activeCurveIdx = 0;
+  let curveAutoTimer = null;
+  const CURVE_INTERVAL_MS = 5000;
+
+  function setActiveCurvePoint(idx, playSound = false) {
+    if (!curveNodes.length) return;
+    const clamped = (idx + curveNodes.length) % curveNodes.length;
+    activeCurveIdx = clamped;
+
+    curveNodes.forEach((node, i) => {
+      const isActive = i === clamped;
+      node.classList.toggle("is-active", isActive);
+      node.setAttribute("aria-selected", String(isActive));
+    });
+
+    narrativeCards.forEach((card, i) => {
+      const isActive = i === clamped;
+      card.classList.toggle("is-active", isActive);
+      card.setAttribute("aria-hidden", String(!isActive));
+    });
+
+    if (playSound) audio?.playBlip?.(true);
+
+    // Reiniciar cuenta atrás de 5 segundos
+    resetCurveAutoTimer();
+  }
+
+  function nextCurvePoint() {
+    const nextIdx = (activeCurveIdx + 1) % (curveNodes.length || 3);
+    setActiveCurvePoint(nextIdx, false);
+  }
+
+  function resetCurveAutoTimer() {
+    if (curveAutoTimer) clearInterval(curveAutoTimer);
+    curveAutoTimer = setInterval(nextCurvePoint, CURVE_INTERVAL_MS);
+  }
+
+  if (curveNodes.length > 0) {
+    curveNodes.forEach((node) => {
+      node.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const idx = parseInt(node.dataset.curveNode, 10) || 0;
+        setActiveCurvePoint(idx, true);
+      });
+
+      node.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          const idx = parseInt(node.dataset.curveNode, 10) || 0;
+          setActiveCurvePoint(idx, true);
+        }
+      });
+    });
+
+    // Iniciar auto-avance continuo cada 5 segundos
+    resetCurveAutoTimer();
+  }
+
   const solutionTrack = $("#solution-track");
   const stepTabs = $$(".step-tab");
   const stepPanels = $$(".sol-step-panel");
