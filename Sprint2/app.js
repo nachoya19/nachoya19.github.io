@@ -78,6 +78,12 @@
       src: "../assets/sprites/sprites_p4_clean.png",
       fallback: "../assets/sprites/sprites_p4.png",
       name: "NICOLÁS · SCRUM MASTER Y CIBERSEGURIDAD"
+    },
+    p5: {
+      id: "p5",
+      src: "../assets/sprites/sprites_p5_clean.png",
+      fallback: "../assets/sprites/sprites_p5.png",
+      name: "MIGUEL · BACKEND Y ARQUITECTURA"
     }
   };
 
@@ -85,7 +91,8 @@
     p1: { ...speakerConfig.p1, loaded: false, frames: [], w: 0, h: 0 },
     p2: { ...speakerConfig.p2, loaded: false, frames: [], w: 0, h: 0 },
     p3: { ...speakerConfig.p3, loaded: false, frames: [], w: 0, h: 0 },
-    p4: { ...speakerConfig.p4, loaded: false, frames: [], w: 0, h: 0 }
+    p4: { ...speakerConfig.p4, loaded: false, frames: [], w: 0, h: 0 },
+    p5: { ...speakerConfig.p5, loaded: false, frames: [], w: 0, h: 0 }
   };
 
   // Carga y recorte de los 6 fotogramas de cada spritesheet
@@ -181,12 +188,20 @@
     "¡Buen reporte! Eso suma puntos al equipo.",
     "Protección perimetral y concienciación al 100%."
   ];
+  const miguelLines = [
+    "¡Revisando logs de autenticación en el servidor!",
+    "Microservicios aislados y monitorizados en tiempo real.",
+    "Base de datos protegida contra accesos no autorizados.",
+    "Cifrado de extremo a extremo activo en todas las peticiones.",
+    "¡Arquitectura backend blindada contra intrusiones!"
+  ];
   let ivanLineIdx = 0;
   let marioLineIdx = 0;
   let nachoLineIdx = 0;
   let nicoLineIdx = 0;
+  let miguelLineIdx = 0;
 
-  // Estado de los 4 personajes en el mundo 2D Zelda
+  // Estado de los personajes en el mundo 2D Zelda
   const workers = {
     p1: {
       id: "p1",
@@ -262,6 +277,25 @@
       bubbleText: "¡Ciberseguridad perimetral activa!",
       bubbleTimer: 5.0,
       waitTimer: 3.2,
+      jumpOffset: 0
+    },
+    p5: {
+      id: "p5",
+      name: "MIGUEL",
+      role: "BACKEND",
+      color: "#a855f7",
+      x: 640,
+      y: 350,
+      targetX: 640,
+      targetY: 350,
+      speed: 1.6,
+      facing: 1,
+      state: "idle",
+      walkTimer: 0,
+      frameIdx: 0,
+      bubbleText: "¡Revisando logs de autenticación!",
+      bubbleTimer: 5.2,
+      waitTimer: 3.0,
       jumpOffset: 0
     }
   };
@@ -586,8 +620,9 @@
       desk1: { x: cw * 0.20, y: wallH + 85, label: "Puesto de Iván" },
       desk4: { x: cw * 0.50, y: wallH + 85, label: "Puesto de Nicolás" },
       desk2: { x: cw * 0.80, y: wallH + 85, label: "Puesto de Mario" },
-      desk3: { x: cw * 0.32, y: ch * 0.52, label: "Puesto de Nacho" },
-      terminal: { x: cw * 0.68, y: ch * 0.52, label: "Terminal Factura" },
+      desk3: { x: cw * 0.28, y: ch * 0.52, label: "Puesto de Nacho" },
+      terminal: { x: cw * 0.50, y: ch * 0.52, label: "Terminal Factura" },
+      desk5: { x: cw * 0.72, y: ch * 0.52, label: "Puesto de Miguel" },
       serverL: { x: cw * 0.10, y: ch * 0.78, label: "Servidor Alpha" },
       serverR: { x: cw * 0.90, y: ch * 0.78, label: "Servidor Beta" },
       coffee: { x: cw * 0.08, y: ch * 0.44, label: "Cafetera" },
@@ -617,6 +652,11 @@
     workers.p3.y = spots.desk3.y;
     workers.p3.targetX = spots.desk3.x;
     workers.p3.targetY = spots.desk3.y;
+
+    workers.p5.x = spots.desk5.x;
+    workers.p5.y = spots.desk5.y;
+    workers.p5.targetX = spots.desk5.x;
+    workers.p5.targetY = spots.desk5.y;
   }
 
   // Dibujar mapa Zelda 2D: suelo amplio en toda la pantalla, alfombra cyber y muebles
@@ -705,6 +745,9 @@
 
     const d3 = spots.desk3;
     drawDesk(ctx, d3.x, d3.y, "NACHO · DEV", "#10b981", "#00e5ff", time, true);
+
+    const d5 = spots.desk5;
+    drawDesk(ctx, d5.x, d5.y, "MIGUEL · BACKEND", "#a855f7", "#10b981", time, true);
 
     const term = spots.terminal;
     drawCentralTerminal(ctx, term.x, term.y, time);
@@ -989,8 +1032,9 @@
       w.y += (dy / dist) * stepDist;
 
       w.walkTimer += dt * 6.5;
-      w.jumpOffset = Math.abs(Math.sin(w.walkTimer * 3.5)) * 3;
-      w.frameIdx = Math.floor(w.walkTimer) % 4;
+      w.jumpOffset = Math.abs(Math.sin(w.walkTimer * 3.5)) * 2.5;
+      // Al caminar NUNCA cambian de sprite: se mantienen en el sprite base (0)
+      w.frameIdx = 0;
     } else {
       if (w.state === "walk") {
         w.state = "idle";
@@ -999,13 +1043,19 @@
         w.waitTimer = 2.5 + Math.random() * 3.0;
       }
 
-      if (w.waitTimer > 0) {
-        if (w.waitTimer < 1.8 && Math.random() < 0.05) {
-          w.frameIdx = (w.frameIdx === 1) ? 2 : 1;
-        }
-      } else {
+      if (w.waitTimer <= 0) {
         pickNextGoal(w);
       }
+    }
+
+    // Solo cambian de sprites y gesticulan mientras hablan (al hacerles clic o al interactuar)
+    if (w.bubbleTimer > 0) {
+      w.talkTimer = (w.talkTimer || 0) + dt * 4.2;
+      const talkFrames = [1, 2, 3, 2, 4, 2];
+      w.frameIdx = talkFrames[Math.floor(w.talkTimer) % talkFrames.length];
+    } else {
+      w.frameIdx = 0;
+      w.talkTimer = 0;
     }
 
     const distToOther = Math.hypot(w.x - other.x, w.y - other.y);
@@ -1028,13 +1078,17 @@
         w.bubbleText = nicoLines[nicoLineIdx % nicoLines.length];
         nicoLineIdx++;
         w.bubbleTimer = 4.5;
+      } else if (w.id === "p5") {
+        w.bubbleText = miguelLines[miguelLineIdx % miguelLines.length];
+        miguelLineIdx++;
+        w.bubbleTimer = 4.5;
       }
     }
   }
 
   function pickNextGoal(w) {
     const spots = getOfficeSpots();
-    const goals = [spots.desk1, spots.desk2, spots.desk3, spots.desk4, spots.terminal, spots.coffee, spots.meeting, spots.serverL, spots.serverR];
+    const goals = [spots.desk1, spots.desk2, spots.desk3, spots.desk4, spots.desk5, spots.terminal, spots.coffee, spots.meeting, spots.serverL, spots.serverR];
     const chosen = goals[Math.floor(Math.random() * goals.length)];
     w.targetX = Math.max(70, Math.min(cw - 70, chosen.x + (Math.random() - 0.5) * 80));
     w.targetY = Math.max(wallH + 50, Math.min(ch - 50, chosen.y + (Math.random() - 0.5) * 45));
@@ -1075,13 +1129,15 @@
       updateWorkerAI(workers.p1, workers.p2, dt);
       updateWorkerAI(workers.p2, workers.p3, dt);
       updateWorkerAI(workers.p3, workers.p4, dt);
-      updateWorkerAI(workers.p4, workers.p1, dt);
+      updateWorkerAI(workers.p4, workers.p5, dt);
+      updateWorkerAI(workers.p5, workers.p1, dt);
 
       const renderList = [
         { w: workers.p1, s: speakers.p1 },
         { w: workers.p2, s: speakers.p2 },
         { w: workers.p3, s: speakers.p3 },
-        { w: workers.p4, s: speakers.p4 }
+        { w: workers.p4, s: speakers.p4 },
+        { w: workers.p5, s: speakers.p5 }
       ].sort((a, b) => a.w.y - b.w.y);
 
       renderList.forEach(item => renderWorker(zctx, item.w, item.s));
@@ -1139,18 +1195,29 @@
     const dist2 = Math.hypot(workers.p2.x - clickX, workers.p2.y - worldY);
     const dist3 = Math.hypot(workers.p3.x - clickX, workers.p3.y - worldY);
     const dist4 = Math.hypot(workers.p4.x - clickX, workers.p4.y - worldY);
+    const dist5 = Math.hypot(workers.p5.x - clickX, workers.p5.y - worldY);
 
     let targetWorker = workers.p1;
     let minDist = dist1;
     if (dist2 < minDist) { targetWorker = workers.p2; minDist = dist2; }
     if (dist3 < minDist) { targetWorker = workers.p3; minDist = dist3; }
     if (dist4 < minDist) { targetWorker = workers.p4; minDist = dist4; }
+    if (dist5 < minDist) { targetWorker = workers.p5; minDist = dist5; }
 
     targetWorker.targetX = Math.max(70, Math.min(cw - 70, clickX));
     targetWorker.targetY = Math.max(wallH + 45, Math.min(ch - 50, worldY));
     targetWorker.waitTimer = 0;
 
     if (minDist < 70) {
+      // Al hacerles clic se detienen a hablar y gesticular
+      targetWorker.targetX = targetWorker.x;
+      targetWorker.targetY = targetWorker.y;
+      targetWorker.state = "idle";
+      targetWorker.waitTimer = 5.0;
+      targetWorker.bubbleTimer = 5.0;
+      targetWorker.talkTimer = 0;
+      targetWorker.jumpOffset = 12;
+
       if (targetWorker.id === "p1") {
         ivanLineIdx = (ivanLineIdx + 1) % ivanLines.length;
         targetWorker.bubbleText = ivanLines[ivanLineIdx];
@@ -1163,13 +1230,14 @@
       } else if (targetWorker.id === "p4") {
         nicoLineIdx = (nicoLineIdx + 1) % nicoLines.length;
         targetWorker.bubbleText = nicoLines[nicoLineIdx];
+      } else if (targetWorker.id === "p5") {
+        miguelLineIdx = (miguelLineIdx + 1) % miguelLines.length;
+        targetWorker.bubbleText = miguelLines[miguelLineIdx];
       }
-      targetWorker.bubbleTimer = 5.0;
-      targetWorker.jumpOffset = 12;
     }
   });
 
-  ["p1", "p2", "p3", "p4"].forEach((key) => {
+  ["p1", "p2", "p3", "p4", "p5"].forEach((key) => {
     loadSpeaker(speakers[key], (data) => {
       speakers[key].frames = data.frames;
       speakers[key].w = data.w;
@@ -1264,17 +1332,21 @@
       workers.p2.state = "alarm";
       workers.p3.state = "alarm";
       workers.p4.state = "alarm";
+      workers.p5.state = "alarm";
       workers.p1.bubbleText = "¡Uff, era una trampa! 😱";
       workers.p2.bubbleText = "¡Casi transferimos 4.870 €!";
       workers.p3.bubbleText = "¡Aislad la red inmediatamente!";
       workers.p4.bubbleText = "¡Alerta perimetral! Bloqueando conexión.";
+      workers.p5.bubbleText = "¡Intrusión detectada en backend! Bloqueando puerto.";
       workers.p1.bubbleTimer = 6.0;
       workers.p2.bubbleTimer = 6.0;
       workers.p3.bubbleTimer = 6.0;
       workers.p4.bubbleTimer = 6.0;
+      workers.p5.bubbleTimer = 6.0;
       spawnAlertMark(workers.p1.x, workers.p1.y);
       spawnAlertMark(workers.p3.x, workers.p3.y);
       spawnAlertMark(workers.p4.x, workers.p4.y);
+      spawnAlertMark(workers.p5.x, workers.p5.y);
 
       if (wallRisk) wallRisk.textContent = "CRÍTICO (FALLO)";
       failOutcome?.focus({ preventScroll: true });
@@ -1296,23 +1368,28 @@
       workers.p2.state = "celebrate";
       workers.p3.state = "celebrate";
       workers.p4.state = "celebrate";
+      workers.p5.state = "celebrate";
       workers.p1.jumpOffset = 22;
       workers.p2.jumpOffset = 22;
       workers.p3.jumpOffset = 22;
       workers.p4.jumpOffset = 22;
+      workers.p5.jumpOffset = 22;
       workers.p1.bubbleText = "¡Amenaza frenada! 🏆";
       workers.p2.bubbleText = "¡+50 XP sumados! Buen trabajo.";
       workers.p3.bubbleText = "¡Reglas actualizadas en Sentinel!";
       workers.p4.bubbleText = "¡Protocolo completado con éxito! 🛡️";
+      workers.p5.bubbleText = "¡Servidor seguro y logs limpios! 🚀";
       workers.p1.bubbleTimer = 6.0;
       workers.p2.bubbleTimer = 6.0;
       workers.p3.bubbleTimer = 6.0;
       workers.p4.bubbleTimer = 6.0;
+      workers.p5.bubbleTimer = 6.0;
 
       spawnXpBurst(workers.p1.x, workers.p1.y, 25);
       spawnXpBurst(workers.p2.x, workers.p2.y, 25);
       spawnXpBurst(workers.p3.x, workers.p3.y, 25);
       spawnXpBurst(workers.p4.x, workers.p4.y, 25);
+      spawnXpBurst(workers.p5.x, workers.p5.y, 25);
 
       if (wallRisk) wallRisk.textContent = "PROTEGIDO (<8%)";
       winOutcome?.focus({ preventScroll: true });
@@ -1332,14 +1409,17 @@
       workers.p2.state = "idle";
       workers.p3.state = "idle";
       workers.p4.state = "idle";
+      workers.p5.state = "idle";
       workers.p1.bubbleText = "¡Llega factura de 4.870 €!";
       workers.p2.bubbleText = "¡El dominio .co es falso!";
       workers.p3.bubbleText = "¡Revisando el código de pagos!";
       workers.p4.bubbleText = "¡Ciberseguridad perimetral activa!";
+      workers.p5.bubbleText = "¡Revisando logs de autenticación!";
       workers.p1.bubbleTimer = 5.0;
       workers.p2.bubbleTimer = 5.0;
       workers.p3.bubbleTimer = 5.0;
       workers.p4.bubbleTimer = 5.0;
+      workers.p5.bubbleTimer = 5.0;
 
       if (wallRisk) wallRisk.textContent = "ALTO (38%)";
       hideInspectUrl();
@@ -1397,16 +1477,17 @@
   const navLinks = $$(".main-nav .nav-link");
 
   const stepStateLabels = [
-    "FASE 1: SEÑUELO INOFENSIVO",
-    "FASE 2: SUSTO DIDÁCTICO (0 SEG)",
-    "FASE 3: HÁBITO Y +50 XP",
-    "FASE 4: RIESGO < 10% EN 90 DÍAS"
+    "FASE 1: PLATAFORMA EDUCATIVA Y SIMULACIONES",
+    "FASE 2: SEÑUELO INOFENSIVO",
+    "FASE 3: SUSTO DIDÁCTICO (0 SEG)",
+    "FASE 4: HÁBITO Y +50 XP",
+    "FASE 5: RIESGO < 10% EN 90 DÍAS"
   ];
 
   let activeSolutionStep = 0;
 
   function setSolutionStep(idx, playSound = false) {
-    const clamped = Math.max(0, Math.min(3, idx));
+    const clamped = Math.max(0, Math.min(4, idx));
     if (clamped === activeSolutionStep && !playSound) return;
     activeSolutionStep = clamped;
     if (playSound) audio.playBlip(true);
@@ -1434,7 +1515,7 @@
     if (visStatePill) {
       visStatePill.textContent = stepStateLabels[clamped];
     }
-    if (solCounter) solCounter.textContent = `PASO 0${clamped + 1} / 04`;
+    if (solCounter) solCounter.textContent = `PASO 0${clamped + 1} / 05`;
   }
 
   stepTabs.forEach((tab) => {
@@ -1503,7 +1584,7 @@
       const scrollable = rect.height - window.innerHeight;
       if (rect.top <= 90 && rect.bottom >= window.innerHeight * 0.5 && scrollable > 0) {
         const localRatio = Math.min(0.999, Math.max(0, -rect.top / scrollable));
-        const stepIdx = Math.floor(localRatio * 4);
+        const stepIdx = Math.floor(localRatio * 5);
         setSolutionStep(stepIdx, false);
       }
     }
@@ -1529,10 +1610,12 @@
       setPacketVisualState("state-shield", "🎬", "03. VÍDEO 30 SEG", "Caso real de Marta", "PLAY");
     } else if (solutionSec && solutionSec.top < triggerLine) {
       currentNav = "solucion";
-      if (activeSolutionStep < 2) {
-        setPacketVisualState("state-intercept", "🎯", "02. ESCUDO SENTINEL", "Simulacro y aprendizaje", "0 SEG");
+      if (activeSolutionStep === 0) {
+        setPacketVisualState("state-intercept", "💻", "PLATAFORMA EDUCATIVA", "Simuladores y teoría guiada", "PREP");
+      } else if (activeSolutionStep < 3) {
+        setPacketVisualState("state-intercept", "🎯", "ESCUDO SENTINEL", "Simulacro y aprendizaje", "0 SEG");
       } else {
-        setPacketVisualState("state-shield", "🛡️", "02. AMENAZA FRENADA", "Riesgo < 10% en 90 días", "+50 XP");
+        setPacketVisualState("state-shield", "🛡️", "AMENAZA FRENADA", "Riesgo < 10% en 90 días", "+50 XP");
       }
     } else if (problemSec && problemSec.top < triggerLine) {
       currentNav = "problema";

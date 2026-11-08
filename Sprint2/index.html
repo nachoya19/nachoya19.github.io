@@ -39,7 +39,7 @@
       
       <div class="hero-sticky-stage" id="hero-stage">
         <!-- LIENZO 2D DEL NIVEL (FONDO DINÁMICO: CIELO NOCTURNO PIXEL ART + OFICINA) -->
-        <canvas id="zelda-game-canvas" class="zelda-game-canvas" aria-label="Nivel 2D interactivo con cielo estrellado pixel art y oficina con Mario, Iván, Nacho y Nicolás"></canvas>
+        <canvas id="zelda-game-canvas" class="zelda-game-canvas" aria-label="Nivel 2D interactivo con cielo estrellado pixel art y oficina con Mario, Iván, Nacho, Nicolás y Miguel"></canvas>
 
         <!-- VIÑETA Y SCANLINES SUTILES PARA INTEGRACIÓN VISUAL -->
         <div class="zelda-viewport-vignette" aria-hidden="true"></div>
@@ -363,17 +363,16 @@
       <div class="wrap">
 
         <div class="section-header">
-          <span class="section-index font-mono text-green">02 // LA SOLUCIÓN SENTINEL</span>
           <h2 class="section-title">
             Tu equipo aprende practicando en su correo real, <br>
             <span class="text-green">sin vídeos aburridos ni tecnicismos.</span>
           </h2>
           <p class="section-lead">
-            Sentinel envía de vez en cuando correos trampa 100% inofensivos. Haz scroll para ver cómo transformamos una amenaza en un hábito de seguridad:
+            Primero, tu plantilla se entrena en una plataforma interactiva con simulaciones guiadas. Después, ponen a prueba sus reflejos en su correo habitual:
           </p>
         </div>
 
-        <!-- CONTENEDOR STICKY DE SCROLLYTELLING A PANTALLA COMPLETA (4 ESCENAS) -->
+        <!-- CONTENEDOR STICKY DE SCROLLYTELLING A PANTALLA COMPLETA (5 ESCENAS) -->
         <div class="scrolly-solution-track" id="solution-track">
           <div class="scrolly-solution-sticky" data-packet-dock="solution">
 
@@ -384,8 +383,20 @@
               <div class="solution-cards-stack">
                 <div class="sol-panels-viewport">
 
-                  <!-- Paso 1: Correo (Azul) -->
+                  <!-- Paso 1: Plataforma Educativa y Simulaciones (Morado) -->
                   <article class="sol-step-panel is-active" data-panel="0">
+                    <h3 class="sol-title-purple">Plataforma educativa con simulaciones interactivas</h3>
+                    <p>
+                      Antes de recibir simulacros sorpresa, tu plantilla accede a un entorno formativo donde aprende la teoría aplicada: infografías claras, casos reales de ciberestafas y simuladores guiados.
+                    </p>
+                    <ul class="sol-check-list">
+                      <li>Píldoras interactivas de 3 minutos adaptadas al ritmo de trabajo diario.</li>
+                      <li>Simuladores paso a paso para entrenar el ojo crítico sin tecnicismos ni exámenes aburridos.</li>
+                    </ul>
+                  </article>
+
+                  <!-- Paso 2: Correo (Azul) -->
+                  <article class="sol-step-panel" data-panel="1">
                     <h3 class="sol-title-blue">Llega un correo trampa inofensivo</h3>
                     <p>
                       Tu equipo recibe en su bandeja habitual un correo que imita una estafa real en España: una factura urgente, un paquete retenido o un aviso del banco.
@@ -396,8 +407,8 @@
                     </ul>
                   </article>
 
-                  <!-- Paso 2: Virus (Naranja) -->
-                  <article class="sol-step-panel" data-panel="1">
+                  <!-- Paso 3: Virus (Naranja) -->
+                  <article class="sol-step-panel" data-panel="2">
                     <h3 class="sol-title-orange">Si alguien cae, lo entiende al instante</h3>
                     <p>
                       Si un empleado hace clic, no hay virus ni broncas. En ese mismo segundo ve qué habría perdido la empresa y las 3 pistas que delataban el engaño.
@@ -408,8 +419,8 @@
                     </ul>
                   </article>
 
-                  <!-- Paso 3: Rayo (Amarillo) -->
-                  <article class="sol-step-panel" data-panel="2">
+                  <!-- Paso 4: Rayo (Amarillo) -->
+                  <article class="sol-step-panel" data-panel="3">
                     <h3 class="sol-title-yellow">Si lo detecta, avisa en 1 clic y gana +50 XP</h3>
                     <p>
                       Cuando alguien sospecha de un correo, pulsa el botón de Sentinel. Si acierta, suma puntos para su departamento y protege al resto del equipo.
@@ -420,8 +431,8 @@
                     </ul>
                   </article>
 
-                  <!-- Paso 4: Escudo (Verde) -->
-                  <article class="sol-step-panel" data-panel="3">
+                  <!-- Paso 5: Escudo (Verde) -->
+                  <article class="sol-step-panel" data-panel="4">
                     <h3 class="sol-title-green">El riesgo baja a menos del 10% en 90 días</h3>
                     <p>
                       En tu panel de gerente ves de un vistazo cuántos ataques se han frenado, cómo mejora cada área y descargas los justificantes oficiales.
@@ -439,8 +450,26 @@
               <div class="solution-visualizer-box" id="solution-visualizer" data-step-state="0">
                 <div class="vis-stage">
                   
-                  <!-- Icono 1: Correo / Carta (Azul) -->
+                  <!-- Objeto 1: Mockup Flotante Plataforma Educativa (Morado) -->
                   <div class="vis-card is-active" data-vis="0">
+                    <div class="holo-object-wrap theme-purple holo-mockup-wrap">
+                      <div class="holo-floating-icon holo-floating-mockup">
+                        <div class="platform-mockup-wrap">
+                          <div class="platform-mockup-header">
+                            <span class="mockup-dot red"></span>
+                            <span class="mockup-dot yellow"></span>
+                            <span class="mockup-dot green"></span>
+                            <span class="mockup-badge">PLATAFORMA EDUCATIVA SENTINEL · ENTORNO DE SIMULACIÓN</span>
+                          </div>
+                          <img src="../assets/img/sentinelMVP.png" alt="Interfaz de la plataforma educativa interactiva Sentinel con simulaciones" class="platform-mockup-img" />
+                        </div>
+                      </div>
+                      <div class="holo-floor-shadow" aria-hidden="true"></div>
+                    </div>
+                  </div>
+
+                  <!-- Icono 2: Correo / Carta (Azul) -->
+                  <div class="vis-card" data-vis="1">
                     <div class="holo-object-wrap theme-blue">
                       <div class="holo-floating-icon">
                         <svg class="holo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -452,8 +481,8 @@
                     </div>
                   </div>
 
-                  <!-- Icono 2: Virus (Naranja) -->
-                  <div class="vis-card" data-vis="1">
+                  <!-- Icono 3: Virus (Naranja) -->
+                  <div class="vis-card" data-vis="2">
                     <div class="holo-object-wrap theme-orange">
                       <div class="holo-floating-icon">
                         <svg class="holo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -483,8 +512,8 @@
                     </div>
                   </div>
 
-                  <!-- Icono 3: Rayo (Amarillo) -->
-                  <div class="vis-card" data-vis="2">
+                  <!-- Icono 4: Rayo (Amarillo) -->
+                  <div class="vis-card" data-vis="3">
                     <div class="holo-object-wrap theme-yellow">
                       <div class="holo-floating-icon">
                         <svg class="holo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -495,8 +524,8 @@
                     </div>
                   </div>
 
-                  <!-- Icono 4: Escudo (Verde) -->
-                  <div class="vis-card" data-vis="3">
+                  <!-- Icono 5: Escudo (Verde) -->
+                  <div class="vis-card" data-vis="4">
                     <div class="holo-object-wrap theme-green">
                       <div class="holo-floating-icon">
                         <svg class="holo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -556,7 +585,6 @@
       <div class="wrap">
 
         <div class="section-header" data-packet-dock="video">
-          <span class="section-index font-mono text-gold">03 // VÍDEO CONCEPTUAL (30 SEGUNDOS)</span>
           <h2 class="section-title">
             Un lunes cualquiera con Sentinel: <br>
             <span class="text-gold">mira el recorrido completo en 30 segundos.</span>
@@ -746,7 +774,6 @@
       <div class="wrap">
 
         <div class="section-header">
-          <span class="section-index font-mono text-cyan">Q&amp;A // RESOLVEMOS TUS DUDAS</span>
           <h2 class="section-title">
             Preguntas frecuentes sobre Sentinel
           </h2>
