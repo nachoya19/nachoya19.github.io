@@ -1586,51 +1586,80 @@ button, input, select {
   }
 }
 
-/* Bento de Beneficios */
+/* Resultados de Negocio: Texto flotante directamente sobre el fondo (sin cards ni paneles) */
 .benefits-bento {
-  margin-top: 3.5rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  padding: clamp(1.75rem, 3.5vw, 2.75rem);
+  margin-top: clamp(4rem, 7vw, 6.5rem);
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
 }
 
 .benefits-header {
-  margin-bottom: 1.75rem;
+  margin-bottom: clamp(2rem, 3.5vw, 3rem);
+}
+.benefits-header .text-cyan {
+  display: inline-block;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.45rem;
 }
 .benefits-header h3 {
   font-family: var(--font-display);
-  font-size: 1.65rem;
-  margin-top: 0.35rem;
+  font-size: clamp(1.8rem, 3vw, 2.45rem);
+  line-height: 1.25;
+  color: #ffffff;
+  margin-top: 0.25rem;
+  max-width: 840px;
 }
 
 .benefits-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1.35rem;
+  gap: clamp(1.75rem, 3vw, 2.8rem);
+}
+
+@media (max-width: 1024px) and (min-width: 768px) {
+  .benefits-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.2rem;
+  }
 }
 
 .benefit-card {
-  background: #0b101d;
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  padding: 1.6rem 1.4rem;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease;
 }
+.benefit-card:hover {
+  transform: translateY(-3px);
+}
+
 .benefit-num {
   display: inline-block;
-  font-size: 1.85rem;
-  font-weight: 700;
+  font-size: clamp(2.2rem, 3.6vw, 3rem);
+  font-weight: 800;
   color: var(--cyan);
-  margin-bottom: 0.5rem;
+  text-shadow: 0 0 28px rgba(0, 229, 255, 0.45);
+  margin-bottom: 0.65rem;
+  line-height: 1;
 }
 .benefit-card h4 {
   font-family: var(--font-display);
   font-size: 1.25rem;
+  color: #ffffff;
   margin-bottom: 0.5rem;
+  line-height: 1.35;
 }
 .benefit-card p {
   font-size: 1.05rem;
-  line-height: 1.55;
+  line-height: 1.6;
   color: var(--text-soft);
 }
 
