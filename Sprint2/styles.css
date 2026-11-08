@@ -741,7 +741,7 @@ button, input, select {
 
 .p-scene-container {
   width: 100%;
-  max-width: 1220px;
+  max-width: 1280px;
   margin-inline: auto;
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
@@ -770,11 +770,11 @@ button, input, select {
 .badge-dot.gold { background: var(--gold); box-shadow: 0 0 8px var(--gold); }
 
 .p-scene-title {
-  font-size: clamp(2rem, 3.8vw, 3.2rem);
-  line-height: 1.16;
+  font-size: clamp(2.3rem, 4.2vw, 3.6rem);
+  line-height: 1.15;
   letter-spacing: -0.02em;
   color: #ffffff;
-  margin-bottom: 1.1rem;
+  margin-bottom: 1.25rem;
 }
 .highlight-cyan { color: var(--cyan); text-shadow: 0 0 20px rgba(0, 229, 255, 0.4); }
 .highlight-danger { color: var(--danger); text-shadow: 0 0 20px rgba(255, 51, 102, 0.4); }
@@ -782,61 +782,52 @@ button, input, select {
 
 .p-scene-lead {
   color: var(--text-soft);
-  font-size: clamp(1.05rem, 1.4vw, 1.25rem);
-  line-height: 1.6;
-  max-width: 48ch;
-  margin-bottom: 1.6rem;
+  font-size: clamp(1.18rem, 1.6vw, 1.45rem);
+  line-height: 1.55;
+  max-width: 44ch;
+  margin-bottom: 2rem;
 }
 
-/* Vectores de Ataque (Escena 1) */
+/* Vectores de Ataque (Escena 1 - Grandes y limpios) */
 .p-attack-vectors {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1.35rem;
 }
 
 .p-vector-card {
   display: flex;
   align-items: center;
-  gap: 1.1rem;
+  gap: 1.25rem;
   background: transparent;
   border: none;
-  border-left: 2px solid rgba(0, 229, 255, 0.25);
-  padding: 0.6rem 0.85rem;
+  border-left: 3px solid rgba(0, 229, 255, 0.35);
+  padding: 0.75rem 1.1rem;
   transition: transform 0.25s, border-color 0.25s;
 }
 
 .p-vector-card:hover {
   border-color: var(--cyan);
-  transform: translateX(6px);
+  transform: translateX(8px);
 }
 
 .p-vector-svg {
-  width: 26px;
-  height: 26px;
+  width: 32px;
+  height: 32px;
   flex-shrink: 0;
-  filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.6));
+  filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.65));
+}
+
+.p-vector-label {
+  font-size: clamp(1.22rem, 1.65vw, 1.45rem);
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
 }
 
 .p-vector-icon {
   font-size: 1.6rem;
   flex-shrink: 0;
-}
-
-.p-vector-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-}
-
-.p-vector-info strong {
-  font-size: 0.98rem;
-  color: #ffffff;
-}
-
-.p-vector-info span {
-  font-size: 0.86rem;
-  color: var(--muted);
 }
 
 /* Gráfico Radial / Donut Chart (Escena 1 - Flotante sin panel) */
@@ -852,12 +843,12 @@ button, input, select {
 
 .p-donut-wrapper {
   position: relative;
-  width: clamp(230px, 25vw, 290px);
-  height: clamp(230px, 25vw, 290px);
+  width: clamp(250px, 27vw, 320px);
+  height: clamp(250px, 27vw, 320px);
   display: flex;
   align-items: center;
   justify-content: center;
-  filter: drop-shadow(0 0 35px rgba(0, 229, 255, 0.2));
+  filter: drop-shadow(0 0 45px rgba(0, 229, 255, 0.25));
 }
 
 .p-donut-svg {
@@ -880,7 +871,7 @@ button, input, select {
 
 .meter-cyan {
   stroke: var(--cyan);
-  filter: drop-shadow(0 0 10px rgba(0, 229, 255, 0.65));
+  filter: drop-shadow(0 0 12px rgba(0, 229, 255, 0.75));
 }
 
 .p-donut-center {
@@ -893,63 +884,63 @@ button, input, select {
 }
 
 .p-donut-number {
-  font-size: clamp(2.8rem, 5vw, 4.2rem);
+  font-size: clamp(3.6rem, 6.8vw, 5.2rem);
   font-weight: 700;
   line-height: 1;
 }
 
 .p-donut-sub {
-  font-size: 0.76rem;
-  letter-spacing: 0.12em;
+  font-size: clamp(0.9rem, 1.15vw, 1.05rem);
+  letter-spacing: 0.16em;
   color: var(--muted);
-  margin-top: 0.25rem;
+  margin-top: 0.35rem;
 }
 
 .p-legend-bar {
   display: flex;
   justify-content: center;
-  gap: 1.5rem;
-  margin-top: 1.4rem;
-  font-size: 0.85rem;
+  gap: 2.2rem;
+  margin-top: 1.8rem;
+  font-size: clamp(1.05rem, 1.35vw, 1.25rem);
 }
 
 .p-leg-item {
   display: flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.6rem;
 }
 
 .p-leg-dot {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
 }
-.p-leg-dot.cyan { background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
-.p-leg-dot.dim { background: rgba(255, 255, 255, 0.2); }
+.p-leg-dot.cyan { background: var(--cyan); box-shadow: 0 0 10px var(--cyan); }
+.p-leg-dot.dim { background: rgba(255, 255, 255, 0.25); }
 
 /* Gráfico Financiero de Impacto (Escena 2 - Flotante sin paneles) */
 .p-incibe-alert {
   display: flex;
   align-items: flex-start;
-  gap: 1.1rem;
+  gap: 1.35rem;
   background: transparent;
   border: none;
-  border-left: 3px solid var(--danger);
-  padding: 0.5rem 0 0.5rem 1.1rem;
-  margin-top: 1.5rem;
+  border-left: 4px solid var(--danger);
+  padding: 0.65rem 0 0.65rem 1.25rem;
+  margin-top: 1.8rem;
 }
 
 .alert-pulse-svg {
-  width: 28px;
-  height: 28px;
+  width: 36px;
+  height: 36px;
   flex-shrink: 0;
   color: var(--danger);
   animation: alert-ping 2s ease-in-out infinite;
-  filter: drop-shadow(0 0 8px rgba(255, 51, 102, 0.6));
+  filter: drop-shadow(0 0 10px rgba(255, 51, 102, 0.65));
 }
 
 .alert-pulse-icon {
-  font-size: 1.8rem;
+  font-size: 2rem;
   animation: alert-ping 2s ease-in-out infinite;
 }
 
@@ -959,14 +950,14 @@ button, input, select {
 }
 
 .alert-text strong {
-  font-size: 0.82rem;
-  letter-spacing: 0.12em;
+  font-size: 1.05rem;
+  letter-spacing: 0.14em;
 }
 
 .alert-text p {
-  font-size: 1rem;
+  font-size: clamp(1.15rem, 1.55vw, 1.35rem);
   color: #fecdd3;
-  margin-top: 0.25rem;
+  margin-top: 0.35rem;
   line-height: 1.5;
 }
 
@@ -982,110 +973,106 @@ button, input, select {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.82rem;
-  letter-spacing: 0.08em;
+  font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+  letter-spacing: 0.1em;
   color: var(--muted);
-  padding-bottom: 1rem;
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.12);
-  margin-bottom: 1.4rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
+  margin-bottom: 1.8rem;
 }
 
 .financial-bars-stack {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.85rem;
 }
 
 .fin-bar-item {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.65rem;
 }
 
 .fin-bar-labels {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.92rem;
+  font-size: clamp(1.15rem, 1.55vw, 1.38rem);
   color: #ffffff;
 }
 
 .fin-bar-labels strong {
-  font-size: 1.05rem;
+  font-size: clamp(1.35rem, 1.85vw, 1.68rem);
 }
 
 .fin-track {
   width: 100%;
-  height: 12px;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 6px;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
   overflow: hidden;
 }
 
 .fin-fill {
   height: 100%;
-  border-radius: 6px;
+  border-radius: 8px;
   transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .fin-fill.danger {
   background: var(--danger);
-  box-shadow: 0 0 12px rgba(255, 51, 102, 0.6);
+  box-shadow: 0 0 14px rgba(255, 51, 102, 0.7);
 }
 
 .fin-fill.gold {
   background: var(--gold);
-  box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.6);
 }
 
 .fin-fill.cyan {
   background: var(--cyan);
-  box-shadow: 0 0 12px rgba(0, 229, 255, 0.5);
-}
-
-.fin-sub {
-  font-size: 0.78rem;
-  color: var(--muted);
+  box-shadow: 0 0 14px rgba(0, 229, 255, 0.6);
 }
 
 /* Curva del Olvido (Escena 3 - Flotante sin paneles) */
 .p-training-contrast {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.25rem;
-  margin-top: 1.5rem;
+  gap: 1.6rem;
+  margin-top: 1.8rem;
 }
 
 .contrast-col {
-  padding: 0.75rem 0 0.75rem 1rem;
+  padding: 0.85rem 0 0.85rem 1.25rem;
   background: transparent;
   border-radius: 0;
-  font-size: 0.86rem;
-  line-height: 1.55;
+  font-size: clamp(1.02rem, 1.35vw, 1.2rem);
+  line-height: 1.6;
 }
 
 .contrast-col.bad {
   border: none;
-  border-left: 2px solid rgba(255, 51, 102, 0.45);
+  border-left: 3px solid rgba(255, 51, 102, 0.5);
 }
 
 .contrast-col.good {
   border: none;
-  border-left: 2px solid rgba(16, 185, 129, 0.45);
+  border-left: 3px solid rgba(16, 185, 129, 0.5);
 }
 
 .contrast-title {
+  font-size: clamp(1.15rem, 1.45vw, 1.35rem);
   font-weight: 700;
   letter-spacing: 0.08em;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.4rem;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
 }
 
 .contrast-icon {
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
 }
 
@@ -1094,18 +1081,18 @@ button, input, select {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.1rem;
 }
 
 .f-curve-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.82rem;
+  font-size: clamp(0.95rem, 1.2vw, 1.08rem);
   letter-spacing: 0.08em;
   color: var(--muted);
-  padding-bottom: 0.75rem;
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.12);
+  padding-bottom: 0.9rem;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
 }
 
 .f-curve-canvas-wrap {
@@ -1140,16 +1127,16 @@ button, input, select {
 .f-milestones-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
-  margin-top: 0.4rem;
+  gap: 1.6rem;
+  margin-top: 0.75rem;
 }
 
 .f-milestone-col {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
-  border-left: 2px solid rgba(255, 255, 255, 0.12);
-  padding-left: 0.85rem;
+  gap: 0.35rem;
+  border-left: 3px solid rgba(255, 255, 255, 0.15);
+  padding-left: 1rem;
 }
 
 .f-milestone-col.gold {
@@ -1157,7 +1144,7 @@ button, input, select {
 }
 
 .f-milestone-col.dim {
-  border-left-color: rgba(255, 255, 255, 0.25);
+  border-left-color: rgba(255, 255, 255, 0.28);
 }
 
 .f-milestone-col.danger {
@@ -1165,22 +1152,22 @@ button, input, select {
 }
 
 .f-ms-tag {
-  font-size: 0.72rem;
+  font-size: 0.82rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
-  opacity: 0.8;
+  letter-spacing: 0.12em;
+  opacity: 0.85;
 }
 
 .f-ms-stat {
-  font-size: 0.96rem;
+  font-size: clamp(1.15rem, 1.45vw, 1.35rem);
   font-weight: 700;
   letter-spacing: 0.05em;
 }
 
 .f-ms-desc {
-  font-size: 0.78rem;
+  font-size: clamp(0.9rem, 1.15vw, 1.02rem);
   color: var(--muted);
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
 @media (max-width: 960px) {
