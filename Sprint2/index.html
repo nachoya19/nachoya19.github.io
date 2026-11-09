@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sentinel — Entrena a tu equipo frente a estafas por correo practicando</title>
-  <meta name="description" content="Sentinel envía correos trampa inofensivos a tu plantilla. Quien cae aprende al instante; quien avisa suma puntos. Pasa del 40% de clics a menos del 10% en 90 días sin informático en plantilla.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><polygon points='16,2 29,7 29,17 16,30 3,17 3,7' fill='%230b101d' stroke='%2300e5ff' stroke-width='2.5'/><circle cx='16' cy='15' r='4.5' fill='%2310b981'/></svg>">
+  <meta name="description"
+    content="Sentinel envía correos trampa inofensivos a tu plantilla. Quien cae aprende al instante; quien avisa suma puntos. Pasa del 40% de clics a menos del 10% en 90 días sin informático en plantilla.">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><polygon points='16,2 29,7 29,17 16,30 3,17 3,7' fill='%230b101d' stroke='%2300e5ff' stroke-width='2.5'/><circle cx='16' cy='15' r='4.5' fill='%2310b981'/></svg>">
 
   <!-- Tipografías: Space Grotesk (Display), Plus Jakarta Sans (Body), Share Tech Mono (Telemetría), Press Start 2P (Detalles Arcade) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Press+Start+2P&family=Share+Tech+Mono&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Press+Start+2P&family=Share+Tech+Mono&family=Space+Grotesk:wght@600;700&display=swap"
+    rel="stylesheet">
 
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
   <!-- CAPA CRT SUTIL (DESACTIVADA POR DEFECTO PARA LECTURA IMPECABLE) -->
@@ -36,17 +42,18 @@
          HERO: TRACK SCROLLYTELLING (CIELO ESTRELLADO NOCTURNO -> OFICINA CON SPRITES)
          ====================================================================== -->
     <section class="hero-section hero-zelda-section hero-scroll-track" id="hero" data-section="hero">
-      
+
       <div class="hero-sticky-stage" id="hero-stage">
         <!-- LIENZO 2D DEL NIVEL (FONDO DINÁMICO: CIELO NOCTURNO PIXEL ART + OFICINA) -->
-        <canvas id="zelda-game-canvas" class="zelda-game-canvas" aria-label="Nivel 2D interactivo con cielo estrellado pixel art y oficina con Mario, Iván, Nacho, Nicolás y Miguel"></canvas>
+        <canvas id="zelda-game-canvas" class="zelda-game-canvas"
+          aria-label="Nivel 2D interactivo con cielo estrellado pixel art y oficina con Mario, Iván, Nacho, Nicolás y Miguel"></canvas>
 
         <!-- VIÑETA Y SCANLINES SUTILES PARA INTEGRACIÓN VISUAL -->
         <div class="zelda-viewport-vignette" aria-hidden="true"></div>
 
         <!-- CAPA SUPERPUESTA AL NIVEL (TÍTULO SENTINEL CON ESCALADO AL SCROLLEAR) -->
         <div class="hero-zelda-overlay" id="office-scene">
-          
+
           <div class="hero-brand-clean" id="hero-brand">
             <h1 class="hero-pure-title font-arcade" id="hero-title">SENTINEL</h1>
           </div>
@@ -56,17 +63,17 @@
 
     </section>
 
-        <!-- ======================================================================
+    <!-- ======================================================================
          01. EL PROBLEMA: EL CORREO ATRAVIESA EL ANTIVIRUS TRADICIONAL
          ====================================================================== -->
     <!-- ======================================================================
          01. EL PROBLEMA: CARRUSEL HORIZONTAL SCROLLYTELLING (3 ESCENAS PANTALLA COMPLETA)
          ====================================================================== -->
     <section class="problem-scrolly-section" id="problema" data-section="problema">
-      
+
       <!-- Track vertical para scrollytelling suave con snap magnético -->
       <div class="problem-scroll-track" id="problem-track">
-        
+
         <!-- Viewport sticky a pantalla completa fija (100vh) -->
         <div class="problem-sticky-stage" id="problem-stage" data-packet-dock="problem">
 
@@ -76,37 +83,41 @@
             <!-- ================= ESCENA 1: ORIGEN DEL INCIDENTE ================= -->
             <article class="problem-fullscreen-scene scene-origin" data-scene-idx="0">
               <div class="p-scene-container">
-                
+
                 <div class="p-scene-content">
                   <h2 class="p-scene-title">
                     El <span class="highlight-cyan font-display">95%</span> de las brechas entran por una persona
                   </h2>
                   <p class="p-scene-lead">
-                    No hace falta vulnerar un cortafuegos: basta un correo persuasivo para que un empleado con prisa entregue el acceso a la empresa.
+                    No hace falta vulnerar un cortafuegos: basta un correo persuasivo para que un empleado con prisa
+                    entregue el acceso a la empresa.
                   </p>
 
                   <div class="p-attack-vectors">
                     <div class="p-vector-card">
-                      <svg class="p-vector-svg text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                      <svg class="p-vector-svg text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
                       </svg>
                       <strong class="p-vector-label">Suplantación de Identidad</strong>
                     </div>
                     <div class="p-vector-card">
-                      <svg class="p-vector-svg text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                        <polyline points="14 2 14 8 20 8"/>
-                        <line x1="16" y1="13" x2="8" y2="13"/>
-                        <line x1="16" y1="17" x2="8" y2="17"/>
-                        <line x1="10" y1="9" x2="8" y2="9"/>
+                      <svg class="p-vector-svg text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                        <line x1="10" y1="9" x2="8" y2="9" />
                       </svg>
                       <strong class="p-vector-label">Factura con IBAN Falso</strong>
                     </div>
                     <div class="p-vector-card">
-                      <svg class="p-vector-svg text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                      <svg class="p-vector-svg text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                       </svg>
                       <strong class="p-vector-label">Robo de Credenciales</strong>
                     </div>
@@ -117,9 +128,11 @@
                 <div class="p-scene-visual">
                   <div class="p-radial-card">
                     <div class="p-donut-wrapper">
-                      <svg class="p-donut-svg" viewBox="0 0 240 240" aria-label="Gráfico de donut: 95% factor humano, 5% fallo técnico">
-                        <circle class="p-donut-bg" cx="120" cy="120" r="95"></circle>
-                        <circle class="p-donut-meter meter-cyan" cx="120" cy="120" r="95" stroke-dasharray="597" stroke-dashoffset="30"></circle>
+                      <svg class="p-donut-svg" viewBox="0 0 280 280"
+                        aria-label="Gráfico de donut: 95% factor humano, 5% fallo técnico">
+                        <circle class="p-donut-bg" cx="140" cy="140" r="95"></circle>
+                        <circle class="p-donut-meter meter-cyan" cx="140" cy="140" r="95" stroke-dasharray="597"
+                          stroke-dashoffset="30"></circle>
                       </svg>
                       <div class="p-donut-center">
                         <span class="p-donut-number font-display text-cyan">95%</span>
@@ -148,24 +161,28 @@
             <!-- ================= ESCENA 2: IMPACTO EN UNA PYME ================= -->
             <article class="problem-fullscreen-scene scene-impact" data-scene-idx="1">
               <div class="p-scene-container">
-                
+
                 <div class="p-scene-content">
                   <h2 class="p-scene-title">
                     De <span class="highlight-danger font-display nowrap">35k€ a 80k€</span> de pérdidas por cada brecha
                   </h2>
                   <p class="p-scene-lead">
-                    El perjuicio económico va mucho más allá del robo: implica parálisis de facturación, costes periciales y quiebra del negocio.
+                    El perjuicio económico va mucho más allá del robo: implica parálisis de facturación, costes
+                    periciales y quiebra del negocio.
                   </p>
 
                   <div class="p-incibe-alert">
-                    <svg class="alert-pulse-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-                      <line x1="12" y1="9" x2="12" y2="13"/>
-                      <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    <svg class="alert-pulse-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path
+                        d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                      <line x1="12" y1="9" x2="12" y2="13" />
+                      <line x1="12" y1="17" x2="12.01" y2="17" />
                     </svg>
                     <div class="alert-text">
                       <strong class="font-mono text-danger">ALERTA OFICIAL INCIBE</strong>
-                      <p>El <strong>60% de las pymes</strong> atacadas con éxito cierran en los 6 meses posteriores a la intrusión.</p>
+                      <p>El <strong>60% de las pymes</strong> atacadas con éxito cierran en los 6 meses posteriores a la
+                        intrusión.</p>
                     </div>
                   </div>
                 </div>
@@ -218,26 +235,34 @@
             <!-- ================= ESCENA 3: FORMACIÓN TRADICIONAL ================= -->
             <article class="problem-fullscreen-scene scene-training" data-scene-idx="2">
               <div class="p-scene-container">
-                
+
                 <div class="p-scene-content">
                   <h2 class="p-scene-title">
                     <span class="highlight-gold font-display">0% de eficacia</span> con cursos teóricos en vídeo
                   </h2>
                   <p class="p-scene-lead">
-                    Los cursos anuales de una hora se ven por obligación y se olvidan a la semana. En una situación de estrés laboral, la teoría no activa reflejos.
+                    Los cursos anuales de una hora se ven por obligación y se olvidan a la semana. En una situación de
+                    estrés laboral, la teoría no activa reflejos.
                   </p>
 
                   <div class="p-training-contrast font-mono">
                     <div class="contrast-col bad">
                       <span class="contrast-title text-danger">
-                        <svg class="contrast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        <svg class="contrast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                          stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <line x1="18" y1="6" x2="6" y2="18"></line>
+                          <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
                         CURSOS EN VÍDEO
                       </span>
                       <p>Vídeo de 1h al año.<br>Se olvida en 7 días.<br>0 reflejo bajo presión.</p>
                     </div>
                     <div class="contrast-col good">
                       <span class="contrast-title text-green">
-                        <svg class="contrast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <svg class="contrast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                          stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
                         MÉTODO SENTINEL
                       </span>
                       <p>Práctica en bandeja real.<br>Hábito reflejo continuo.<br>Riesgo &lt; 10% en 90 días.</p>
@@ -248,62 +273,80 @@
                 <!-- Gráfico Visual: Curva del Olvido y Fallo Flotante -->
                 <div class="p-scene-visual">
                   <div class="p-forgetting-visual font-mono">
-                    
+
                     <div class="f-curve-header">
                       <span class="f-curve-title">LA CURVA DEL OLVIDO: DE LA TEORÍA AL FALLO</span>
                     </div>
 
                     <div class="f-curve-canvas-wrap">
-                      <svg class="f-curve-svg" viewBox="0 0 660 270" aria-label="Curva interactiva del olvido: toca los puntos para explorar cómo cae la retención del 100% al 0%">
+                      <svg class="f-curve-svg" viewBox="0 0 660 270"
+                        aria-label="Curva interactiva del olvido: toca los puntos para explorar cómo cae la retención del 100% al 0%">
                         <defs>
                           <linearGradient id="f-stroke-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stop-color="#f59e0b"/>
-                            <stop offset="38%" stop-color="#fbbf24"/>
-                            <stop offset="72%" stop-color="#ff3366"/>
-                            <stop offset="100%" stop-color="#ef4444"/>
+                            <stop offset="0%" stop-color="#f59e0b" />
+                            <stop offset="38%" stop-color="#fbbf24" />
+                            <stop offset="72%" stop-color="#ff3366" />
+                            <stop offset="100%" stop-color="#ef4444" />
                           </linearGradient>
 
                           <linearGradient id="f-fill-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.28"/>
-                            <stop offset="55%" stop-color="#ff3366" stop-opacity="0.10"/>
-                            <stop offset="100%" stop-color="#ff3366" stop-opacity="0"/>
+                            <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.28" />
+                            <stop offset="55%" stop-color="#ff3366" stop-opacity="0.10" />
+                            <stop offset="100%" stop-color="#ff3366" stop-opacity="0" />
                           </linearGradient>
 
                           <filter id="f-neon-glow" x="-20%" y="-20%" width="140%" height="140%">
-                            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                            <feGaussianBlur stdDeviation="4" result="coloredBlur" />
                             <feMerge>
-                              <feMergeNode in="coloredBlur"/>
-                              <feMergeNode in="SourceGraphic"/>
+                              <feMergeNode in="coloredBlur" />
+                              <feMergeNode in="SourceGraphic" />
                             </feMerge>
                           </filter>
                         </defs>
 
                         <!-- Ejes y marcas horizontales de porcentaje más grandes y nítidas -->
-                        <line x1="55" y1="42" x2="635" y2="42" stroke="rgba(245, 158, 11, 0.25)" stroke-dasharray="4 5"/>
-                        <text x="44" y="47" fill="rgba(245, 158, 11, 0.85)" font-size="14" font-weight="700" text-anchor="end">100%</text>
+                        <line x1="55" y1="42" x2="635" y2="42" stroke="rgba(245, 158, 11, 0.25)"
+                          stroke-dasharray="4 5" />
+                        <text x="44" y="47" fill="rgba(245, 158, 11, 0.85)" font-size="14" font-weight="700"
+                          text-anchor="end">100%</text>
 
-                        <line x1="55" y1="130" x2="635" y2="130" stroke="rgba(255, 255, 255, 0.1)" stroke-dasharray="4 5"/>
-                        <text x="44" y="135" fill="rgba(255, 255, 255, 0.45)" font-size="14" font-weight="700" text-anchor="end">50%</text>
+                        <line x1="55" y1="130" x2="635" y2="130" stroke="rgba(255, 255, 255, 0.1)"
+                          stroke-dasharray="4 5" />
+                        <text x="44" y="135" fill="rgba(255, 255, 255, 0.45)" font-size="14" font-weight="700"
+                          text-anchor="end">50%</text>
 
-                        <line x1="55" y1="218" x2="635" y2="218" stroke="rgba(255, 51, 102, 0.3)" stroke-dasharray="4 5"/>
-                        <text x="44" y="223" fill="rgba(255, 51, 102, 0.85)" font-size="14" font-weight="700" text-anchor="end">0%</text>
+                        <line x1="55" y1="218" x2="635" y2="218" stroke="rgba(255, 51, 102, 0.3)"
+                          stroke-dasharray="4 5" />
+                        <text x="44" y="223" fill="rgba(255, 51, 102, 0.85)" font-size="14" font-weight="700"
+                          text-anchor="end">0%</text>
 
                         <!-- Área sombreada bajo la curva descendente -->
-                        <path class="f-area-path" d="M 85 42 C 175 52, 230 188, 330 204 C 420 220, 490 218, 580 218 L 580 248 L 85 248 Z" fill="url(#f-fill-grad)" />
+                        <path class="f-area-path"
+                          d="M 85 42 C 175 52, 230 188, 330 204 C 420 220, 490 218, 580 218 L 580 248 L 85 248 Z"
+                          fill="url(#f-fill-grad)" />
 
                         <!-- Trazado de la curva del olvido -->
-                        <path class="f-curve-stroke" d="M 85 42 C 175 52, 230 188, 330 204 C 420 220, 490 218, 580 218" fill="none" stroke="url(#f-stroke-grad)" stroke-width="5" stroke-linecap="round" filter="url(#f-neon-glow)" />
+                        <path class="f-curve-stroke" d="M 85 42 C 175 52, 230 188, 330 204 C 420 220, 490 218, 580 218"
+                          fill="none" stroke="url(#f-stroke-grad)" stroke-width="5" stroke-linecap="round"
+                          filter="url(#f-neon-glow)" />
 
+                        <!-- Indicadores de tiempo y flechas con texto más grande -->
+                        <text x="180" y="122" fill="rgba(255, 255, 255, 0.6)" font-size="13" font-weight="600"
+                          letter-spacing="1.5">7 DÍAS DE RUTINA &darr;</text>
                         <!-- Indicador de momento crítico sobre la recta final -->
-                        <text x="415" y="196" fill="rgba(255, 51, 102, 0.8)" font-size="13" font-weight="600" letter-spacing="1.5">ATAQUE REAL &darr;</text>
+                        <text x="415" y="196" fill="rgba(255, 51, 102, 0.8)" font-size="13" font-weight="600"
+                          letter-spacing="1.5">ATAQUE REAL &darr;</text>
 
                         <!-- Índice cronológico situado abajo de la gráfica -->
-                        <line x1="330" y1="218" x2="330" y2="234" stroke="rgba(255, 255, 255, 0.25)" stroke-dasharray="2 2"/>
-                        <text x="330" y="254" text-anchor="middle" fill="rgba(255, 255, 255, 0.75)" font-size="12.5" font-weight="600" letter-spacing="1.4">7 DÍAS DE RUTINA &darr;</text>
+                        <line x1="330" y1="218" x2="330" y2="234" stroke="rgba(255, 255, 255, 0.25)"
+                          stroke-dasharray="2 2" />
+                        <text x="330" y="254" text-anchor="middle" fill="rgba(255, 255, 255, 0.75)" font-size="12.5"
+                          font-weight="600" letter-spacing="1.4">7 DÍAS DE RUTINA &darr;</text>
 
                         <!-- Puntos interactivos que muestran la información al tocarlos y avanzan cada 5s -->
                         <!-- Nodo 0: Día 1 -->
-                        <g class="f-interactive-node is-active node-gold" data-curve-node="0" role="button" tabindex="0" aria-label="Punto 1: Día 1 - 100% Visto">
+                        <g class="f-interactive-node is-active node-gold" data-curve-node="0" role="button" tabindex="0"
+                          aria-label="Punto 1: Día 1 - 100% Visto">
                           <circle cx="85" cy="42" r="32" class="f-node-hitbox" fill="transparent" />
                           <circle cx="85" cy="42" r="16" class="f-node-ping" />
                           <circle cx="85" cy="42" r="14" class="f-node-halo" />
@@ -312,7 +355,8 @@
                         </g>
 
                         <!-- Nodo 1: Día 7 -->
-                        <g class="f-interactive-node node-cyan" data-curve-node="1" role="button" tabindex="0" aria-label="Punto 2: Día 7 - Menos del 5% de Retención">
+                        <g class="f-interactive-node node-cyan" data-curve-node="1" role="button" tabindex="0"
+                          aria-label="Punto 2: Día 7 - Menos del 5% de Retención">
                           <circle cx="330" cy="204" r="32" class="f-node-hitbox" fill="transparent" />
                           <circle cx="330" cy="204" r="16" class="f-node-ping" />
                           <circle cx="330" cy="204" r="14" class="f-node-halo" />
@@ -321,7 +365,8 @@
                         </g>
 
                         <!-- Nodo 2: Ataque Real -->
-                        <g class="f-interactive-node node-danger" data-curve-node="2" role="button" tabindex="0" aria-label="Punto 3: Ataque Real - 0% de Reflejo">
+                        <g class="f-interactive-node node-danger" data-curve-node="2" role="button" tabindex="0"
+                          aria-label="Punto 3: Ataque Real - 0% de Reflejo">
                           <circle cx="580" cy="218" r="32" class="f-node-hitbox" fill="transparent" />
                           <circle cx="580" cy="218" r="16" class="f-node-ping" />
                           <circle cx="580" cy="218" r="14" class="f-node-halo" />
@@ -333,7 +378,7 @@
 
                     <!-- Bloque de texto interactivo dinámico (cambia según el punto activo o cada 5 segundos) -->
                     <div class="f-narrative-container font-mono" id="f-narrative-container" aria-live="polite">
-                      
+
                       <!-- Hito 0: Día 1 -->
                       <div class="f-narrative-card is-active gold" data-narrative-idx="0">
                         <div class="f-narrative-body">
@@ -352,7 +397,8 @@
                             <span class="f-narrative-tag">DÍA 7</span>
                           </div>
                           <div class="f-narrative-stat">&lt; 5% RETENCIÓN</div>
-                          <p class="f-narrative-desc">Olvido casi total: la rutina y la carga diaria borran la teoría.</p>
+                          <p class="f-narrative-desc">Olvido casi total: la rutina y la carga diaria borran la teoría.
+                          </p>
                         </div>
                       </div>
 
@@ -363,7 +409,8 @@
                             <span class="f-narrative-tag">ATAQUE</span>
                           </div>
                           <div class="f-narrative-stat">0% REFLEJO</div>
-                          <p class="f-narrative-desc">Clic accidental: bajo presión y prisas, la teoría no activa reflejos.</p>
+                          <p class="f-narrative-desc">Clic accidental: bajo presión y prisas, la teoría no activa
+                            reflejos.</p>
                         </div>
                       </div>
 
@@ -395,7 +442,8 @@
             <span class="text-green">sin vídeos aburridos ni tecnicismos.</span>
           </h2>
           <p class="section-lead">
-            Primero, tu plantilla se entrena en una plataforma interactiva con simulaciones guiadas. Después, ponen a prueba sus reflejos en su correo habitual:
+            Primero, tu plantilla se entrena en una plataforma interactiva con simulaciones guiadas. Después, ponen a
+            prueba sus reflejos en su correo habitual:
           </p>
         </div>
 
@@ -405,7 +453,7 @@
 
             <!-- Escena a pantalla completa: Información a la izquierda + Gran Icono Flotante a la derecha -->
             <div class="solution-stage-grid" data-active-step="0">
-              
+
               <!-- Izquierda: Información clara, grande y directamente sobre el fondo -->
               <div class="solution-cards-stack">
                 <div class="sol-panels-viewport">
@@ -414,11 +462,13 @@
                   <article class="sol-step-panel is-active" data-panel="0">
                     <h3 class="sol-title-purple">Plataforma educativa con simulaciones interactivas</h3>
                     <p>
-                      Antes de recibir simulacros sorpresa, tu plantilla accede a un entorno formativo donde aprende la teoría aplicada: infografías claras, casos reales de ciberestafas y simuladores guiados.
+                      Antes de recibir simulacros sorpresa, tu plantilla accede a un entorno formativo donde aprende la
+                      teoría aplicada: infografías claras, casos reales de ciberestafas y simuladores guiados.
                     </p>
                     <ul class="sol-check-list">
                       <li>Píldoras interactivas de 3 minutos adaptadas al ritmo de trabajo diario.</li>
-                      <li>Simuladores paso a paso para entrenar el ojo crítico sin tecnicismos ni exámenes aburridos.</li>
+                      <li>Simuladores paso a paso para entrenar el ojo crítico sin tecnicismos ni exámenes aburridos.
+                      </li>
                     </ul>
                   </article>
 
@@ -426,7 +476,8 @@
                   <article class="sol-step-panel" data-panel="1">
                     <h3 class="sol-title-blue">Llega un correo trampa inofensivo</h3>
                     <p>
-                      Tu equipo recibe en su bandeja habitual un correo que imita una estafa real en España: una factura urgente, un paquete retenido o un aviso del banco.
+                      Tu equipo recibe en su bandeja habitual un correo que imita una estafa real en España: una factura
+                      urgente, un paquete retenido o un aviso del banco.
                     </p>
                     <ul class="sol-check-list">
                       <li>Adaptado al puesto de cada persona (administración, compras, ventas).</li>
@@ -438,7 +489,8 @@
                   <article class="sol-step-panel" data-panel="2">
                     <h3 class="sol-title-orange">Si alguien cae, lo entiende al instante</h3>
                     <p>
-                      Si un empleado hace clic, no hay virus ni broncas. En ese mismo segundo ve qué habría perdido la empresa y las 3 pistas que delataban el engaño.
+                      Si un empleado hace clic, no hay virus ni broncas. En ese mismo segundo ve qué habría perdido la
+                      empresa y las 3 pistas que delataban el engaño.
                     </p>
                     <ul class="sol-check-list">
                       <li>Ese pequeño susto en caliente se recuerda 10 veces más que un vídeo.</li>
@@ -450,7 +502,8 @@
                   <article class="sol-step-panel" data-panel="3">
                     <h3 class="sol-title-yellow">Si lo detecta, avisa en 1 clic y gana +50 XP</h3>
                     <p>
-                      Cuando alguien sospecha de un correo, pulsa el botón de Sentinel. Si acierta, suma puntos para su departamento y protege al resto del equipo.
+                      Cuando alguien sospecha de un correo, pulsa el botón de Sentinel. Si acierta, suma puntos para su
+                      departamento y protege al resto del equipo.
                     </p>
                     <ul class="sol-check-list">
                       <li>Más de un <strong>80% de participación y avisos</strong> en la plantilla.</li>
@@ -462,7 +515,8 @@
                   <article class="sol-step-panel" data-panel="4">
                     <h3 class="sol-title-green">El riesgo baja a menos del 10% en 90 días</h3>
                     <p>
-                      En tu panel de gerente ves de un vistazo cuántos ataques se han frenado, cómo mejora cada área y descargas los justificantes oficiales.
+                      En tu panel de gerente ves de un vistazo cuántos ataques se han frenado, cómo mejora cada área y
+                      descargas los justificantes oficiales.
                     </p>
                     <ul class="sol-check-list">
                       <li>Pasas del <strong>35–40% de caídas a menos del 10%</strong> en 3 meses.</li>
@@ -476,7 +530,7 @@
               <!-- Derecha: Gran Objeto / Icono Flotante siempre en la misma posición -->
               <div class="solution-visualizer-box" id="solution-visualizer" data-step-state="0">
                 <div class="vis-stage">
-                  
+
                   <!-- Objeto 1: Mockup Flotante Plataforma Educativa (Morado) -->
                   <div class="vis-card is-active" data-vis="0">
                     <div class="holo-object-wrap theme-purple holo-mockup-wrap">
@@ -488,7 +542,9 @@
                             <span class="mockup-dot green"></span>
                             <span class="mockup-badge">PLATAFORMA EDUCATIVA SENTINEL · ENTORNO DE SIMULACIÓN</span>
                           </div>
-                          <img src="../assets/img/sentinelMVP.png" alt="Interfaz de la plataforma educativa interactiva Sentinel con simulaciones" class="platform-mockup-img" />
+                          <img src="../assets/img/sentinelMVP.png"
+                            alt="Interfaz de la plataforma educativa interactiva Sentinel con simulaciones"
+                            class="platform-mockup-img" />
                         </div>
                       </div>
                       <div class="holo-floor-shadow" aria-hidden="true"></div>
@@ -499,7 +555,8 @@
                   <div class="vis-card" data-vis="1">
                     <div class="holo-object-wrap theme-blue">
                       <div class="holo-floating-icon">
-                        <svg class="holo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <svg class="holo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                           <rect x="2" y="4" width="20" height="16" rx="2.5"></rect>
                           <path d="m22 7-10 7L2 7"></path>
                         </svg>
@@ -512,7 +569,8 @@
                   <div class="vis-card" data-vis="2">
                     <div class="holo-object-wrap theme-orange">
                       <div class="holo-floating-icon">
-                        <svg class="holo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <svg class="holo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                           <circle cx="12" cy="12" r="5.5"></circle>
                           <circle cx="10.2" cy="10.8" r="0.8" fill="currentColor"></circle>
                           <circle cx="13.8" cy="10.8" r="0.8" fill="currentColor"></circle>
@@ -543,7 +601,8 @@
                   <div class="vis-card" data-vis="3">
                     <div class="holo-object-wrap theme-yellow">
                       <div class="holo-floating-icon">
-                        <svg class="holo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <svg class="holo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                           <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
                         </svg>
                       </div>
@@ -555,7 +614,8 @@
                   <div class="vis-card" data-vis="4">
                     <div class="holo-object-wrap theme-green">
                       <div class="holo-floating-icon">
-                        <svg class="holo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <svg class="holo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                           <path d="m9 12 2 2 4-4"></path>
                         </svg>
@@ -618,10 +678,10 @@
         </div>
 
         <figure class="cinema-player" id="player">
-          
+
           <!-- Marco Cinematográfico -->
           <div class="cinema-viewport" aria-hidden="true">
-            
+
             <div class="cinema-topbar font-mono">
               <span class="cinema-rec"><i class="rec-dot"></i> RECORRIDO INTERACTIVO · CASO REAL PYME</span>
               <span class="cinema-timer" id="cinema-timer">00:00 / 00:30</span>
@@ -663,7 +723,8 @@
                   <span>09:13</span>
                 </div>
                 <div class="cine-click-stage">
-                  <p class="cine-context">Marta tiene 15 pagos pendientes antes del mediodía y pulsa en el archivo sin fijarse en el remitente:</p>
+                  <p class="cine-context">Marta tiene 15 pagos pendientes antes del mediodía y pulsa en el archivo sin
+                    fijarse en el remitente:</p>
                   <div class="cine-fake-btn">
                     <span class="pdf-tag font-mono">PDF</span>
                     <strong>Descargar Factura_2026-1184_Ribera.pdf (4.870&nbsp;€)</strong>
@@ -682,7 +743,8 @@
                 </div>
                 <div class="cine-alert-body">
                   <span class="cine-pill-alert font-arcade">⚡ TRANQUILA, MARTA: ERA UN SIMULACRO DE SENTINEL</span>
-                  <h3>Un atacante real habría robado tu contraseña y desviado <span class="nowrap">4.870&nbsp;€</span></h3>
+                  <h3>Un atacante real habría robado tu contraseña y desviado <span class="nowrap">4.870&nbsp;€</span>
+                  </h3>
                   <div class="cine-clues-row font-mono">
                     <span>1. El dominio era .co y no .es</span>
                     <span>2. Nunca se cambia un IBAN por email</span>
@@ -702,7 +764,8 @@
                 <div class="cine-win-body">
                   <div class="cine-xp-burst font-arcade">+50 XP</div>
                   <h3>Marta detecta un correo falso y avisa en un clic</h3>
-                  <p>Al recordar el simulacro anterior, revisa el remitente, pulsa <strong>«Marcar como sospechoso»</strong> y suma puntos para Administración.</p>
+                  <p>Al recordar el simulacro anterior, revisa el remitente, pulsa <strong>«Marcar como
+                      sospechoso»</strong> y suma puntos para Administración.</p>
                 </div>
               </div>
             </div>
@@ -801,7 +864,8 @@
             Preguntas frecuentes sobre Sentinel
           </h2>
           <p class="section-lead">
-            Todo lo que necesitas saber antes de empezar a entrenar a tu equipo, explicado sin tecnicismos ni letra pequeña.
+            Todo lo que necesitas saber antes de empezar a entrenar a tu equipo, explicado sin tecnicismos ni letra
+            pequeña.
           </p>
         </div>
 
@@ -811,7 +875,8 @@
             <summary class="faq-question">
               <span class="faq-q-text">¿Necesitamos un informático o departamento de TI para ponerlo en marcha?</span>
               <span class="faq-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
                   <line x1="12" y1="5" x2="12" y2="19"></line>
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                 </svg>
@@ -819,7 +884,9 @@
             </summary>
             <div class="faq-answer">
               <p>
-                Para nada. Sentinel es una plataforma 100% en la nube diseñada específicamente para empresas sin equipo técnico. No hay que instalar ningún programa en los ordenadores ni configurar servidores complejos. En menos de 15 minutos queda configurado y los simulacros se gestionan automáticamente.
+                Para nada. Sentinel es una plataforma 100% en la nube diseñada específicamente para empresas sin equipo
+                técnico. No hay que instalar ningún programa en los ordenadores ni configurar servidores complejos. En
+                menos de 15 minutos queda configurado y los simulacros se gestionan automáticamente.
               </p>
             </div>
           </details>
@@ -828,7 +895,8 @@
             <summary class="faq-question">
               <span class="faq-q-text">¿Qué ocurre si un empleado comete un fallo y pincha en un simulacro?</span>
               <span class="faq-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
                   <line x1="12" y1="5" x2="12" y2="19"></line>
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                 </svg>
@@ -836,7 +904,10 @@
             </summary>
             <div class="faq-answer">
               <p>
-                Cero broncas, cero castigos y cero señalamientos. Nuestro método se basa en el aprendizaje en positivo: en ese mismo segundo se abre una pantalla explicativa de 20 segundos que le muestra con amabilidad las 3 pistas clave que delataban la trampa. Ese pequeño susto en caliente genera 10 veces más retención que un curso teórico aburrido.
+                Cero broncas, cero castigos y cero señalamientos. Nuestro método se basa en el aprendizaje en positivo:
+                en ese mismo segundo se abre una pantalla explicativa de 20 segundos que le muestra con amabilidad las 3
+                pistas clave que delataban la trampa. Ese pequeño susto en caliente genera 10 veces más retención que un
+                curso teórico aburrido.
               </p>
             </div>
           </details>
@@ -845,7 +916,8 @@
             <summary class="faq-question">
               <span class="faq-q-text">¿Cumple Sentinel con la normativa de protección de datos (RGPD)?</span>
               <span class="faq-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
                   <line x1="12" y1="5" x2="12" y2="19"></line>
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                 </svg>
@@ -853,7 +925,10 @@
             </summary>
             <div class="faq-answer">
               <p>
-                Cumplimiento estricto al 100%. Todos los datos de tu empresa están alojados en centros de datos seguros dentro de la Unión Europea y cifrados de punto a punto. Además, la plataforma emite automáticamente certificados e informes periódicos de formación continua válidos para demostrar diligencia ante inspecciones de la AEPD y ante compañías de seguros.
+                Cumplimiento estricto al 100%. Todos los datos de tu empresa están alojados en centros de datos seguros
+                dentro de la Unión Europea y cifrados de punto a punto. Además, la plataforma emite automáticamente
+                certificados e informes periódicos de formación continua válidos para demostrar diligencia ante
+                inspecciones de la AEPD y ante compañías de seguros.
               </p>
             </div>
           </details>
@@ -862,7 +937,8 @@
             <summary class="faq-question">
               <span class="faq-q-text">¿Cuánto tiempo le quita esto a mi equipo en su jornada diaria?</span>
               <span class="faq-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
                   <line x1="12" y1="5" x2="12" y2="19"></line>
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                 </svg>
@@ -870,7 +946,10 @@
             </summary>
             <div class="faq-answer">
               <p>
-                Menos de 1 minuto al mes por trabajador. No obligamos a tu plantilla a perder horas en vídeos teóricos ni presentaciones eternas. El entrenamiento ocurre dentro de la propia rutina del día a día, directamente en la bandeja de entrada, convirtiendo la detección en un reflejo natural sin frenar el ritmo de trabajo.
+                Menos de 1 minuto al mes por trabajador. No obligamos a tu plantilla a perder horas en vídeos teóricos
+                ni presentaciones eternas. El entrenamiento ocurre dentro de la propia rutina del día a día,
+                directamente en la bandeja de entrada, convirtiendo la detección en un reflejo natural sin frenar el
+                ritmo de trabajo.
               </p>
             </div>
           </details>
@@ -879,7 +958,8 @@
             <summary class="faq-question">
               <span class="faq-q-text">¿En qué consiste el simulacro piloto gratuito de 48 horas?</span>
               <span class="faq-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
                   <line x1="12" y1="5" x2="12" y2="19"></line>
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                 </svg>
@@ -887,7 +967,10 @@
             </summary>
             <div class="faq-answer">
               <p>
-                Preparamos un primer correo trampa realista y completamente inofensivo adaptado al sector de tu empresa. Lo enviamos a las personas que elijas y, en 48 horas, revisamos juntos en una breve videollamada de 15 minutos el porcentaje exacto de empleados que habrían caído. Es un diagnóstico real, sin coste y sin ningún compromiso de contratación.
+                Preparamos un primer correo trampa realista y completamente inofensivo adaptado al sector de tu empresa.
+                Lo enviamos a las personas que elijas y, en 48 horas, revisamos juntos en una breve videollamada de 15
+                minutos el porcentaje exacto de empleados que habrían caído. Es un diagnóstico real, sin coste y sin
+                ningún compromiso de contratación.
               </p>
             </div>
           </details>
@@ -896,7 +979,8 @@
             <summary class="faq-question">
               <span class="faq-q-text">¿Pueden filtrarse contraseñas o datos reales durante las pruebas?</span>
               <span class="faq-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
                   <line x1="12" y1="5" x2="12" y2="19"></line>
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                 </svg>
@@ -904,7 +988,10 @@
             </summary>
             <div class="faq-answer">
               <p>
-                Rotundamente no. Las páginas de destino de los simulacros son entornos estériles y aislados controlados por Sentinel. Si un empleado introduce datos por error, el sistema bloquea inmediatamente el formulario, no almacena ninguna contraseña en disco y únicamente registra el evento anónimo para fines estadísticos de formación.
+                Rotundamente no. Las páginas de destino de los simulacros son entornos estériles y aislados controlados
+                por Sentinel. Si un empleado introduce datos por error, el sistema bloquea inmediatamente el formulario,
+                no almacena ninguna contraseña en disco y únicamente registra el evento anónimo para fines estadísticos
+                de formación.
               </p>
             </div>
           </details>
@@ -921,47 +1008,39 @@
       <div class="wrap cta-grid">
 
         <div class="cta-copy-col">
-          <span class="section-index font-mono text-cyan">04 // PRUEBA EN TU EMPRESA SIN COSTE</span>
           <h2 class="cta-title">
             Descubre cuántos empleados caerían hoy <br>
             <span class="text-cyan">antes de que lo pruebe un estafador real.</span>
           </h2>
           <p class="cta-lead">
-            Te preparamos un <strong>primer simulacro gratuito</strong> adaptado a tu empresa y en 48 horas vemos juntos el resultado en una llamada de 15 minutos. Sin compromiso ni permanencia.
+            Te preparamos un <strong>primer simulacro gratuito</strong> adaptado a tu empresa y en 48 horas vemos juntos
+            el resultado en una llamada de 15 minutos. Sin compromiso ni permanencia.
           </p>
 
           <ul class="cta-perks-list">
             <li>
-              <span class="perk-check">✓</span>
-              <div>
-                <strong>Listo en 15 minutos</strong>
-                <span>Sin instalar nada en los ordenadores ni necesitar informático.</span>
-              </div>
+              <svg class="perk-check-icon text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <strong>Listo en 15 minutos</strong>
             </li>
             <li>
-              <span class="perk-check">✓</span>
-              <div>
-                <strong>Diagnóstico confidencial de tu plantilla</strong>
-                <span>Sabrás el porcentaje exacto de riesgo por departamento desde el primer día.</span>
-              </div>
+              <svg class="perk-check-icon text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <strong>Diagnóstico confidencial de tu plantilla</strong>
             </li>
             <li>
-              <span class="perk-check">✓</span>
-              <div>
-                <strong>100% inofensivo y conforme al RGPD</strong>
-                <span>Diseñado para enseñar en positivo, sin exponer datos reales.</span>
-              </div>
+              <svg class="perk-check-icon text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <strong>100% inofensivo y conforme al RGPD</strong>
             </li>
           </ul>
         </div>
 
         <!-- Tarjeta del Formulario donde aterriza el Objeto Viajero -->
         <div class="cta-form-col" data-packet-dock="cta">
-          <div class="cta-landing-slot" id="cta-landing-slot">
-            <span class="slot-icon">🛡️</span>
-            <span class="font-mono">DESTINO FINAL DEL RECORRIDO: TU SIMULACRO PILOTO GRATIS</span>
-          </div>
-
           <form class="pilot-form" id="form" novalidate>
             <div class="form-top-row">
               <h3>Solicitar simulacro piloto gratuito</h3>
@@ -975,13 +1054,15 @@
 
             <div class="field">
               <label for="f-email">Email de trabajo</label>
-              <input id="f-email" name="email" type="email" autocomplete="email" placeholder="carlos@tuempresa.es" required>
+              <input id="f-email" name="email" type="email" autocomplete="email" placeholder="carlos@tuempresa.es"
+                required>
             </div>
 
             <div class="field-row">
               <div class="field">
                 <label for="f-company">Nombre de la empresa</label>
-                <input id="f-company" name="company" type="text" autocomplete="organization" placeholder="Ej. Suministros Norte SL" required>
+                <input id="f-company" name="company" type="text" autocomplete="organization"
+                  placeholder="Ej. Suministros Norte SL" required>
               </div>
 
               <div class="field">
@@ -1002,10 +1083,6 @@
               <span>Quiero mi simulacro gratuito</span>
               <span class="btn-arrow">&rarr;</span>
             </button>
-
-            <p class="form-footnote font-mono">
-              Te contactaremos en menos de 24h laborables para activar la prueba.
-            </p>
           </form>
 
           <!-- Confirmación tras enviar -->
@@ -1013,7 +1090,8 @@
             <div class="done-pill font-arcade">✓ SOLICITUD REGISTRADA</div>
             <h3>¡Tu simulacro piloto está en marcha!</h3>
             <p id="done-text">
-              Te escribiremos en menos de 24 horas laborables para preparar el primer simulacro inofensivo con tu equipo.
+              Te escribiremos en menos de 24 horas laborables para preparar el primer simulacro inofensivo con tu
+              equipo.
             </p>
             <div class="done-ticket-box font-mono">
               <span>TICKET DE RESERVA: <strong id="done-ref" class="text-gold">SNT-88219</strong></span>
@@ -1033,13 +1111,14 @@
       <div class="footer-brand">
         <div class="footer-brand-row">
           <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true">
-            <polygon points="16,2 29,7 29,17 16,30 3,17 3,7" fill="#101726" stroke="#00e5ff" stroke-width="2.2"/>
-            <circle cx="16" cy="15" r="4.5" fill="#10b981"/>
+            <polygon points="16,2 29,7 29,17 16,30 3,17 3,7" fill="#101726" stroke="#00e5ff" stroke-width="2.2" />
+            <circle cx="16" cy="15" r="4.5" fill="#10b981" />
           </svg>
           <span class="brand-wordmark font-display">SENTINEL</span>
         </div>
         <p>
-          Entrenamiento práctico de ciberseguridad para pymes. Convertimos a tu plantilla en tu primera línea de defensa frente al fraude por correo electrónico.
+          Entrenamiento práctico de ciberseguridad para pymes. Convertimos a tu plantilla en tu primera línea de defensa
+          frente al fraude por correo electrónico.
         </p>
       </div>
       <div class="footer-meta font-mono">
@@ -1051,4 +1130,5 @@
 
   <script src="app.js"></script>
 </body>
+
 </html>
