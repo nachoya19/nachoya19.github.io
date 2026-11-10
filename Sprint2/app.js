@@ -84,6 +84,12 @@
       src: "../assets/sprites/sprites_p5_clean.png",
       fallback: "../assets/sprites/sprites_p5.png",
       name: "MIGUEL · BACKEND Y ARQUITECTURA"
+    },
+    p6: {
+      id: "p6",
+      src: "../assets/sprites/sprites_p6_clean.png",
+      fallback: "../assets/sprites/sprites_p6.png",
+      name: "ALBERTO · CISO Y AUDITORÍA"
     }
   };
 
@@ -92,7 +98,8 @@
     p2: { ...speakerConfig.p2, loaded: false, frames: [], w: 0, h: 0 },
     p3: { ...speakerConfig.p3, loaded: false, frames: [], w: 0, h: 0 },
     p4: { ...speakerConfig.p4, loaded: false, frames: [], w: 0, h: 0 },
-    p5: { ...speakerConfig.p5, loaded: false, frames: [], w: 0, h: 0 }
+    p5: { ...speakerConfig.p5, loaded: false, frames: [], w: 0, h: 0 },
+    p6: { ...speakerConfig.p6, loaded: false, frames: [], w: 0, h: 0 }
   };
 
   // Carga y recorte de los 6 fotogramas de cada spritesheet
@@ -195,11 +202,19 @@
     "Cifrado de extremo a extremo activo en todas las peticiones.",
     "¡Arquitectura backend blindada contra intrusiones!"
   ];
+  const albertoLines = [
+    "¡Auditoría superada: 0 brechas!",
+    "El factor humano entrenado es nuestro mejor firewall.",
+    "Reportes en tiempo real para dirección y RGPD listos.",
+    "¡Excelente reflejo! Detección en menos de 30 segundos.",
+    "Sentinel activo en toda la empresa: instintos a punto."
+  ];
   let ivanLineIdx = 0;
   let marioLineIdx = 0;
   let nachoLineIdx = 0;
   let nicoLineIdx = 0;
   let miguelLineIdx = 0;
+  let albertoLineIdx = 0;
 
   // Estado de los personajes en el mundo 2D Zelda
   const workers = {
@@ -296,6 +311,25 @@
       bubbleText: "¡Revisando logs de autenticación!",
       bubbleTimer: 5.2,
       waitTimer: 3.0,
+      jumpOffset: 0
+    },
+    p6: {
+      id: "p6",
+      name: "ALBERTO",
+      role: "CISO",
+      color: "#ec4899",
+      x: 500,
+      y: 460,
+      targetX: 500,
+      targetY: 460,
+      speed: 1.5,
+      facing: -1,
+      state: "idle",
+      walkTimer: 0,
+      frameIdx: 0,
+      bubbleText: "¡Auditoría superada: 0 brechas!",
+      bubbleTimer: 5.4,
+      waitTimer: 3.1,
       jumpOffset: 0
     }
   };
@@ -620,13 +654,14 @@
       desk1: { x: cw * 0.20, y: wallH + 85, label: "Puesto de Iván" },
       desk4: { x: cw * 0.50, y: wallH + 85, label: "Puesto de Nicolás" },
       desk2: { x: cw * 0.80, y: wallH + 85, label: "Puesto de Mario" },
-      desk3: { x: cw * 0.28, y: ch * 0.52, label: "Puesto de Nacho" },
+      desk3: { x: cw * 0.22, y: ch * 0.52, label: "Puesto de Nacho" },
       terminal: { x: cw * 0.50, y: ch * 0.52, label: "Terminal Factura" },
-      desk5: { x: cw * 0.72, y: ch * 0.52, label: "Puesto de Miguel" },
-      serverL: { x: cw * 0.10, y: ch * 0.78, label: "Servidor Alpha" },
-      serverR: { x: cw * 0.90, y: ch * 0.78, label: "Servidor Beta" },
+      desk5: { x: cw * 0.78, y: ch * 0.52, label: "Puesto de Miguel" },
+      desk6: { x: cw * 0.50, y: ch * 0.74, label: "Puesto de Alberto" },
+      serverL: { x: cw * 0.10, y: ch * 0.82, label: "Servidor Alpha" },
+      serverR: { x: cw * 0.90, y: ch * 0.82, label: "Servidor Beta" },
       coffee: { x: cw * 0.08, y: ch * 0.44, label: "Cafetera" },
-      meeting: { x: cw * 0.50, y: ch * 0.78, label: "Punto de encuentro" }
+      meeting: { x: cw * 0.35, y: ch * 0.86, label: "Punto de encuentro" }
     };
   }
 
@@ -657,6 +692,11 @@
     workers.p5.y = spots.desk5.y;
     workers.p5.targetX = spots.desk5.x;
     workers.p5.targetY = spots.desk5.y;
+
+    workers.p6.x = spots.desk6.x;
+    workers.p6.y = spots.desk6.y;
+    workers.p6.targetX = spots.desk6.x;
+    workers.p6.targetY = spots.desk6.y;
   }
 
   // Dibujar mapa Zelda 2D: suelo amplio en toda la pantalla, alfombra cyber y muebles
@@ -748,6 +788,9 @@
 
     const d5 = spots.desk5;
     drawDesk(ctx, d5.x, d5.y, "MIGUEL · BACKEND", "#a855f7", "#10b981", time, true);
+
+    const d6 = spots.desk6;
+    drawDesk(ctx, d6.x, d6.y, "ALBERTO · CISO", "#ec4899", "#00e5ff", time, true);
 
     const term = spots.terminal;
     drawCentralTerminal(ctx, term.x, term.y, time);
@@ -913,54 +956,199 @@
     }
   }
 
-  function drawCanvasBubble(ctx, x, y, name, tagColor, text) {
-    ctx.save();
-    ctx.font = "bold 11px 'Plus Jakarta Sans', system-ui, sans-serif";
-    const textW = ctx.measureText(text).width;
-    const padX = 14;
-    const bW = Math.max(160, Math.min(260, textW + padX * 2));
-    const bH = 36;
-    const bX = Math.max(12, Math.min(cw - bW - 12, x - bW / 2));
-    const bY = y - bH - 6;
+  // Divide el texto en líneas respetando palabras para que nunca se desborde del bocadillo
+  function wrapCanvasText(ctx, text, maxTextWidth) {
+    const words = text.split(" ");
+    const lines = [];
+    let currentLine = "";
 
-    ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+    for (let i = 0; i < words.length; i++) {
+      const word = words[i];
+      const testLine = currentLine ? currentLine + " " + word : word;
+      const testWidth = ctx.measureText(testLine).width;
+      if (testWidth > maxTextWidth && currentLine) {
+        lines.push(currentLine);
+        currentLine = word;
+      } else {
+        currentLine = testLine;
+      }
+    }
+    if (currentLine) {
+      lines.push(currentLine);
+    }
+    return lines;
+  }
+
+  function drawCanvasBubble(ctx, x, y, name, tagColor, text) {
+    if (!text) return;
+    ctx.save();
+
+    // 1. Fuentes tipográficas consistentes
+    const nameFont = "bold 9px 'Press Start 2P', monospace";
+    const textFont = "600 11.5px 'Plus Jakarta Sans', system-ui, sans-serif";
+
+    // 2. Medir etiqueta del trabajador
+    ctx.font = nameFont;
+    const nameW = ctx.measureText(name).width;
+
+    // 3. Medir y particionar el texto en líneas para que NUNCA desborde el bocadillo
+    ctx.font = textFont;
+    const padX = 14;
+    const maxAvailableTextW = Math.min(270, Math.max(160, cw - 48 - padX * 2));
+    const rawTextW = ctx.measureText(text).width;
+
+    let lines;
+    if (rawTextW <= 220) {
+      lines = [text];
+    } else {
+      lines = wrapCanvasText(ctx, text, maxAvailableTextW);
+    }
+
+    // 4. Calcular el ancho máximo de contenido real de las líneas
+    let maxContentW = nameW;
+    lines.forEach(line => {
+      const w = ctx.measureText(line).width;
+      if (w > maxContentW) maxContentW = w;
+    });
+
+    // 5. Dimensiones exactas y dinámicas de la burbuja (con holgura garantizada)
+    const bW = Math.max(160, Math.ceil(maxContentW + padX * 2));
+    const padTop = 10;
+    const nameH = 12;
+    const nameGap = 5;
+    const lineHeight = 16;
+    const padBottom = 10;
+    const bH = padTop + nameH + nameGap + (lines.length * lineHeight) + padBottom;
+
+    // 6. Posicionamiento inteligente en pantalla
+    let bX = Math.max(12, Math.min(cw - bW - 12, x - bW / 2));
+    let bY = y - bH - 9;
+    let tailDir = "bottom";
+
+    if (bY < 10) {
+      // Si se saldría por la parte superior del canvas, posicionar al lateral del personaje
+      if (x < cw * 0.5) {
+        bX = Math.min(cw - bW - 12, x + 44);
+        bY = Math.max(10, y - bH * 0.35);
+        tailDir = "left";
+      } else {
+        bX = Math.max(12, x - 44 - bW);
+        bY = Math.max(10, y - bH * 0.35);
+        tailDir = "right";
+      }
+    }
+
+    // 7. Sombra de la burbuja
+    ctx.fillStyle = "rgba(0, 0, 0, 0.45)";
     ctx.beginPath();
-    ctx.roundRect ? ctx.roundRect(bX + 2, bY + 3, bW, bH, 8) : ctx.rect(bX + 2, bY + 3, bW, bH);
+    if (ctx.roundRect) {
+      ctx.roundRect(bX + 2, bY + 3, bW, bH, 10);
+    } else {
+      ctx.rect(bX + 2, bY + 3, bW, bH);
+    }
     ctx.fill();
 
+    // 8. Cuerpo blanco de la burbuja
     ctx.fillStyle = "#ffffff";
     ctx.beginPath();
-    ctx.roundRect ? ctx.roundRect(bX, bY, bW, bH, 8) : ctx.rect(bX, bY, bW, bH);
+    if (ctx.roundRect) {
+      ctx.roundRect(bX, bY, bW, bH, 10);
+    } else {
+      ctx.rect(bX, bY, bW, bH);
+    }
     ctx.fill();
 
-    ctx.strokeStyle = "#000000";
+    // 9. Contorno de la burbuja
+    ctx.strokeStyle = "#070a14";
     ctx.lineWidth = 2;
     ctx.stroke();
 
+    // 10. Cola del bocadillo
     ctx.fillStyle = "#ffffff";
-    ctx.beginPath();
-    ctx.moveTo(x - 6, bY + bH);
-    ctx.lineTo(x, bY + bH + 7);
-    ctx.lineTo(x + 6, bY + bH);
-    ctx.closePath();
-    ctx.fill();
+    ctx.strokeStyle = "#070a14";
+    ctx.lineWidth = 2;
 
-    ctx.strokeStyle = "#000000";
-    ctx.beginPath();
-    ctx.moveTo(x - 6, bY + bH);
-    ctx.lineTo(x, bY + bH + 7);
-    ctx.lineTo(x + 6, bY + bH);
-    ctx.stroke();
+    if (tailDir === "bottom") {
+      const tailX = Math.max(bX + 18, Math.min(bX + bW - 18, x));
 
-    ctx.font = "9px 'Press Start 2P', monospace";
+      // Sombra sutil de la cola
+      ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
+      ctx.beginPath();
+      ctx.moveTo(tailX - 6, bY + bH + 2);
+      ctx.lineTo(tailX, bY + bH + 9);
+      ctx.lineTo(tailX + 6, bY + bH + 2);
+      ctx.fill();
+
+      // Relleno blanco de la cola
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.moveTo(tailX - 7, bY + bH - 1);
+      ctx.lineTo(tailX, bY + bH + 8);
+      ctx.lineTo(tailX + 7, bY + bH - 1);
+      ctx.closePath();
+      ctx.fill();
+
+      // Trazo de la cola
+      ctx.beginPath();
+      ctx.moveTo(tailX - 7, bY + bH - 0.5);
+      ctx.lineTo(tailX, bY + bH + 8);
+      ctx.lineTo(tailX + 7, bY + bH - 0.5);
+      ctx.stroke();
+
+      // Borrar la costura interna de la cola con el cuerpo
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(tailX - 6, bY + bH - 2, 12, 3);
+    } else if (tailDir === "left") {
+      const tailY = Math.max(bY + 14, Math.min(bY + bH - 14, y + 8));
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.moveTo(bX + 1, tailY - 6);
+      ctx.lineTo(bX - 7, tailY);
+      ctx.lineTo(bX + 1, tailY + 6);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(bX + 0.5, tailY - 6);
+      ctx.lineTo(bX - 7, tailY);
+      ctx.lineTo(bX + 0.5, tailY + 6);
+      ctx.stroke();
+
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(bX - 1, tailY - 5, 3, 10);
+    } else if (tailDir === "right") {
+      const tailY = Math.max(bY + 14, Math.min(bY + bH - 14, y + 8));
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.moveTo(bX + bW - 1, tailY - 6);
+      ctx.lineTo(bX + bW + 7, tailY);
+      ctx.lineTo(bX + bW - 1, tailY + 6);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(bX + bW - 0.5, tailY - 6);
+      ctx.lineTo(bX + bW + 7, tailY);
+      ctx.lineTo(bX + bW - 0.5, tailY + 6);
+      ctx.stroke();
+
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(bX + bW - 2, tailY - 5, 3, 10);
+    }
+
+    // 11. Nombre del trabajador
+    ctx.font = nameFont;
     ctx.fillStyle = tagColor;
     ctx.textAlign = "left";
-    ctx.fillText(name, bX + 10, bY + 12);
+    ctx.fillText(name, bX + padX, bY + padTop + 9);
 
-    ctx.font = "600 11px 'Plus Jakarta Sans', system-ui, sans-serif";
+    // 12. Texto del diálogo línea por línea
+    ctx.font = textFont;
     ctx.fillStyle = "#070a12";
     ctx.textAlign = "left";
-    ctx.fillText(text, bX + 10, bY + 27);
+    lines.forEach((line, idx) => {
+      ctx.fillText(line, bX + padX, bY + padTop + nameH + nameGap + 12 + (idx * lineHeight));
+    });
 
     ctx.restore();
   }
@@ -1082,13 +1270,17 @@
         w.bubbleText = miguelLines[miguelLineIdx % miguelLines.length];
         miguelLineIdx++;
         w.bubbleTimer = 4.5;
+      } else if (w.id === "p6") {
+        w.bubbleText = albertoLines[albertoLineIdx % albertoLines.length];
+        albertoLineIdx++;
+        w.bubbleTimer = 4.5;
       }
     }
   }
 
   function pickNextGoal(w) {
     const spots = getOfficeSpots();
-    const goals = [spots.desk1, spots.desk2, spots.desk3, spots.desk4, spots.desk5, spots.terminal, spots.coffee, spots.meeting, spots.serverL, spots.serverR];
+    const goals = [spots.desk1, spots.desk2, spots.desk3, spots.desk4, spots.desk5, spots.desk6, spots.terminal, spots.coffee, spots.meeting, spots.serverL, spots.serverR];
     const chosen = goals[Math.floor(Math.random() * goals.length)];
     w.targetX = Math.max(70, Math.min(cw - 70, chosen.x + (Math.random() - 0.5) * 80));
     w.targetY = Math.max(wallH + 50, Math.min(ch - 50, chosen.y + (Math.random() - 0.5) * 45));
@@ -1130,14 +1322,16 @@
       updateWorkerAI(workers.p2, workers.p3, dt);
       updateWorkerAI(workers.p3, workers.p4, dt);
       updateWorkerAI(workers.p4, workers.p5, dt);
-      updateWorkerAI(workers.p5, workers.p1, dt);
+      updateWorkerAI(workers.p5, workers.p6, dt);
+      updateWorkerAI(workers.p6, workers.p1, dt);
 
       const renderList = [
         { w: workers.p1, s: speakers.p1 },
         { w: workers.p2, s: speakers.p2 },
         { w: workers.p3, s: speakers.p3 },
         { w: workers.p4, s: speakers.p4 },
-        { w: workers.p5, s: speakers.p5 }
+        { w: workers.p5, s: speakers.p5 },
+        { w: workers.p6, s: speakers.p6 }
       ].sort((a, b) => a.w.y - b.w.y);
 
       renderList.forEach(item => renderWorker(zctx, item.w, item.s));
@@ -1196,6 +1390,7 @@
     const dist3 = Math.hypot(workers.p3.x - clickX, workers.p3.y - worldY);
     const dist4 = Math.hypot(workers.p4.x - clickX, workers.p4.y - worldY);
     const dist5 = Math.hypot(workers.p5.x - clickX, workers.p5.y - worldY);
+    const dist6 = Math.hypot(workers.p6.x - clickX, workers.p6.y - worldY);
 
     let targetWorker = workers.p1;
     let minDist = dist1;
@@ -1203,6 +1398,7 @@
     if (dist3 < minDist) { targetWorker = workers.p3; minDist = dist3; }
     if (dist4 < minDist) { targetWorker = workers.p4; minDist = dist4; }
     if (dist5 < minDist) { targetWorker = workers.p5; minDist = dist5; }
+    if (dist6 < minDist) { targetWorker = workers.p6; minDist = dist6; }
 
     targetWorker.targetX = Math.max(70, Math.min(cw - 70, clickX));
     targetWorker.targetY = Math.max(wallH + 45, Math.min(ch - 50, worldY));
@@ -1233,11 +1429,14 @@
       } else if (targetWorker.id === "p5") {
         miguelLineIdx = (miguelLineIdx + 1) % miguelLines.length;
         targetWorker.bubbleText = miguelLines[miguelLineIdx];
+      } else if (targetWorker.id === "p6") {
+        albertoLineIdx = (albertoLineIdx + 1) % albertoLines.length;
+        targetWorker.bubbleText = albertoLines[albertoLineIdx];
       }
     }
   });
 
-  ["p1", "p2", "p3", "p4", "p5"].forEach((key) => {
+  ["p1", "p2", "p3", "p4", "p5", "p6"].forEach((key) => {
     loadSpeaker(speakers[key], (data) => {
       speakers[key].frames = data.frames;
       speakers[key].w = data.w;
@@ -1333,20 +1532,24 @@
       workers.p3.state = "alarm";
       workers.p4.state = "alarm";
       workers.p5.state = "alarm";
+      workers.p6.state = "alarm";
       workers.p1.bubbleText = "¡Uff, era una trampa! 😱";
       workers.p2.bubbleText = "¡Casi transferimos 4.870 €!";
       workers.p3.bubbleText = "¡Aislad la red inmediatamente!";
       workers.p4.bubbleText = "¡Alerta perimetral! Bloqueando conexión.";
       workers.p5.bubbleText = "¡Intrusión detectada en backend! Bloqueando puerto.";
+      workers.p6.bubbleText = "¡Bloquead transferencias y accesos de inmediato!";
       workers.p1.bubbleTimer = 6.0;
       workers.p2.bubbleTimer = 6.0;
       workers.p3.bubbleTimer = 6.0;
       workers.p4.bubbleTimer = 6.0;
       workers.p5.bubbleTimer = 6.0;
+      workers.p6.bubbleTimer = 6.0;
       spawnAlertMark(workers.p1.x, workers.p1.y);
       spawnAlertMark(workers.p3.x, workers.p3.y);
       spawnAlertMark(workers.p4.x, workers.p4.y);
       spawnAlertMark(workers.p5.x, workers.p5.y);
+      spawnAlertMark(workers.p6.x, workers.p6.y);
 
       if (wallRisk) wallRisk.textContent = "CRÍTICO (FALLO)";
       failOutcome?.focus({ preventScroll: true });
@@ -1369,27 +1572,32 @@
       workers.p3.state = "celebrate";
       workers.p4.state = "celebrate";
       workers.p5.state = "celebrate";
+      workers.p6.state = "celebrate";
       workers.p1.jumpOffset = 22;
       workers.p2.jumpOffset = 22;
       workers.p3.jumpOffset = 22;
       workers.p4.jumpOffset = 22;
       workers.p5.jumpOffset = 22;
+      workers.p6.jumpOffset = 22;
       workers.p1.bubbleText = "¡Amenaza frenada! 🏆";
       workers.p2.bubbleText = "¡+50 XP sumados! Buen trabajo.";
       workers.p3.bubbleText = "¡Reglas actualizadas en Sentinel!";
       workers.p4.bubbleText = "¡Protocolo completado con éxito! 🛡️";
       workers.p5.bubbleText = "¡Servidor seguro y logs limpios! 🚀";
+      workers.p6.bubbleText = "¡Instinto impecable! Empresa 100% a salvo. 🛡️";
       workers.p1.bubbleTimer = 6.0;
       workers.p2.bubbleTimer = 6.0;
       workers.p3.bubbleTimer = 6.0;
       workers.p4.bubbleTimer = 6.0;
       workers.p5.bubbleTimer = 6.0;
+      workers.p6.bubbleTimer = 6.0;
 
       spawnXpBurst(workers.p1.x, workers.p1.y, 25);
       spawnXpBurst(workers.p2.x, workers.p2.y, 25);
       spawnXpBurst(workers.p3.x, workers.p3.y, 25);
       spawnXpBurst(workers.p4.x, workers.p4.y, 25);
       spawnXpBurst(workers.p5.x, workers.p5.y, 25);
+      spawnXpBurst(workers.p6.x, workers.p6.y, 25);
 
       if (wallRisk) wallRisk.textContent = "PROTEGIDO (<8%)";
       winOutcome?.focus({ preventScroll: true });
@@ -1410,16 +1618,19 @@
       workers.p3.state = "idle";
       workers.p4.state = "idle";
       workers.p5.state = "idle";
+      workers.p6.state = "idle";
       workers.p1.bubbleText = "¡Llega factura de 4.870 €!";
       workers.p2.bubbleText = "¡El dominio .co es falso!";
       workers.p3.bubbleText = "¡Revisando el código de pagos!";
       workers.p4.bubbleText = "¡Ciberseguridad perimetral activa!";
       workers.p5.bubbleText = "¡Revisando logs de autenticación!";
+      workers.p6.bubbleText = "¡Auditoría superada: 0 brechas!";
       workers.p1.bubbleTimer = 5.0;
       workers.p2.bubbleTimer = 5.0;
       workers.p3.bubbleTimer = 5.0;
       workers.p4.bubbleTimer = 5.0;
       workers.p5.bubbleTimer = 5.0;
+      workers.p6.bubbleTimer = 5.0;
 
       if (wallRisk) wallRisk.textContent = "ALTO (38%)";
       hideInspectUrl();
@@ -1623,6 +1834,16 @@
         const translateY = -heroScrollProgress * (window.innerHeight * 0.44);
         heroBrand.style.transform = `translate(-50%, calc(-50% + ${translateY}px)) scale(${scale})`;
       }
+
+      const heroSlogan = $("#hero-slogan");
+      if (heroSlogan) {
+        // En scroll = 0: 100% visible bajo SENTINEL en el centro de la pantalla principal.
+        // En cuanto empieza a bajar/scrollear, se desvanece de inmediato (completamente invisible en el primer ~10% de scroll).
+        const sloganOpacity = Math.max(0, 1 - heroScrollProgress * 10);
+        heroSlogan.style.opacity = sloganOpacity.toFixed(3);
+        heroSlogan.style.transform = `translateY(${heroScrollProgress * 15}px)`;
+        heroSlogan.style.visibility = sloganOpacity <= 0.01 ? "hidden" : "visible";
+      }
     }
 
     // Posición vertical del objeto viajero y llenado de la línea
@@ -1668,7 +1889,7 @@
       setPacketVisualState("state-shield", "💬", "Q&A // RESOLVEMOS DUDAS", "Cero letra pequeña", "CLARO");
     } else if (videoSec && videoSec.top < triggerLine) {
       currentNav = "video";
-      setPacketVisualState("state-shield", "🎬", "03. VÍDEO 30 SEG", "Caso real de Marta", "PLAY");
+      setPacketVisualState("state-shield", "🎬", "03. VÍDEO 50 SEG", "Caso real de Nacho", "PLAY");
     } else if (solutionSec && solutionSec.top < triggerLine) {
       currentNav = "solucion";
       if (activeSolutionStep === 0) {
@@ -1708,116 +1929,158 @@
   updateScrollytelling();
 
   /* --------------------------------------------------------------------------
-     5. VÍDEO CONCEPTUAL INTERACTIVO DE 30 SEGUNDOS
+     5. VÍDEO NATIVO SENTINEL (50 SEGUNDOS)
      -------------------------------------------------------------------------- */
   const player = $("#player");
-  const scenes = $$(".v-scene", player);
+  const video = $("#sentinel-video");
   const chapters = $$(".cinema-chapters button", player);
   const caption = $("#caption");
   const playBtn = $("#play");
   const playBig = $("#play-big");
+  const videoSoundBtn = $("#btn-sound");
   const timerEl = $("#cinema-timer");
 
-  const script = [
-    "Lunes, 09:12. A Marta, de administración, le llega un correo urgente de un proveedor habitual.",
-    "Tiene 15 pagos pendientes antes del mediodía y pulsa el enlace para ver la factura sin fijarse en el remitente.",
-    "Sentinel interviene en 0 segundos: era un simulacro inofensivo. Le muestra al instante las 3 señales que delataban el engaño.",
-    "Dos semanas después llega otro correo trampa. Esta vez Marta lo detecta, avisa en 1 clic y suma +50 XP para su equipo.",
-    "En 90 días, el gerente comprueba que los clics caen a menos del 10%, con más del 80% de avisos y cumplimiento RGPD."
+  const CHAPTERS = [
+    { start: 0, end: 15, caption: "Viernes, 14:55. A Nacho, de recursos humanos, le llega un correo urgente." },
+    { start: 15, end: 25, caption: "SENTINEL" },
+    { start: 25, end: 35, caption: "Con SENTINEL, olvídate de los problemas" },
+    { start: 35, end: 45, caption: "Tú como jefe vas a estar más tranquilo" },
+    { start: 45, end: 50, caption: "No formamos empleados, entrenamos instintos." }
   ];
 
-  const SCENE_DURATION = 6000; // 5 escenas x 6s = 30s
-  let currentScene = 0;
-  let isPlaying = false;
-  let startT = 0;
-  let elapsed = 0;
-  let animFrame = 0;
+  const TOTAL_DURATION = 50;
+
+  const ICON_SPEAKER_ON = `<svg class="icon-speaker" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>`;
+
+  const ICON_SPEAKER_MUTED = `<svg class="icon-speaker" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>`;
+
+  function updateSoundButton() {
+    if (!videoSoundBtn || !video) return;
+    const isMuted = video.muted;
+    videoSoundBtn.innerHTML = isMuted ? ICON_SPEAKER_MUTED : ICON_SPEAKER_ON;
+    videoSoundBtn.setAttribute("aria-label", isMuted ? "Activar sonido" : "Silenciar sonido");
+  }
 
   function formatSec(sec) {
-    const s = Math.min(30, Math.max(0, Math.floor(sec)));
-    return `00:${String(s).padStart(2, "0")} / 00:30`;
+    const s = Math.min(TOTAL_DURATION, Math.max(0, Math.floor(sec)));
+    return `00:${String(s).padStart(2, "0")} / 00:50`;
   }
 
-  function showScene(idx) {
-    currentScene = idx;
-    scenes.forEach((s, i) => s.classList.toggle("is-on", i === idx));
-    chapters.forEach((c, i) => {
-      c.setAttribute("aria-current", i === idx ? "true" : "false");
-      c.classList.toggle("done-ch", i < idx);
-      const bar = $(".bar i", c);
-      if (bar) bar.style.width = i < idx ? "100%" : "0";
-    });
-    if (caption && script[idx]) caption.textContent = script[idx];
-    if (timerEl) timerEl.textContent = formatSec(idx * 6);
-  }
+  function updateVideoUI(curTime) {
+    const cur = typeof curTime === "number" ? curTime : (video ? video.currentTime : 0);
 
-  function videoLoop(now) {
-    if (!isPlaying) return;
-    if (!startT) startT = now - elapsed;
-    elapsed = now - startT;
-
-    const progress = Math.min(elapsed / SCENE_DURATION, 1);
-    const curBar = $(".bar i", chapters[currentScene]);
-    if (curBar) curBar.style.width = `${progress * 100}%`;
-
-    const totalSec = currentScene * 6 + progress * 6;
-    if (timerEl) timerEl.textContent = formatSec(totalSec);
-
-    if (progress >= 1) {
-      if (currentScene === scenes.length - 1) {
-        pauseVideo();
-        elapsed = 0;
-        return;
+    let chapterIdx = CHAPTERS.length - 1;
+    for (let i = 0; i < CHAPTERS.length; i++) {
+      if (cur < CHAPTERS[i].end) {
+        chapterIdx = i;
+        break;
       }
-      showScene(currentScene + 1);
-      audio.playBlip(true);
-      startT = now;
-      elapsed = 0;
     }
-    animFrame = requestAnimationFrame(videoLoop);
+
+    if (timerEl) timerEl.textContent = formatSec(cur);
+    if (caption && CHAPTERS[chapterIdx]) caption.textContent = CHAPTERS[chapterIdx].caption;
+
+    chapters.forEach((c, i) => {
+      const ch = CHAPTERS[i];
+      const isCur = i === chapterIdx;
+      c.setAttribute("aria-current", isCur ? "true" : "false");
+      c.classList.toggle("done-ch", cur >= ch.end);
+      const bar = $(".bar i", c);
+      if (bar) {
+        if (cur >= ch.end) {
+          bar.style.width = "100%";
+        } else if (cur <= ch.start) {
+          bar.style.width = "0%";
+        } else {
+          const progress = ((cur - ch.start) / (ch.end - ch.start)) * 100;
+          bar.style.width = `${Math.min(100, Math.max(0, progress)).toFixed(1)}%`;
+        }
+      }
+    });
   }
 
-  function playVideo() {
-    if (!player) return;
-    if (currentScene === scenes.length - 1 && elapsed === 0) showScene(0);
-    player.classList.add("started");
-    isPlaying = true;
-    startT = 0;
-    audio.playCoin();
-    if (playBtn) playBtn.textContent = "⏸";
-    animFrame = requestAnimationFrame(videoLoop);
+  function togglePlay() {
+    if (!video) return;
+    if (video.paused || video.ended) {
+      if (video.ended || video.currentTime >= TOTAL_DURATION) {
+        video.currentTime = 0;
+      }
+      player?.classList.add("started");
+      video.play().catch(() => {
+        // Fallback en caso de que la política del navegador requiera mutear
+        video.muted = true;
+        updateSoundButton();
+        video.play().catch(() => {});
+      });
+      audio?.playCoin?.();
+    } else {
+      video.pause();
+    }
   }
 
-  function pauseVideo() {
-    isPlaying = false;
-    cancelAnimationFrame(animFrame);
-    if (playBtn) playBtn.textContent = "▶";
+  if (video) {
+    video.addEventListener("play", () => {
+      player?.classList.add("playing");
+      player?.classList.add("started");
+      if (playBtn) playBtn.textContent = "⏸";
+    });
+
+    video.addEventListener("pause", () => {
+      player?.classList.remove("playing");
+      if (playBtn) playBtn.textContent = "▶";
+    });
+
+    video.addEventListener("ended", () => {
+      player?.classList.remove("playing");
+      player?.classList.remove("started");
+      if (playBtn) playBtn.textContent = "▶";
+      updateVideoUI(TOTAL_DURATION);
+    });
+
+    video.addEventListener("timeupdate", () => {
+      updateVideoUI(video.currentTime);
+    });
+
+    video.addEventListener("click", togglePlay);
   }
 
-  playBtn?.addEventListener("click", () => (isPlaying ? pauseVideo() : playVideo()));
-  playBig?.addEventListener("click", playVideo);
+  playBtn?.addEventListener("click", togglePlay);
+  playBig?.addEventListener("click", togglePlay);
+
+  videoSoundBtn?.addEventListener("click", () => {
+    if (!video) return;
+    video.muted = !video.muted;
+    updateSoundButton();
+    audio?.playBlip?.(true);
+  });
 
   chapters.forEach((btn, idx) => {
     btn.addEventListener("click", () => {
+      if (!video) return;
       player?.classList.add("started");
-      showScene(idx);
-      elapsed = 0;
-      startT = 0;
-      audio.playBlip(true);
-      if (!isPlaying) playVideo();
+      const seekSec = CHAPTERS[idx] ? CHAPTERS[idx].start : 0;
+      video.currentTime = seekSec;
+      updateVideoUI(seekSec);
+      audio?.playBlip?.(true);
+      if (video.paused) {
+        video.play().catch(() => {});
+      }
     });
   });
 
   if (player && "IntersectionObserver" in window) {
     new IntersectionObserver(
       ([entry]) => {
-        if (!entry.isIntersecting && isPlaying) pauseVideo();
+        if (!entry.isIntersecting && video && !video.paused) {
+          video.pause();
+        }
       },
       { threshold: 0.2 }
     ).observe(player);
   }
 
-  showScene(0);
+  updateVideoUI(0);
+  updateSoundButton();
 
   /* --------------------------------------------------------------------------
      6. FORMULARIO DE SIMULACRO PILOTO GRATUITO

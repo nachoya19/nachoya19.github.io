@@ -46,7 +46,7 @@
       <div class="hero-sticky-stage" id="hero-stage">
         <!-- LIENZO 2D DEL NIVEL (FONDO DINÁMICO: CIELO NOCTURNO PIXEL ART + OFICINA) -->
         <canvas id="zelda-game-canvas" class="zelda-game-canvas"
-          aria-label="Nivel 2D interactivo con cielo estrellado pixel art y oficina con Mario, Iván, Nacho, Nicolás y Miguel"></canvas>
+          aria-label="Nivel 2D interactivo con cielo estrellado pixel art y oficina con Mario, Iván, Nacho, Nicolás, Miguel y Alberto"></canvas>
 
         <!-- VIÑETA Y SCANLINES SUTILES PARA INTEGRACIÓN VISUAL -->
         <div class="zelda-viewport-vignette" aria-hidden="true"></div>
@@ -56,6 +56,7 @@
 
           <div class="hero-brand-clean" id="hero-brand">
             <h1 class="hero-pure-title font-arcade" id="hero-title">SENTINEL</h1>
+            <p class="hero-pure-slogan font-arcade" id="hero-slogan">No formamos empleados, entrenamos instintos</p>
           </div>
 
         </div>
@@ -670,7 +671,7 @@
         <div class="section-header" data-packet-dock="video">
           <h2 class="section-title">
             Un lunes cualquiera con Sentinel: <br>
-            <span class="text-gold">mira el recorrido completo en 30 segundos.</span>
+            <span class="text-gold">mira el recorrido completo en 50 segundos.</span>
           </h2>
           <p class="section-lead">
             Así vive tu plantilla el paso desde el primer tropiezo hasta tener el riesgo bajo control.
@@ -680,132 +681,25 @@
         <figure class="cinema-player" id="player">
 
           <!-- Marco Cinematográfico -->
-          <div class="cinema-viewport" aria-hidden="true">
+          <div class="cinema-viewport" id="cinema-viewport">
 
             <div class="cinema-topbar font-mono">
-              <span class="cinema-rec"><i class="rec-dot"></i> RECORRIDO INTERACTIVO · CASO REAL PYME</span>
-              <span class="cinema-timer" id="cinema-timer">00:00 / 00:30</span>
+              <span class="cinema-rec"><i class="rec-dot"></i> RECORRIDO EN VÍDEO · CASO REAL PYME</span>
+              <span class="cinema-timer" id="cinema-timer">00:00 / 00:50</span>
             </div>
 
-            <!-- Escena 0: Llega el correo -->
-            <div class="v-scene is-on" data-scene="0">
-              <div class="cine-card">
-                <div class="cine-card-head font-mono">
-                  <span>ESCENA 01 · BANDEJA DE ENTRADA DE MARTA (ADMINISTRACIÓN)</span>
-                  <span>LUNES 09:12</span>
-                </div>
-                <div class="cine-inbox-list">
-                  <div class="cine-mail-item">
-                    <span class="cine-from">Mensajería Norte</span>
-                    <span class="cine-subj">Entrega programada de material de oficina</span>
-                    <span class="cine-hour font-mono">08:45</span>
-                  </div>
-                  <div class="cine-mail-item is-highlight">
-                    <span class="cine-badge font-arcade">NUEVO</span>
-                    <span class="cine-from"><strong>Suministros Ribera</strong></span>
-                    <span class="cine-subj"><strong>Factura 2026-1184: cambio urgente de cuenta bancaria</strong></span>
-                    <span class="cine-hour font-mono">09:12</span>
-                  </div>
-                  <div class="cine-mail-item">
-                    <span class="cine-from">Asesoría Fiscal Pardo</span>
-                    <span class="cine-subj">Resumen de liquidación trimestral</span>
-                    <span class="cine-hour font-mono">Ayer</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Escena 1: El clic con prisa -->
-            <div class="v-scene" data-scene="1">
-              <div class="cine-card cine-click-scene">
-                <div class="cine-card-head font-mono">
-                  <span>ESCENA 02 · CON LAS PRISAS DE LA MAÑANA</span>
-                  <span>09:13</span>
-                </div>
-                <div class="cine-click-stage">
-                  <p class="cine-context">Marta tiene 15 pagos pendientes antes del mediodía y pulsa en el archivo sin
-                    fijarse en el remitente:</p>
-                  <div class="cine-fake-btn">
-                    <span class="pdf-tag font-mono">PDF</span>
-                    <strong>Descargar Factura_2026-1184_Ribera.pdf (4.870&nbsp;€)</strong>
-                    <div class="animated-cursor"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Escena 2: El aprendizaje al instante -->
-            <div class="v-scene" data-scene="2">
-              <div class="cine-card cine-alert-scene">
-                <div class="cine-card-head font-mono">
-                  <span>ESCENA 03 · INTERVENCIÓN DIDÁCTICA DE SENTINEL</span>
-                  <span>09:13 (0 SEG)</span>
-                </div>
-                <div class="cine-alert-body">
-                  <span class="cine-pill-alert font-arcade">⚡ TRANQUILA, MARTA: ERA UN SIMULACRO DE SENTINEL</span>
-                  <h3>Un atacante real habría robado tu contraseña y desviado <span class="nowrap">4.870&nbsp;€</span>
-                  </h3>
-                  <div class="cine-clues-row font-mono">
-                    <span>1. El dominio era .co y no .es</span>
-                    <span>2. Nunca se cambia un IBAN por email</span>
-                    <span>3. Te metían prisa artificial</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Escena 3: Dos semanas después, detecta y gana puntos -->
-            <div class="v-scene" data-scene="3">
-              <div class="cine-card cine-win-scene">
-                <div class="cine-card-head font-mono">
-                  <span>ESCENA 04 · DOS SEMANAS DESPUÉS</span>
-                  <span>HÁBITO CREADO</span>
-                </div>
-                <div class="cine-win-body">
-                  <div class="cine-xp-burst font-arcade">+50 XP</div>
-                  <h3>Marta detecta un correo falso y avisa en un clic</h3>
-                  <p>Al recordar el simulacro anterior, revisa el remitente, pulsa <strong>«Marcar como
-                      sospechoso»</strong> y suma puntos para Administración.</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Escena 4: El panel del gerente -->
-            <div class="v-scene" data-scene="4">
-              <div class="cine-card cine-dash-scene">
-                <div class="cine-card-head font-mono">
-                  <span>ESCENA 05 · PANEL DE GERENCIA A LOS 90 DÍAS</span>
-                  <span class="text-green">RIESGO &lt; 10%</span>
-                </div>
-                <div class="cine-dash-rows font-mono">
-                  <div class="cine-dept-line">
-                    <span>Administración</span>
-                    <span class="old-val">38% caían</span>
-                    <span>&rarr;</span>
-                    <strong class="new-val text-green">6% caen · 89% avisan</strong>
-                  </div>
-                  <div class="cine-dept-line">
-                    <span>Ventas y Comercial</span>
-                    <span class="old-val">34% caían</span>
-                    <span>&rarr;</span>
-                    <strong class="new-val text-green">7% caen · 84% avisan</strong>
-                  </div>
-                  <div class="cine-dept-line">
-                    <span>Compras y Almacén</span>
-                    <span class="old-val">41% caían</span>
-                    <span>&rarr;</span>
-                    <strong class="new-val text-green">9% caen · 81% avisan</strong>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <!-- Vídeo Real de Sentinel -->
+            <video class="cinema-video" id="sentinel-video" playsinline preload="metadata">
+              <source src="assets/sentinelFinal.mp4" type="video/mp4">
+              Tu navegador no soporta el formato de vídeo MP4.
+            </video>
 
             <!-- Botón grande de reproducción sobre el vídeo -->
-            <button type="button" class="btn-cinema-overlay" id="play-big">
+            <button type="button" class="btn-cinema-overlay" id="play-big" aria-label="Reproducir recorrido en vídeo">
               <span class="play-circle">▶</span>
               <span>
-                <strong>Reproducir recorrido completo (30s)</strong>
-                <small class="font-mono">Haz clic para iniciar o salta entre las 5 escenas abajo</small>
+                <strong>Reproducir recorrido completo (50s)</strong>
+                <small class="font-mono">Haz clic para iniciar el vídeo o salta entre las escenas</small>
               </span>
             </button>
 
@@ -813,37 +707,44 @@
 
           <!-- Subtítulo narrativo sincronizado -->
           <figcaption class="cinema-caption" id="caption" aria-live="polite">
-            Lunes, 09:12. A Marta, de administración, le llega un correo urgente de un proveedor habitual.
+            Viernes, 14:55. A Nacho, de recursos humanos, le llega un correo urgente.
           </figcaption>
 
           <!-- Controles y capítulos del vídeo -->
           <div class="cinema-controls">
             <button type="button" class="btn-cinema-play" id="play" aria-label="Reproducir o pausar vídeo">▶</button>
+            <button type="button" class="btn-cinema-sound" id="btn-sound" aria-label="Silenciar sonido">
+              <svg class="icon-speaker" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+              </svg>
+            </button>
             <div class="cinema-chapters" role="group" aria-label="Escenas del vídeo">
-              <button type="button" data-go="0" aria-current="true">
-                <span class="bar"><i></i></span>
+              <button type="button" data-seek="0" aria-current="true">
+                <span class="bar"><i style="width: 0%;"></i></span>
                 <span class="ch-num font-mono">01</span>
-                <span class="ch-name">Llega el correo</span>
+                <span class="ch-name">Aviso a Nacho</span>
               </button>
-              <button type="button" data-go="1">
-                <span class="bar"><i></i></span>
+              <button type="button" data-seek="15">
+                <span class="bar"><i style="width: 0%;"></i></span>
                 <span class="ch-num font-mono">02</span>
-                <span class="ch-name">Clic con prisa</span>
+                <span class="ch-name">SENTINEL</span>
               </button>
-              <button type="button" data-go="2">
-                <span class="bar"><i></i></span>
+              <button type="button" data-seek="25">
+                <span class="bar"><i style="width: 0%;"></i></span>
                 <span class="ch-num font-mono">03</span>
-                <span class="ch-name">Aprende al acto</span>
+                <span class="ch-name">Sin problemas</span>
               </button>
-              <button type="button" data-go="3">
-                <span class="bar"><i></i></span>
+              <button type="button" data-seek="35">
+                <span class="bar"><i style="width: 0%;"></i></span>
                 <span class="ch-num font-mono">04</span>
-                <span class="ch-name">Detecta (+50 XP)</span>
+                <span class="ch-name">Jefe tranquilo</span>
               </button>
-              <button type="button" data-go="4">
-                <span class="bar"><i></i></span>
+              <button type="button" data-seek="45">
+                <span class="bar"><i style="width: 0%;"></i></span>
                 <span class="ch-num font-mono">05</span>
-                <span class="ch-name">Resultados &lt;10%</span>
+                <span class="ch-name">Instintos</span>
               </button>
             </div>
           </div>
@@ -1005,99 +906,115 @@
          04. LLAMADA A LA ACCIÓN (CTA): SIMULACRO PILOTO GRATIS
          ====================================================================== -->
     <section class="section-cta" id="demo" data-section="demo">
-      <div class="wrap cta-grid">
+      <div class="wrap">
 
-        <div class="cta-copy-col">
-          <h2 class="cta-title">
-            Descubre cuántos empleados caerían hoy <br>
-            <span class="text-cyan">antes de que lo pruebe un estafador real.</span>
-          </h2>
-          <p class="cta-lead">
-            Te preparamos un <strong>primer simulacro gratuito</strong> adaptado a tu empresa y en 48 horas vemos juntos
-            el resultado en una llamada de 15 minutos. Sin compromiso ni permanencia.
-          </p>
+        <div class="cta-grid">
 
-          <ul class="cta-perks-list">
-            <li>
-              <svg class="perk-check-icon text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-              <strong>Listo en 15 minutos</strong>
-            </li>
-            <li>
-              <svg class="perk-check-icon text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-              <strong>Diagnóstico confidencial de tu plantilla</strong>
-            </li>
-            <li>
-              <svg class="perk-check-icon text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-              <strong>100% inofensivo y conforme al RGPD</strong>
-            </li>
-          </ul>
-        </div>
-
-        <!-- Tarjeta del Formulario donde aterriza el Objeto Viajero -->
-        <div class="cta-form-col" data-packet-dock="cta">
-          <form class="pilot-form" id="form" novalidate>
-            <div class="form-top-row">
-              <h3>Solicitar simulacro piloto gratuito</h3>
-              <span class="free-badge font-arcade nowrap">0&nbsp;€ · SIN COMPROMISO</span>
-            </div>
-
-            <div class="field">
-              <label for="f-name">Tu nombre y apellidos</label>
-              <input id="f-name" name="name" type="text" autocomplete="name" placeholder="Ej. Carlos Martínez" required>
-            </div>
-
-            <div class="field">
-              <label for="f-email">Email de trabajo</label>
-              <input id="f-email" name="email" type="email" autocomplete="email" placeholder="carlos@tuempresa.es"
-                required>
-            </div>
-
-            <div class="field-row">
-              <div class="field">
-                <label for="f-company">Nombre de la empresa</label>
-                <input id="f-company" name="company" type="text" autocomplete="organization"
-                  placeholder="Ej. Suministros Norte SL" required>
-              </div>
-
-              <div class="field">
-                <label for="f-size">Personas con correo</label>
-                <select id="f-size" name="size" required>
-                  <option value="">Selecciona tamaño</option>
-                  <option value="1-10">Hasta 10 personas</option>
-                  <option value="11-50">De 11 a 50 personas</option>
-                  <option value="51-250">De 51 a 250 personas</option>
-                  <option value="250+">Más de 250 personas</option>
-                </select>
-              </div>
-            </div>
-
-            <p class="form-error" id="form-error" role="alert" hidden></p>
-
-            <button type="submit" class="btn-submit-pilot" id="btn-submit">
-              <span>Quiero mi simulacro gratuito</span>
-              <span class="btn-arrow">&rarr;</span>
-            </button>
-          </form>
-
-          <!-- Confirmación tras enviar -->
-          <div class="pilot-done-card" id="done" hidden tabindex="-1" role="status">
-            <div class="done-pill font-arcade">✓ SOLICITUD REGISTRADA</div>
-            <h3>¡Tu simulacro piloto está en marcha!</h3>
-            <p id="done-text">
-              Te escribiremos en menos de 24 horas laborables para preparar el primer simulacro inofensivo con tu
-              equipo.
+          <div class="cta-copy-col">
+            <h2 class="cta-title">
+              Descubre cuántos empleados caerían hoy <br>
+              <span class="text-cyan">antes de que lo pruebe un estafador real.</span>
+            </h2>
+            <p class="cta-lead">
+              Te preparamos un <strong>primer simulacro gratuito</strong> adaptado a tu empresa y en 48 horas vemos juntos
+              el resultado en una llamada de 15 minutos. Sin compromiso ni permanencia.
             </p>
-            <div class="done-ticket-box font-mono">
-              <span>TICKET DE RESERVA: <strong id="done-ref" class="text-gold">SNT-88219</strong></span>
-              <span class="text-green">● PRIORIDAD PYME ACTIVADA</span>
+
+            <ul class="cta-perks-list">
+              <li>
+                <svg class="perk-check-icon text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <strong>Listo en 15 minutos</strong>
+              </li>
+              <li>
+                <svg class="perk-check-icon text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <strong>Diagnóstico confidencial de tu plantilla</strong>
+              </li>
+              <li>
+                <svg class="perk-check-icon text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <strong>100% inofensivo y conforme al RGPD</strong>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Tarjeta del Formulario donde aterriza el Objeto Viajero -->
+          <div class="cta-form-col" data-packet-dock="cta">
+            <form class="pilot-form" id="form" novalidate>
+              <div class="form-top-row">
+                <h3>Solicitar simulacro piloto gratuito</h3>
+                <span class="free-badge font-arcade nowrap">0&nbsp;€ · SIN COMPROMISO</span>
+              </div>
+
+              <div class="field">
+                <label for="f-name">Tu nombre y apellidos</label>
+                <input id="f-name" name="name" type="text" autocomplete="name" placeholder="Ej. Carlos Martínez" required>
+              </div>
+
+              <div class="field">
+                <label for="f-email">Email de trabajo</label>
+                <input id="f-email" name="email" type="email" autocomplete="email" placeholder="carlos@tuempresa.es"
+                  required>
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="f-company">Nombre de la empresa</label>
+                  <input id="f-company" name="company" type="text" autocomplete="organization"
+                    placeholder="Ej. Suministros Norte SL" required>
+                </div>
+
+                <div class="field">
+                  <label for="f-size">Personas con correo</label>
+                  <select id="f-size" name="size" required>
+                    <option value="">Selecciona tamaño</option>
+                    <option value="1-10">Hasta 10 personas</option>
+                    <option value="11-50">De 11 a 50 personas</option>
+                    <option value="51-250">De 51 a 250 personas</option>
+                    <option value="250+">Más de 250 personas</option>
+                  </select>
+                </div>
+              </div>
+
+              <p class="form-error" id="form-error" role="alert" hidden></p>
+
+              <button type="submit" class="btn-submit-pilot" id="btn-submit">
+                <span>Quiero mi simulacro gratuito</span>
+                <span class="btn-arrow">&rarr;</span>
+              </button>
+            </form>
+
+            <!-- Confirmación tras enviar -->
+            <div class="pilot-done-card" id="done" hidden tabindex="-1" role="status">
+              <div class="done-pill font-arcade">✓ SOLICITUD REGISTRADA</div>
+              <h3>¡Tu simulacro piloto está en marcha!</h3>
+              <p id="done-text">
+                Te escribiremos en menos de 24 horas laborables para preparar el primer simulacro inofensivo con tu
+                equipo.
+              </p>
+              <div class="done-ticket-box font-mono">
+                <span>TICKET DE RESERVA: <strong id="done-ref" class="text-gold">SNT-88219</strong></span>
+                <span class="text-green">● PRIORIDAD PYME ACTIVADA</span>
+              </div>
             </div>
           </div>
+
+        </div>
+
+        <!-- Foto grupal centrada al centro y más grande -->
+        <div class="cta-team-sprites">
+          <picture>
+            <source srcset="assets/fotoGrupalSprites_clean.webp" type="image/webp">
+            <img src="assets/fotoGrupalSprites_clean.png"
+                 alt="Equipo Sentinel en Pixel Art"
+                 class="cta-team-sprites-img"
+                 width="2613" height="1227"
+                 loading="lazy">
+          </picture>
         </div>
 
       </div>
