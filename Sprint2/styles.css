@@ -1553,15 +1553,19 @@ button, input, select {
     0 0 35px rgba(168, 85, 247, 0.32),
     0 0 75px rgba(168, 85, 247, 0.14);
   transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
+  position: relative;
 }
 
 .platform-mockup-wrap:hover {
-  transform: translateY(-4px) scale(1.01);
-  border-color: rgba(168, 85, 247, 0.85);
+  transform: translateY(-5px) scale(1.015);
+  border-color: rgba(168, 85, 247, 0.95);
   box-shadow:
-    0 30px 75px rgba(0, 0, 0, 0.9),
-    0 0 50px rgba(168, 85, 247, 0.5),
-    0 0 95px rgba(168, 85, 247, 0.22);
+    0 30px 80px rgba(0, 0, 0, 0.92),
+    0 0 50px rgba(168, 85, 247, 0.6),
+    0 0 95px rgba(168, 85, 247, 0.28);
 }
 
 .platform-mockup-header {
@@ -1599,6 +1603,7 @@ button, input, select {
   display: block;
   object-fit: cover;
   border-radius: 0 0 11px 11px;
+  cursor: pointer;
 }
 
 /* Columna Derecha: Objeto / Icono Grande Flotante con Sombra Dinámica */
